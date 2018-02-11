@@ -1,0 +1,7 @@
+/node_modules
+.directory
+*~
+/dist
+TODO
+*.kate-swp
+/src/api/configs/
