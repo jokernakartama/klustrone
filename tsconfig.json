@@ -1,10 +1,26 @@
 {
+  "compileOnSave": true,
   "compilerOptions": {
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "allowSyntheticDefaultImports": true,
     "outDir": "./dist/",
-    "noImplicitAny": true,
     "module": "es6",
-    "target": "es5",
     "jsx": "react",
-    "allowJs": true
-  }
-} 
+    "noEmitOnError": true,
+    "allowJs": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"]
+    }
+  },
+  "awesomeTypescriptLoaderOptions": {
+    "silent": true
+  },
+  "files": [
+    "./src/index.ts"
+  ],
+  "exclude": [
+    "./src/**/*.js"
+  ]
+}

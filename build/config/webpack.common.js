@@ -2,11 +2,9 @@ var webpack = require('webpack')
 var path = require('path')
 // Extracts all css files in one
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
-// Adds vendor prefixes in css
-var autoprefixer = require('autoprefixer')
 var nodeEnv = process.env.NODE_ENV || 'development'
 var isProduction = nodeEnv === 'production'
-// paths 
+// paths
 var rootDir = path.join(__dirname, '../../')
 var nodeModulesPath = path.join(rootDir, 'node_modules')
 var buildPath = path.join(rootDir, 'dist')
@@ -26,8 +24,8 @@ var rules = [
   {
     test: /\.(ts|tsx)$/,
     use: [
-      'ts-loader',
-      'eslint-loader'
+      'awesome-typescript-loader',
+      'tslint-loader'
     ],
     exclude: /node_modules/
   }
@@ -39,8 +37,7 @@ var plugins = [
       NODE_ENV: JSON.stringify(nodeEnv),
     },
   }),
-  // prevents Webpack from outputting anything into a bundle on errors
-  new webpack.NoEmitOnErrorsPlugin()
+  new webpack.NoEmitOnErrorsPlugin() // prevents Webpack from outputting anything into a bundle on errors
 ]
 
 
@@ -48,7 +45,7 @@ module.exports = {
   devtool: false,
   context: sourcePath,
   entry: {
-    app: path.join(sourcePath, 'index.ts')
+    app: path.join(sourcePath, 'index.tsx')
   },
   output: {
     path: buildPath,
@@ -60,9 +57,13 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.tsx', '.ts'],
+    // set the same aliases in tsconfig.json
+    alias: {
+      '~': sourcePath
+    },
     modules: [
       nodeModulesPath,
-      sourcePath,
+      rootDir
     ],
   },
   plugins

@@ -2,7 +2,7 @@
 
 module.exports = {
   root: true,
-  parser: 'typescript-eslint-parser',
+  parser: 'babel-eslint',
   parserOptions: {
     sourceType: 'module'
   },
@@ -10,9 +10,8 @@ module.exports = {
     browser: true,
   },
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
-  extends: ['eslint:recommended', 'plugin:react/recommended', "standard-with-typescript"],
+  extends: ['eslint:recommended', 'plugin:react/recommended'],
   plugins: [
-    "typescript",
     "react"
   ],
   // add your custom rules here
@@ -27,8 +26,7 @@ module.exports = {
   },
   settings: {
     'import/resolver': {
-      'node': true,
-      'eslint-import-resolver-typescript': true
+      'node': true
     }
   }
 }

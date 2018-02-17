@@ -4,7 +4,6 @@ if (!process.env.NODE_ENV) {
 }
 var path = require('path')
 var rootDir = path.join(__dirname, '../')
-var sourcePath = path.join(rootDir, 'source')
 var ora = require('ora')
 var path = require('path')
 var express = require('express')
@@ -67,7 +66,7 @@ app.use(hotMiddleware)
 
 // serve pure static assets
 var staticPath = path.posix.join(config.assetsPublicPath, config.assetsSubDirectory)
-app.use(staticPath, express.static(path.join(sourcePath, 'static')))
+app.use(staticPath, express.static(path.join(rootDir, 'static')))
 
 var uri = 'http://0.0.0.0:' + port
 
