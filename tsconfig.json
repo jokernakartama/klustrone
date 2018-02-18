@@ -18,7 +18,7 @@
     "silent": true
   },
   "files": [
-    "./src/index.ts"
+    "./src/index.tsx"
   ],
   "exclude": [
     "./src/**/*.js"
