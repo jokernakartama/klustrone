@@ -24,6 +24,7 @@ var rules = [
   {
     test: /\.(ts|tsx)$/,
     use: [
+      'babel-loader',
       'awesome-typescript-loader',
       'tslint-loader'
     ],

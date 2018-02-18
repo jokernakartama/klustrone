@@ -6,6 +6,7 @@
     "allowSyntheticDefaultImports": true,
     "outDir": "./dist/",
     "module": "es6",
+    "target": "es6",
     "jsx": "react",
     "noEmitOnError": true,
     "allowJs": true,
@@ -18,9 +19,9 @@
     "silent": true
   },
   "files": [
-    "./src/index.tsx"
+    "src/index.tsx"
   ],
   "exclude": [
-    "./src/**/*.js"
+    "src/**/*.js"
   ]
 }

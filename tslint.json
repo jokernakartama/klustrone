@@ -5,9 +5,12 @@
     "tslint-react"
   ],
   "rules": {
+    "no-irregular-whitespace": false,
     "only-arrow-functions": false,
     "ordered-imports": false,
-    "space-before-function-paren": false,
+    "object-literal-sort-keys": false,
+    "no-empty": false,
+    "space-before-function-paren": [true, "always"],
     "semicolon": [true, "never"],
     "curly": [true, "ignore-same-line"],
     "trailing-comma": false,

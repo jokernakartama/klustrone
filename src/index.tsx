@@ -13,7 +13,7 @@ const excludedSessionKeys = [
 startSession(excludedSessionKeys).then(
   function () {
     ReactDOM.render(
-      <Provider store={ store }>
+      <Provider store={store}>
         <App />
       </Provider>,
       document.getElementById('app')
