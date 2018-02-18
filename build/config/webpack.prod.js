@@ -7,7 +7,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var CopyWebpackPlugin = require('copy-webpack-plugin')
 var config = require('./build.config')
-// paths 
+// paths
 var rootDir = path.join(__dirname, '../../')
 var buildPath = path.join(rootDir, 'dist')
 var sourcePath = path.join(rootDir, 'src')
@@ -18,7 +18,7 @@ var rules = [
     use: ExtractTextPlugin.extract({
       fallback: 'style-loader',
       use: loaders(['css', 'postcss', 'stylus', 'import-glob'])
-      
+
     }),
   },
   {
@@ -104,7 +104,7 @@ var plugins = [
   // copy static files from source directory
   new CopyWebpackPlugin([
       {
-        from: path.resolve(sourcePath, 'static'),
+        from: path.resolve(rootDir, 'static'),
         to: config.assetsSubDirectory,
         ignore: ['.*']
       }
