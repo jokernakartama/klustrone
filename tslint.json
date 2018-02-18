@@ -1,0 +1,18 @@
+{
+  "extends": [
+    "tslint:recommended",
+    "tslint-eslint-rules",
+    "tslint-react"
+  ],
+  "rules": {
+    "only-arrow-functions": false,
+    "ordered-imports": false,
+    "space-before-function-paren": false,
+    "semicolon": [true, "never"],
+    "curly": [true, "ignore-same-line"],
+    "trailing-comma": false,
+    "quotemark": [true, "single"],
+    "no-constant-condition": true,
+    "max-line-length": false
+  }
+}
