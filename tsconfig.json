@@ -21,6 +21,9 @@
   "files": [
     "src/index.tsx"
   ],
+  "include": [
+    "src/**/*.d.ts"
+  ],
   "exclude": [
     "src/**/*.js"
   ]

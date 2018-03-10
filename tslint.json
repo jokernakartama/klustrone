@@ -18,6 +18,8 @@
     "trailing-comma": false,
     "quotemark": [true, "single"],
     "no-constant-condition": true,
-    "max-line-length": false
+    "max-line-length": false,
+    "jsx-no-multiline-js": false,
+    "jsx-curly-spacing": false
   }
 }
