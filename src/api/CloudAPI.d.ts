@@ -1,6 +1,7 @@
 type optional = string|null
 type AjaxResponseCallback =  (b?: any, r?: any) => void
 type SerializedResource = object
+type token = ITokenData|boolean
 
 interface IMethodCallback {
   success: AjaxResponseCallback
@@ -84,7 +85,7 @@ interface ICloudAPI {
   postCode: () => boolean
   openAuthWindow: (data?: any, window?: Window) => void
   getToken: (data: object, cb?: () => void, err?: () => void) => void
-  saveTokenData: (data?: ITokenData, cb?: (data: ITokenData) => void) => void
+  saveTokenData: (data?: token, cb?: (data?: token) => void) => void
   revokeAuthorization: (cb?: () => void) => void
   [anyMethod: string]: (...args: any[]) => any
 }
