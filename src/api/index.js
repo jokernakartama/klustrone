@@ -1,4 +1,4 @@
-import { checkToken } from '~/utilities/tokenBag'
+import { checkToken } from '~/utils/tokenBag'
 import { default as _CloudAPI } from './CloudAPI'
 import { default as _GoogleDrive } from './GoogleDrive'
 import { default as _YandexDisk } from './YandexDisk'

@@ -1,11 +1,11 @@
 /* eslint no-unused-vars: [0, { "args": "none" }] */
-import { urlStr } from '~/utilities/ajax'
+import { urlStr } from '~/utils/ajax'
 import getFileType from './getFileType'
 
 /**
- * Other applications can send messages, while the window is waiting for a message with token data.
- * The problem manifests itself in the unexpected closing of the authorization window and recieving
- * incorrect data.
+ * Other applications can send messages, while the window is waiting for a
+ * message with token data. The problem manifests itself in the unexpected
+ * closing of the authorization window and recieving incorrect data.
  */
 const MESSAGE_SOURCE_IDENTIFIER = 'cloud-api-postcode-method'
 
@@ -13,26 +13,34 @@ const MESSAGE_SOURCE_IDENTIFIER = 'cloud-api-postcode-method'
  * Common abstract interface for services api
  * @abstract
  * @class
- * @classdesc Most of the methods provided by the class use parameter func: an object that
- * may contain the following callback functions:
- * - success - In most cases this function is used to handle the result of a query (sometimes after some preparations).
- * - error - This function should handle any api errors like absence of resource or access errors.
- * - exist - In some cases, service can throw errors of resource existance, so those errors should be handled there.
- * - fail - This function should handle server errors, unknown errors or cases when some functions limited by service api.
- * For example, Dropbox does not provide special methods to get and manage trashed files. As the function is used in different cases,
- * it can be called not in an asynchronous query, so do not forget to call func.anyway if it's nessesary.
- * - anyway - This function mostly notices that an asynchronous query (sometimes without a query itself) completed (successfully or not),
- * in methods which use consecutive queries it should be called in last one.
+ * @classdesc Most of the methods provided by the class use parameter func: an object
+ * that may contain the following callback functions:
+ * - success - In most cases this function is used to handle the result of
+ * a query (sometimes after some preparations).
+ * - error - This function should handle any api errors like absence of resource
+ * or access errors.
+ * - exist - In some cases, service can throw errors of resource existance,
+ * so those errors should be handled there.
+ * - fail - This function should handle server errors, unknown errors or cases
+ * when some functions limited by service api.
+ * For example, Dropbox does not provide special methods to get and manage
+ * trashed files. As the function is used in different cases,
+ * it can be called not in an asynchronous query, so do not forget to call
+ * func.anyway if it's nessesary.
+ * - anyway - This function mostly notices that an asynchronous query (sometimes
+ *  without a query itself) completed (successfully or not), in methods which use
+ * consecutive queries it should be called in last one.
  * @author Sergey Kobzev <jokernakartama@gmail.com>
  * @hideconstructor
  */
 class CloudAPI {
   /**
    * Any settings for API
-   * @property winHeight {string} authorization window height, used in openAuthWindow()
-   * @property winWidth {string} authorization window width, used in openAuthWindow()
-   * @property noRefreshBorder {number} the minimum time from which the token is considered as infinite (to set refresh or revoke timeouts)
-   * @property anyParameter {*} any parameter which are used in code
+   * @property {string} winHeight - authorization window height, used in openAuthWindow()
+   * @property {string} winWidth - authorization window width, used in openAuthWindow()
+   * @property {number} noRefreshBorder - the minimum time from which the token is
+   * considered as infinite (to set refresh or revoke timeouts)
+   * @property {*} anyParameter - any parameter which are used in code
    */
   static get settings () {
     return {
@@ -45,19 +53,23 @@ class CloudAPI {
   /**
    * Urls for requests.
    * @abstract
-   * @property authorize {object} used in openAuthWindow()
-   * @property anyUrlName {(string|object)} any property to use in queries
+   * @property {object} authorize - Used in openAuthWindow()
+   * @property {string} authorize.path - Authorization url
+   * @property {object} authorize.params - Authorization url GET parameters
+   * @property {(string|object)} anyUrlName - any property to use in queries
    * @example
    * // somewhere in our api we use this.urls.token
    * return {
    *   authorize: {
-   *     path: 'https://anycloud.com/auth', // we use serializer to set url as https://anycloud.com/auth?query_parameter=value&state=cloudservice
+   *     // we use serializer to set url as https://anycloud.com/auth?query_parameter=value&state=cloudservice
+   *     path: 'https://anycloud.com/auth',
    *     params: {
    *       query_parameter: 'value',
    *       state: 'cloudservice'
    *     }
    *   },
-   *  token: 'https://anycloud.com/token' // no query parameters, so the string is more convenient
+   *  // no query parameters, so the string is more convenient
+   *  token: 'https://anycloud.com/token'
    * }
    */
   static get urls () {
@@ -67,18 +79,19 @@ class CloudAPI {
    * Set api response object identifiers
    * for internal usage
    * @abstract
-   * @property serviceName {string} used in openAuthWindow
-   * @property limitUrlParamName {string} limit parameter key
-   * @property listKey {string} key to get a resources list
-   * @property listParentObject {string} may be useful if raw response contains a resource list in third level of nesting
-   * @property itemIdKey {string} key to get resource id
-   * @property itemTypeKey {string} key to get resource type
-   * @property itemDirKey {string} value to consider resource as directory
-   * @property itemFileKey {string} value to consider resource as file
-   * @property itemNameKey {string} key to get resource name
-   * @property itemModifiedKey {string} key to get resource date
-   * @property itemPreviewKey {string} key to get resource preview
-   * @property itemSizeKey {string} key to get resource size
+   * @property {string} serviceName - used in openAuthWindow
+   * @property {string} limitUrlParamName - limit parameter key
+   * @property {string} listKey - key to get a resources list
+   * @property {string} listParentObject - may be useful if raw response contains
+   * a resource list in third level of nesting
+   * @property {string} itemIdKey - key to get resource id
+   * @property {string} itemTypeKey - key to get resource type
+   * @property {string} itemDirKey - value to consider resource as directory
+   * @property {string} itemFileKey - value to consider resource as file
+   * @property {string} itemNameKey - key to get resource name
+   * @property {string} itemModifiedKey - key to get resource date
+   * @property {string} itemPreviewKey - key to get resource preview
+   * @property {string} itemSizeKey - key to get resource size
    * @example
    * return {
    *  'serviceName': 'disk',
@@ -97,13 +110,14 @@ class CloudAPI {
    * @returns {object}
    */
   static get names () {
+    return {}
   }
 
   /**
    * It describes whether the resource is a directory or not.
    * For Dropbox it should return i.['.tag'] === 'folder'.
    * @abstract
-   * @param identifier {string} Resource identifier (path or id)
+   * @param {string} identifier - Resource identifier (path or id)
    * @returns {boolean}
    */
   static isDir (item) {
@@ -112,7 +126,7 @@ class CloudAPI {
   /**
    * It describes whether the resource is a file or not.
    * @abstract
-   * @param identifier {string} Resource identifier (path or id)
+   * @param {string} identifier - Resource identifier (path or id)
    */
   static isFile (item) {
   }
@@ -120,22 +134,22 @@ class CloudAPI {
   /**
    * It describes whether the data contains a resource list or not.
    * @abstract
-   * @param rawResponse {object} JSON parsed response body
+   * @param {object} rawResponse - JSON parsed response body
    */
   static isList (rawResponse) {
   }
 
   /**
    * @abstract
-   * @param rawData {object}
+   * @param {object} rawData
    * @returns {boolean}
    */
   static isRoot (rawData) {
   }
-  
+
   /**
    * @abstract
-   * @param rawData {object}
+   * @param {object} rawData
    * @returns {(string|null)} Shared link or null
    */
   static isShared (rawData) {
@@ -167,17 +181,17 @@ class CloudAPI {
    * Obtains parent id or path from resource metadata.
    * @abstract
    * @see parseDir
-   * @param rawData {object}
-   * @returns {(string|null)} Returns null if resource is root
-   */ 
+   * @param {object} rawData
+   * @returns {(string|null)} - returns null if resource is root
+   */
   static getParent (rawData) {
   }
 
   /**
    * Obtains a preview picture if supported.
    * @abstact
-   * @param rawData {object}
-   * @returns {(string|null)} Returns the preview link or null
+   * @param {object} rawData
+   * @returns {(string|null)} - a preview link or null
    */
   static getPreview (rawData) {
     return rawData[this.names.itemPreviewKey]
@@ -186,7 +200,7 @@ class CloudAPI {
   /**
    * Serializes directory data.
    * @see getItemPath
-   * @param rawData {object}
+   * @param {object} rawData
    * @returns {object}
    */
   static parseDir (rawData) {
@@ -203,7 +217,7 @@ class CloudAPI {
 
   /**
    * Serializes file data.
-   * @param rawData {object}
+   * @param {object} rawData
    * @returns {object}
    */
   static parseFile (rawData) {
@@ -220,7 +234,7 @@ class CloudAPI {
   }
   /**
    * Serializes raw response data to directory object or file object.
-   * @param rawData {object}
+   * @param {object} rawData
    * @returns {object}
    */
   static serialize (rawData) {
@@ -249,174 +263,243 @@ class CloudAPI {
   // API methods
 
   /**
-   * Calls a callback with the response as argument (mostly do not use arguments)
-   * [ON SUCCESS]: This method should call the success callback with an object of the serialized RESOURCE META as the first argument.
+   * Sends a request to make a directory
    * @abstract
-   * @param parentIdentifier {string} Parent resource id or path 
-   * @param dirName Name of the directory
-   * @param func {object} Object of callbacks: success, error, exist, fail, anyway
+   * @param {string} parentIdentifier - Parent resource id or path
+   * @param {string} dirName - Name of the directory
+   * @param {object} func - Object of callbacks: success, error, exist, fail, anyway
+   * @param {function} func.success - Takes a serialized resource meta as the first argument
+   * @param {function} func.error - Takes the response body as the first argument
+   * @param {function} func.fail - Takes the response body (or null if it's not provided)
+   * as the first argument
+   * @param {function} func.exist - Takes the response body as the first argument
+   * @param {function} func.anyway - Takes the response body as the first argument
    */
   static makeDir (parentIdentifier, dirName, func = {}) {
   }
 
   /**
    * Obtains metadata of the resource.
-   * [ON SUCCESS]: This method should call the success callback with an object of the RESPONSE BODY as the first argument.
    * @abstract
-   * @param identifier {string} Path or id, depending on the service
-   * @param func {object} Object of callbacks: success, error, fail, anyway
-   * @param params {object} Any parameters (e.g. fields for request)
+   * @param {string} identifier - Path or id, depending on the service
+   * @param {object} func - Object of callbacks: success, error, fail, anyway
+   * @param {function} func.success - Takes the response body as the first argument
+   * @param {function} func.error - Takes the response body as the first argument
+   * @param {function} func.fail - Takes the response body (or null if it's not provided)
+   * as the first argument
+   * @param {function} func.anyway - Takes the response body as the first argument
+   * @param {object} params - Any parameters (e.g. fields for request)
    */
   static getResourceMeta (identifier, func = {}, params = {}) {
   }
 
   /**
    * Get resource parameters by identifier. Generally, it is used for directory listing.
-   * In most cases, it should get information whether the directory is root or not and get its parent identifier (path or id),
-   * so the data can be calculated (if path is used) or recieved by request (if id is used, e. g. for Google Drive).
-   * [ON SUCCESS]: This method should call the success callback with an object of the RESOURCE DATA (includes list of children in the "resources"
-   * key and own meta in the "current" key) as the first argument.
+   * In most cases, it should get information whether the directory is root or
+   * not and get its parent identifier (path or id),
+   * so the data can be calculated (if path is used) or recieved by request
+   * (if id is used, e. g. for Google Drive).
    * @abstract
-   * @see getFilesList
-   * @param identifier {string} Resource identifier (path or id)
-   * @param func {object} Object of callbacks: success, error, fail, anyway
-   * @param trash {boolean} Whether only trashed files should be included
-   */ 
+   * @see getResourceList
+   * @param {string} identifier - Resource identifier (path or id)
+   * @param {object} func - Object of callbacks: success, error, fail, anyway
+   * @param {function} func.success - Takes an object of the resource data
+   * as the first argument. The object contains serialized resource own meta in the "current" key
+   * and list of serialized its' children meta in the "resources" key
+   * @param {function} func.error - Takes the response body as the first argument
+   * @param {function} func.fail - Takes the response body (or null if it's not provided)
+   * as the first argument
+   * @param {function} func.anyway - Takes the response body as the first argument
+   * @param {boolean} trash - Whether only trashed files should be included
+   */
   static getResource (identifier, func = {}, trash = false) {
   }
 
   /**
-   * Appears to call function with parsed list for success and response for others as argument (mostly do not use arguments).
-   * In most cases, it is called by getResource(), if the second one has succeed (if it uses request). 
-   * [ON SUCCESS]: This method should call the success callback with an object of the RESOURCES LIST as the first argument.
-   * It CAN include the resource own data in the "current" key.
+   * Obtains the resource children list
+   * In most cases, it is called by getResource(), if the second one has succeed
+   * (if it uses request).
    * @abstract
    * @see getResource()
    * @see parseList()
-   * @param identifier {string} Unlike others this method uses unspecified type of parameter, because services
-   * use different concepts of their hierarchy, so, for Dropbox, the folder path is enough, for Google Drive it should be used parent id.
-   * @param func {object} Object of callbacks: success, error, fail, anyway
-   * @param trash {boolean} Whether only trashed files should be included
+   * @param {string} identifier - Unlike others this method uses unspecified
+   * type of parameter, because services use different concepts of their hierarchy,
+   * so, for Dropbox, a folder path is enough, for Google Drive it should use a parent id.
+   * @param {object} func - Object of callbacks: success, error, fail, anyway
+   * @param {function} func.success - Takes a serialized resources list as the first argument.
+   * @param {function} func.error - Takes the response body as the first argument
+   * @param {function} func.fail - Takes the response body (or null if it's not provided)
+   * as the first argument
+   * @param {function} func.anyway - Takes the response body as the first argument
+   * @param {boolean} trash - Whether only trashed files should be included
    */
-  static getFilesList (identifier, func = {}, trash = false) {
+  static getResourceList (identifier, func = {}, trash = false) {
   }
 
   /**
-   * Calls a callback with the link as argument for success 
-   * and response for others as argument (mostly do not use arguments)
-   * [ON SUCCESS]: This method should call the success callback with a string of the RESOURCE DOWNLOAD LINK as the first argument.
+   * Obtains a download link
    * @abstract
-   * @param identifier {string} Resource identifier (path or id)
-   * @param func {object} Object of callbacks: success, error, fail, anyway
+   * @param {string} identifier - Resource identifier (path or id)
+   * @param {object} func - Object of callbacks: success, error, fail, anyway
+   * @param {function} func.success - Takes a download link as the first argument
+   * @param {function} func.error - Takes the response body as the first argument
+   * @param {function} func.fail - Takes the response body (or null if it's not provided)
+   * as the first argument
+   * @param {function} func.anyway - Takes the response body as the first argument
    */
   static getDownloadLink (identifier, func = {}) {
   }
 
   /**
-   * In common, it publishes a resource, and calls function with the resource public link as argument.
-   * [ON SUCCESS]: This method should call the success callback with an object of the RESPONSE BODY as the first argument.
+   * In common, it publishes a resource, and calls function with the resource
+   * public link as argument.
    * @abstract
-   * @param identifier {string} Resource identifier (path or id)
-   * @param func {object} Object of callbacks: success, error, fail, anyway
+   * @param {string} identifier - Resource identifier (path or id)
+   * @param {object} func - Object of callbacks: success, error, fail, anyway
+   * @param {function} func.success - Takes a public link as the first argument
+   * @param {function} func.error - Takes the response body as the first argument
+   * @param {function} func.fail - Takes the response body (or null if it's not provided)
+   * as the first argument
+   * @param {function} func.anyway - Takes the response body as the first argument
    */
   static publishResource (identifier, func = {}) {
   }
 
   /**
    * Unpublishes resource.
-   * [ON SUCCESS]: This method should call the success callback with an object of the RESPONSE BODY as the first argument.
    * @abstract
-   * @param identifier {string} Resource identifier (path or id)
-   * @param func {object} Object of callbacks: success, error, fail, anyway
+   * @param {string} identifier - Resource identifier (path or id)
+   * @param {object} func - Object of callbacks: success, error, fail, anyway
+   * @param {function} func.success - Takes the response body as the first argument
+   * @param {function} func.error - Takes the response body as the first argument
+   * @param {function} func.fail - Takes the response body (or null if it's not provided)
+   * as the first argument
+   * @param {function} func.anyway - Takes the response body as the first argument
    */
   static unpublishResource (identifier, func = {}) {
   }
 
   /**
-   * Obtains public link. This method may send request or calculate link. Used in other methods.
-   * [ON SUCCESS]: This method can provide ANY DATA as the first argument as the data appears to be parsed in other methods.
+   * Obtains public link. This method may send request or calculate link. Used
+   * in other methods.
    * @abstract
-   * @param identifier {string} Resource identifier (path or id)
-   * @param func {object} Object of callbacks: success, error, fail, anyway
+   * @param {string} identifier - Resource identifier (path or id)
+   * @param {object} func - Object of callbacks: success, error, fail, anyway
+   * @param {function} func.success - Takes any data as the first argument
+   * @param {function} func.error - Takes the response body as the first argument
+   * @param {function} func.fail - Takes the response body (or null if it's not provided)
+   * as the first argument
+   * @param {function} func.anyway - Takes the response body as the first argument
    */
-  static getPublicLink () {
+  static getPublicLink (identifier, func = {}) {
   }
 
   /**
-   * Calls a callback with the response as argument (mostly do not use arguments).
-   * [ON SUCCESS]: This method should call the success callback with an object of the RESPONSE BODY as the first argument.
+   * Removes a resource
    * @abstract
-   * @param identifier {string} Resource identifier (path or id)
-   * @param func {object} Object of callbacks: success, error, fail, anyway
-   * @param params {object} Any query parameters
+   * @param {string} identifier - Resource identifier (path or id)
+   * @param {object} func - Object of callbacks: success, error, fail, anyway
+   * @param {function} func.success - Takes the response body as the first argument
+   * @param {function} func.error - Takes the response body as the first argument
+   * @param {function} func.fail - Takes the response body (or null if it's not provided)
+   * as the first argument
+   * @param {function} func.anyway - Takes the response body as the first argument
+   * @param {object} params - Any query parameters
    */
   static removeResource (identifier, func = {}, params = {}) {
   }
 
   /**
-   * In most cases, calls removeResource() with parameters
-   * [ON SUCCESS]: This method should call the success callback with an object of the RESPONSE BODY as the first argument.
+   * Deletes a resource permanently
    * @abstract
    * @see removeResource()
-   * @param identifier {string} Resource identifier (path or id)
-   * @param func {object} Object of callbacks: success, error, fail, anyway
+   * @param {string} identifier - Resource identifier (path or id)
+   * @param {object} func - Object of callbacks: success, error, fail, anyway
+   * @param {function} func.success - Takes the response body as the first argument
+   * @param {function} func.error - Takes the response body as the first argument
+   * @param {function} func.fail - Takes the response body (or null if it's not provided)
+   * as the first argument
+   * @param {function} func.anyway - Takes the response body as the first argument
    */
   static deleteResource (identifier, func = {}) {
   }
 
   /**
-   * In most cases moves file to the same directory with new name or makes a patch request, if service supports this.
-   * [ON SUCCESS]: This method should call the success callback with an object of the serialized RESOURCE META as the first argument.
+   * In most cases moves file to the same directory with new name or makes a
+   * patch request, if service supports this.
    * @abstract
    * @see moveResourceTo()
-   * @param identifier {string} Resource identifier (path or id)
-   * @param newname {string} New file name
-   * @param func {object} Object of callbacks: success, error, exist, fail, anyway
+   * @param {string} identifier - Resource identifier (path or id)
+   * @param {string} newname - New file name
+   * @param {object} func - Object of callbacks: success, error, exist, fail, anyway
+   * @param {function} func.success - Takes the resource serialized meta as the first argument
+   * @param {function} func.error - Takes the response body as the first argument
+   * @param {function} func.fail - Takes the response body (or null if it's not provided)
+   * as the first argument
+   * @param {function} func.exist - Takes the response body as the first argument
+   * @param {function} func.anyway - Takes the response body as the first argument
    */
   static renameResource (identifier, newname, func = {}) {
   }
 
   /**
-   * Sends copy request. New file should be unshared.
-   * [ON SUCCESS]: This method should call the success callback with an object of the RESPONSE BODY as the first argument.
-   * [ON EXIST]: If this method can call "exist" function it should call the exist callback with the path of the resource that will replace existed.
-   * Make sence in path-based service api's.
+   * Sends copy request. The new file should be unshared.
    * @abstract
-   * @param identifier {string} Resource identifier (path or id)
-   * @param destination {string} Path or id of parent directory
-   * @param func {object} Object of callbacks: success, error, exist, fail, anyway
+   * @param {string} identifier - Resource identifier (path or id)
+   * @param {string} destination - Path or id of parent directory
+   * @param {object} func - Object of callbacks: success, error, exist, fail, anyway
+   * @param {function} func.success - Takes the response body as the first argument
+   * @param {function} func.error - Takes the response body as the first argument
+   * @param {function} func.fail - Takes the response body (or null if it's not provided)
+   * as the first argument
+   * @param {function} func.exist - Takes the response body as the first argument
+   * @param {function} func.anyway - Takes the response body as the first argument
    */
   static copyResourceTo (identifier, destination, func = {}) {
   }
 
   /**
    * Sends move request.
-   * [ON SUCCESS]: This method should call the success callback with an object of the RESPONSE BODY as the first argument.
-   * [ON EXIST]: If this method can call "exist" function it should call the exist callback with the path of the resource that will replace existed.
-   * Make sence in path-based service api's.
    * @abstract
-   * @param identifier {string} Resource identifier (path or id)
-   * @param destination {string} Path or id of parent directory
-   * @param func {object} Object of callbacks: success, error, exist, fail, anyway
+   * @param {string} identifier - Resource identifier (path or id)
+   * @param {string} destination - Path or id of parent directory
+   * @param {object} func - Object of callbacks: success, error, exist, fail, anyway
+   * @param {function} func.success - Takes the response body as the first argument
+   * @param {function} func.error - Takes the response body as the first argument
+   * @param {function} func.fail - Takes the response body (or null if it's not provided)
+   * as the first argument
+   * @param {function} func.exist - Takes the response body as the first argument
+   * @param {function} func.anyway - Takes the response body as the first argument
    */
   static moveResourceTo (identifier, destination, func = {}) {
   }
 
   /**
-   * Restores file from trash and calls function with resource as argument if succeed.
-   * [ON SUCCESS]: This method should call the success callback with an object of the RESPONSE BODY as the first argument.
+   * Restores file from trash.
    * @abstract
-   * @param item {object} Parsed resource object
-   * @param overwrite {boolean}
-   * @param func {object} Object of callbacks: success, error, exist, fail, anyway
+   * @param {object} item - Parsed resource object
+   * @param {boolean} overwrite
+   * @param {object} func - Object of callbacks: success, error, exist, fail, anyway
+   * @param {function} func.success - Takes the response body as the first argument
+   * @param {function} func.error - Takes the response body as the first argument
+   * @param {function} func.fail - Takes the response body (or null if it's not provided)
+   * as the first argument
+   * @param {function} func.exist - Takes the response body as the first argument
+   * @param {function} func.anyway - Takes the response body as the first argument
    */
   static restoreResource (identifier, func = {}, overwrite = false) {
   }
-  
+
   /**
    * Purges trash bin.
+   * @param {object} func - Object of callbacks: success, error, exist, fail, anyway
+   * @param {function} func.success - Takes the response body as the first argument
+   * @param {function} func.error - Takes the response body as the first argument
+   * @param {function} func.fail - Takes the response body (or null if it's not provided)
+   * as the first argument
+   * @param {function} func.anyway - Takes the response body as the first argument
    */
-  static purgeTrash () {
+  static purgeTrash (func = {}) {
   }
 
   /**
@@ -452,7 +535,7 @@ class CloudAPI {
 
   /**
    * Opens an authorization window and call the callback function when recieves message.
-   * @param callback {function} Function that recieve data and popup window as arguments
+   * @param {function} callback - Function that takes data and popup window as arguments
    */
   static openAuthWindow (callback) {
     var params = urlStr(this.urls.authorize.params)
@@ -467,14 +550,14 @@ class CloudAPI {
   }
 
   /**
-   * This method recieves token data from anywhere 
+   * This method recieves token data from anywhere
    * (e. g. it can be recieved from any storage or by parsing redirect url)
    * and calls the callback on it. Should be overwritten, as can require any preparations,
    * like token checking or data formatting.
    * @abstract
-   * @param data {object} Any parsed data from url.
-   * @param callback {function}
-   * @param error {function}
+   * @param {object} data - Any parsed data from url.
+   * @param {function} callback
+   * @param {function} error
    */
   static getToken (data, callback = () => {}, error = () => {}) {
   }
@@ -483,18 +566,19 @@ class CloudAPI {
    * Sets tokens. Appears to be immidiately recieved data from getToken().
    * Because of common format for response data, in most cases should not be overwritten.
    * Used to not change token properties directly.
-   * @param data {object} Token data
-   * @param callback {function}
+   * @param {object} data - Token data
+   * @param {function} callback
    */
   static saveTokenData (data, callback = () => {}) {
     this.accessToken = data['token']
-    callback()
+    callback(data)
   }
 
   /**
    * Revokes authorization.
-   * Mostly just clear session through callback, if service does not provide any revoke interface.
-   * @param callback {function}
+   * Mostly just clears session through callback, if service does not provide
+   * any revoke interface.
+   * @param {function} callback
   */
   static revokeAuthorization (callback = () => {}) {
     delete this.accessToken
