@@ -7,8 +7,8 @@ interface IAction {
 
 const initialState = null
 
-export const SERVICE_SELECT = 'activeservice::select'
-export const SERVICE_CLEAR = 'activeservice::clear'
+const SERVICE_SELECT = 'activeservice::select'
+const SERVICE_CLEAR = 'activeservice::clear'
 
 export function selectService (service: actionPayload): IAction {
   return {
@@ -22,8 +22,6 @@ export function clearServiceSelection (): IAction {
     type: SERVICE_CLEAR
   }
 }
-
-// REDUCER
 
 const actionsMap = {
   [SERVICE_SELECT ]: (state, action) => {
