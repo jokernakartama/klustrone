@@ -1,0 +1,3 @@
+interface ILoadingAction {
+  type?: string
+}
