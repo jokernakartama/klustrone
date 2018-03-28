@@ -46,7 +46,7 @@ module.exports = {
   devtool: false,
   context: sourcePath,
   entry: {
-    app: path.join(sourcePath, 'index.tsx')
+    app: ['babel-polyfill', path.join(sourcePath, 'index.tsx')]
   },
   output: {
     path: buildPath,

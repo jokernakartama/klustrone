@@ -15,6 +15,5 @@
         "react-hmre"
       ]
     }
-  },
-  "plugins": ["transform-runtime"],
+  }
 }
