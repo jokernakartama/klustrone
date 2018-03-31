@@ -5,6 +5,8 @@ module.exports = function(config) {
     files: [
       // use a polyfill for function.prototype.bind which is missing from PhantomJS
       'node_modules/phantomjs-polyfill/bind-polyfill.js',
+      'node_modules/babel-polyfill/browser.js',
+      'build/config/enzyme.init.js',
       // path pattern for specifications
       'src/**/*.spec.js'
     ],
@@ -13,14 +15,21 @@ module.exports = function(config) {
     basePath: '../../',
     preprocessors: {
       // application files
-      'src/**/*[^\.spec].js': ['webpack'],
-      // test files
-      'src/**/*.spec.js': ['webpack']
+      'build/config/enzyme.init.js': ['webpack'],
+      'src/**/*.js': ['webpack'],
+      'src/**/*.tsx': ['webpack'],
+      'src/**/*.ts': ['webpack'],
     },
-    reporters: ['spec'],
+    logLevel : config.LOG_DISABLE,
+    reporters: ['mocha'],
+    mochaReporter: {
+      maxLogLines: -1,
+      showDiff: true
+    },
     webpack: webpackConfig,
     webpackMiddleware: {
-      noInfo: true
+      logLevel: 'silent',
+      stats: 'errors-only'
     },
     browsers: ['PhantomJS']
   })
