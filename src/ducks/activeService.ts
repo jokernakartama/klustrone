@@ -1,23 +1,23 @@
-type actionPayload = string|null
-
-interface IAction {
-    type?: string
-    payload?: actionPayload
-}
+import { serviceMap } from '~/api'
 
 const initialState = null
 
 const SERVICE_SELECT = 'activeservice::select'
 const SERVICE_CLEAR = 'activeservice::clear'
 
-export function selectService (service: actionPayload): IAction {
+export function usedAPI (getState: () => any): ICloudAPI {
+  const state = getState()
+  return serviceMap[state.services.active]
+}
+
+export function selectService (service: activeServiceActionPayload): IActiveServiceAction {
   return {
     type: SERVICE_SELECT,
     payload: service
   }
 }
 
-export function clearServiceSelection (): IAction {
+export function clearServiceSelection (): IActiveServiceAction {
   return {
     type: SERVICE_CLEAR
   }
@@ -32,7 +32,7 @@ const actionsMap = {
   }
 }
 
-export default function reducer (state: actionPayload = initialState, action: IAction = {}): actionPayload {
+export default function reducer (state: activeServiceActionPayload = initialState, action: IActiveServiceAction = {}) {
   const fn = actionsMap[action.type]
   return fn ? fn(state, action) : state
 }

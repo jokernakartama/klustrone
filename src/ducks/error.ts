@@ -1,23 +1,16 @@
-type actionPayload = number|null
-
-interface IAction {
-    type?: string
-    payload?: actionPayload
-}
-
-const initialState: actionPayload = null
+const initialState: errorActionPayload = null
 
 export const ERROR_RECIEVE = 'error::recieve'
 export const ERROR_CLEAR = 'error::clear'
 
-export function throwError (code: number): IAction {
+export function throwError (code: number): IErrorAction {
   return {
     type: ERROR_RECIEVE,
     payload: code
   }
 }
 
-export function clearError (): IAction {
+export function clearError (): IErrorAction {
   return {
     type: ERROR_CLEAR
   }
@@ -34,7 +27,7 @@ const actionsMap = {
   }
 }
 
-export default function reducer (state: actionPayload = initialState, action: IAction = {}): actionPayload {
+export default function reducer (state: errorActionPayload = initialState, action: IErrorAction = {}) {
   const fn = actionsMap[action.type]
   return fn ? fn(state, action) : state
 }

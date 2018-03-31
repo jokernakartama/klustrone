@@ -1,20 +1,5 @@
 import Promise from 'promise-polyfill'
 
-interface IActionPayload {
-  type: string
-  message?: string
-  title?: string
-  data?: any
-  accept?: string
-  decline?: string
-  keep?: boolean
-}
-
-interface IAction {
-    type?: string
-    payload?: IActionPayload|false
-}
-
 type gFunc = ((data: any) => any)|false
 
 // Omit uncaught exceptions to use Promise.catch() only
@@ -39,7 +24,7 @@ const dialogDefaults = {
   keep: false
 }
 
-export function openDialog (type, message = '', data?, opts = {}, resolve: gFunc = false, reject: gFunc = false) {
+export function openDialog (type: ModalType, message: string = '', data?, opts = {}, resolve: gFunc = false, reject: gFunc = false) {
   return function (dispatch): void {
     const options = Object.assign({}, dialogDefaults, opts)
     globalResolveFunction = resolve
@@ -69,7 +54,7 @@ export function closeDialog (data?) {
   }
 }
 
-export function openModal (type: string, message: string = '', data: any = false, title: string, accept: string, decline: string): IAction {
+export function openModal (type: ModalType, message: string = '', data: any = false, title: string, accept: string, decline: string): IModalAction {
   return {
     type: MODAL_OPEN,
     payload: {
@@ -83,7 +68,7 @@ export function openModal (type: string, message: string = '', data: any = false
   }
 }
 
-export function closeModal (): IAction {
+export function closeModal (): IModalAction {
   return {
     type: MODAL_CLOSED
   }
@@ -133,7 +118,7 @@ const actionsMap = {
  * @returns {Promise}
  */
 export function appInfo (dispatch) {
-  return function (message = '', opts = { decline: 'Ok'}, data = true): Promise {
+  return function (message: string = '', opts = { decline: 'Ok'}, data = true): Promise {
     return new Promise((resolve) => {
       dispatch(openDialog('info', message, data, opts, resolve))
     })
@@ -144,7 +129,7 @@ export function appInfo (dispatch) {
  * @see appInfo
  */
 export function appError (dispatch) {
-  return function (message = '', opts = { decline: 'Ok'}, data = true) {
+  return function (message: string = '', opts = { decline: 'Ok'}, data = true) {
     return new Promise((resolve) => {
       dispatch(openDialog('error', message, data, opts, resolve))
     })
@@ -155,7 +140,7 @@ export function appError (dispatch) {
  * @see appInfo
  */
 export function appWarning (dispatch) {
-  return function (message = '', opts = { decline: 'Ok'}, data = true) {
+  return function (message: string = '', opts = { decline: 'Ok'}, data = true) {
     return new Promise((resolve) => {
       dispatch(openDialog('warning', message, data, opts, resolve))
     })
@@ -169,7 +154,7 @@ export function appWarning (dispatch) {
  * @returns {Promise}
  */
 export function appConfirm (dispatch) {
-  return function (message = '', opts = { accept: 'Confirm' }) {
+  return function (message: string = '', opts = { accept: 'Confirm' }) {
     return new Promise((resolve, reject) => {
       dispatch(openDialog('confirm', message, true, opts, resolve, reject))
     })
@@ -183,14 +168,14 @@ export function appConfirm (dispatch) {
  * @returns {Promise}
  */
 export function appPrompt (dispatch) {
-  return function (message = '', defautValue = '', opts = { accept: 'Done' }) {
+  return function (message: string = '', defautValue = '', opts = { accept: 'Done' }) {
     return new Promise((resolve, reject) => {
       dispatch(openDialog('prompt', message, defautValue, opts, resolve, reject))
     })
   }
 }
 
-export default function reducer (state = initialState, action: IAction = {}) {
+export default function reducer (state = initialState, action: IModalAction = {}) {
   const fn = actionsMap[action.type]
   return fn ? fn(state, action) : state
 }

@@ -1,10 +1,5 @@
 const RESOURCES_TRASH_FLAG_UPDATE = 'resourcestrashflag::update'
 
-interface IAction {
-    type?: string
-    payload?: boolean
-}
-
 const initialState = false
 
 export function updateTrashFlag (isTrash: boolean) {
@@ -20,7 +15,7 @@ const actionsMap = {
   }
 }
 
-export default function reducer (state = initialState, action: IAction = {}) {
+export default function reducer (state = initialState, action: IResourceIsTrashAction = {}) {
   const fn = actionsMap[action.type]
   return fn ? fn(state, action) : state
 }

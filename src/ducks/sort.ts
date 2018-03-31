@@ -1,21 +1,11 @@
 import { setKey, getKey } from '~/utils/session'
 
-interface IActionPayload {
-  field: string
-  asc: boolean
-}
-
-interface IAction {
-  type?: string
-  payload?: IActionPayload
-}
-
 const SORTING_SETTINGS_KEY = 'sort'
 const initialState = getKey(SORTING_SETTINGS_KEY) || { field: 'name', asc: true }
 
 export const RESOURCES_SORT_CHANGE = 'resourcessort::change'
 
-export function sortResourcesList(field = 'name', asc = true) {
+export function sortResourcesList (field = 'name', asc = true) {
   return function (dispatch) {
     setKey(SORTING_SETTINGS_KEY, {
       field,
@@ -37,7 +27,7 @@ const actionsMap = {
   }
 }
 
-export default function reducer (state = initialState, action: IAction = {}) {
+export default function reducer (state = initialState, action: ISortAction = {}) {
   const fn = actionsMap[action.type]
   return fn ? fn(state, action) : state
 }
