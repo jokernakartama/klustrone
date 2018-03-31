@@ -21,7 +21,6 @@
   "homepage": "https://github.com/jokernakartama/klustrfm#readme",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
-    "cross-tab-channel": "^1.1.0",
     "cross-tab-middleware": "^1.1.0",
     "promise-polyfill": "^7.0.0",
     "prop-types": "^15.6.1",

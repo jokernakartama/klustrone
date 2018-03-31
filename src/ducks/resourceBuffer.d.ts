@@ -7,5 +7,6 @@ interface IResourceBufferActionPayload {
 
 interface IResourceBufferAction {
   type?: string
+  meta?: any
   payload?: boolean|IResourceBufferActionPayload
 } 
