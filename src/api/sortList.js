@@ -5,6 +5,12 @@ const DEFAULT_SORT_FIELD = 'name'
 const TYPE_FIELD_NAME = 'type'
 const PUBLIC_LINK_FIELD_NAME = 'publicLink'
 
+/**
+ * @param {object} o - An object of CloudAPI resources
+ * @param {string} field - A field to sort by: name, type, size or publicLink
+ * @param {boolean} asc - Whether resources should be sorted ascending
+ * @returns {array} - Sorted list of resource ids
+ */
 export default function sortList (o, field = DEFAULT_SORT_FIELD, asc = true) {
   var sorted = Object.keys(o)
   sorted.sort(function (a, b) {
@@ -49,4 +55,4 @@ export default function sortList (o, field = DEFAULT_SORT_FIELD, asc = true) {
     }
   })
   return sorted
-} 
+}
