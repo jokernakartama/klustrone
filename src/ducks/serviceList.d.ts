@@ -1,5 +1,6 @@
 interface IServiceListAction {
     type?: string
+    meta?: any
     payload?: any
 }
 

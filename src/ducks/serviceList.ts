@@ -26,6 +26,9 @@ function setExpirationTime (Service, data) {
 export function mountService (serviceName: string, expiresAt = null) {
   return {
     type: SERVICE_MOUNT,
+    meta: {
+      crossTab: true
+    },
     payload: {
       name: serviceName,
       expiresAt
@@ -36,6 +39,9 @@ export function mountService (serviceName: string, expiresAt = null) {
 export function unmountService (serviceName: string) {
   return {
     type: SERVICE_UNMOUNT,
+    meta: {
+      crossTab: true
+    },
     payload: serviceName
   }
 }
