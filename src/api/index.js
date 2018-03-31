@@ -7,6 +7,7 @@ import { default as _Dropbox } from './Dropbox'
 import { default as _sortList } from './sortList'
 import { default as _getFileType } from './getFileType'
 import { default as _parseLocation } from './parseLocation'
+import { default as _createHref } from './createHref'
 import { TRASH_URL_IDENTIFIER as _TRASH_URL_IDENTIFIER } from './parseLocation'
 
 export const CloudAPI = _CloudAPI
@@ -15,6 +16,7 @@ export const YandexDisk = _YandexDisk
 export const Dropbox = _Dropbox
 export const sortList = _sortList
 export const getFileType = _getFileType
+export const createHref = _createHref
 export const parseLocation = _parseLocation
 export const TRASH_URL_IDENTIFIER = _TRASH_URL_IDENTIFIER
 
