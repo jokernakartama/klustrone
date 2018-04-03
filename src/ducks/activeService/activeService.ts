@@ -1,14 +1,7 @@
-import { serviceMap } from '~/api'
-
 const initialState = null
 
-const SERVICE_SELECT = 'activeservice::select'
-const SERVICE_CLEAR = 'activeservice::clear'
-
-export function usedAPI (getState: () => any): ICloudAPI {
-  const state = getState()
-  return serviceMap[state.services.active]
-}
+export const SERVICE_SELECT = 'activeservice::select'
+export const SERVICE_CLEAR = 'activeservice::clear'
 
 export function selectService (service: activeServiceActionPayload): IActiveServiceAction {
   return {

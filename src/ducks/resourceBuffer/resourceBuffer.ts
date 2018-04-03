@@ -9,8 +9,8 @@ Object.keys(serviceMap).forEach((name) => {
   }
 })
 
-const BUFFER_COPY_FLAG_SET = 'buffer::copy_flag_set'
-const BUFFER_UPDATE = 'buffer::update'
+export const BUFFER_COPY_FLAG_SET = 'buffer::copy_flag_set'
+export const BUFFER_UPDATE = 'buffer::update'
 
 export function updateBuffer (id: string, path: string, service: string, copy: boolean): IResourceBufferAction {
   return {

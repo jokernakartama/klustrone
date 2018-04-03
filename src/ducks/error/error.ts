@@ -16,8 +16,6 @@ export function clearError (): IErrorAction {
   }
 }
 
-// REDUCER
-
 const actionsMap = {
   [ERROR_RECIEVE]: (state, action) => {
     return action.payload

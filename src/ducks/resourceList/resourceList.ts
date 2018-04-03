@@ -3,8 +3,8 @@ import { appWarning } from '~/ducks/modal'
 
 const initialState = {}
 
-const RESOURCE_LIST_UPDATE = 'resourcelist::update_list'
-const RESOURCE_UPDATE = 'resourcelist::update_resource'
+export const RESOURCE_LIST_UPDATE = 'resourcelist::update_list'
+export const RESOURCE_UPDATE = 'resourcelist::update_resource'
 
 export function updateList (list: IResourceListActionPayload = initialState): IResourceListAction {
   return {

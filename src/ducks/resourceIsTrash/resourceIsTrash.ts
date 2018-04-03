@@ -1,6 +1,6 @@
-const RESOURCES_TRASH_FLAG_UPDATE = 'resourcestrashflag::update'
-
 const initialState = false
+
+export const RESOURCES_TRASH_FLAG_UPDATE = 'resourcetrashflag::update'
 
 export function updateTrashFlag (isTrash: boolean) {
    return {

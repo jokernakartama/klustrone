@@ -1,6 +1,6 @@
-const RESOURCES_PATH_UPDATE = 'resourcepath::update'
-
 const initialState = ''
+
+export const RESOURCES_PATH_UPDATE = 'resourcepath::update'
 
 export function updateResourcePath (path: string): IResourcPathAction {
    return {

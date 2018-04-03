@@ -2,7 +2,7 @@ import Promise from 'promise-polyfill'
 
 const initialState = null
 
-const RESOURCE_DIRECTORY_UPDATE = 'resourcedirectory::update'
+export const RESOURCE_DIRECTORY_UPDATE = 'resourcedirectory::update'
 
 export function updateDir (dir: IDirResource|null = initialState): IResourceDirectoryAction {
   return {

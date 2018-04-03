@@ -1,6 +1,6 @@
 const initialState = null
 
-const RESOURCE_SELECT = 'resource::select'
+export const RESOURCE_SELECT = 'resource::select'
 
 export function select (id: string|null = initialState): IResourceSelectedAction {
   return {

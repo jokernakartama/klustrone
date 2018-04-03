@@ -1,7 +1,7 @@
 const initialState = false
 
-const LOADING_START = 'loading::start'
-const LOADING_END = 'loading::end'
+export const LOADING_START = 'loading::start'
+export const LOADING_END = 'loading::end'
 
 export function loadingStart (): ILoadingAction {
   return {

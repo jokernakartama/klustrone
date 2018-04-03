@@ -1,5 +1,5 @@
 import { serviceMap } from '~/api/index.js'
-import { checkToken, putToken } from '~/utils/tokenBag'
+import { checkToken, putToken, removeToken } from '~/utils/tokenBag'
 
 const initialState = {
 }
@@ -11,8 +11,8 @@ Object.keys(serviceMap).forEach((serviceName) => {
   }
 })
 
-const SERVICE_MOUNT = 'servicepanel::service_mount'
-const SERVICE_UNMOUNT = 'servicepanel::service_unmount'
+export const SERVICE_MOUNT = 'servicepanel::service_mount'
+export const SERVICE_UNMOUNT = 'servicepanel::service_unmount'
 
 function setExpirationTime (Service, data) {
   const noRefreshBorder = Service.settings.noRefreshBorder
@@ -62,6 +62,7 @@ export function disconnectService (serviceName: string, callback?: () => void) {
   return function (dispatch): void {
     serviceMap[serviceName].revokeAuthorization(() => {
       dispatch(unmountService(serviceName))
+      removeToken(serviceName)
       callback()
     })
   }
