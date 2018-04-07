@@ -39,6 +39,6 @@ export default function bemName (o: IBEMEntityObject|IBEMEntityObject[]): string
     className = o.block
     if (o.elem) className = className +  ELEMENT_DELIMETER + o.elem
     if (o.mod) className = className + ' ' + bemModifier(className, o.mod)
-    return className
+    return className.trim()
   }
 }
