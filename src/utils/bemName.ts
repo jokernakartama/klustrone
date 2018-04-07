@@ -11,16 +11,23 @@ const ELEMENT_DELIMETER = '__'
 const MODIFIER_DELIMETER = '_'
 const MODIFIER_VALUE_DELIMETER = '_'
 
+// converts camelCase to kebab-case
+function c2k (str: string) {
+  return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+}
+
 function bemModifier (block: string, mod: IBEMEntityObjectModifier): string {
+  // block should be kebab-cased at this moment
   let modifier = ''
   const modifierKeys = Object.keys(mod)
   if (modifierKeys.length) {
     modifierKeys.forEach((name) => {
+      const propName = c2k(name)
       const modifierValue = mod[name]
       if (typeof modifierValue === 'string') {
-        modifier = modifier + ' ' + block + MODIFIER_DELIMETER + name + MODIFIER_VALUE_DELIMETER + modifierValue
+        modifier = modifier + ' ' + block + MODIFIER_DELIMETER + propName + MODIFIER_VALUE_DELIMETER + c2k(modifierValue)
       } else {
-        modifier =  modifierValue ? modifier + ' ' + block + MODIFIER_DELIMETER + name : ''
+        modifier =  modifierValue ? modifier + ' ' + block + MODIFIER_DELIMETER + propName : ''
       }
     })
     // because joining makes an extra space symbol if modifier's value is false
@@ -36,8 +43,8 @@ export default function bemName (o: IBEMEntityObject|IBEMEntityObject[]): string
       return className + bemName(value)
     }).join(' ')
   } else {
-    className = o.block
-    if (o.elem) className = className +  ELEMENT_DELIMETER + o.elem
+    className = c2k(o.block)
+    if (o.elem) className = className +  ELEMENT_DELIMETER + c2k(o.elem)
     if (o.mod) className = className + ' ' + bemModifier(className, o.mod)
     return className.trim()
   }
