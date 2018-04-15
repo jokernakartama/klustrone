@@ -6,7 +6,9 @@ interface IServiceListAction {
 
 interface IServiceListElementState {
   name: string
-  mounted: false
+  mounted: boolean
+  expiresPerc?: number
+  timerId?: number 
 }
 
 interface IServiceListState {
