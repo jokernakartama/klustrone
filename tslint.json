@@ -4,6 +4,7 @@
     "tslint-eslint-rules",
     "tslint-react"
   ],
+  "exclude": "*.spec.js",
   "rules": {
     "no-irregular-whitespace": false,
     "only-arrow-functions": false,
