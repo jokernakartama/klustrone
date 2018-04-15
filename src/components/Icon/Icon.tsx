@@ -10,7 +10,7 @@ interface IIconComponentProps {
 
 const Icon: React.SFC<IIconComponentProps> = (props) => {
   const iconClassNames = [
-    { block: 'icon', mod: { [icon]: true } },
+    { block: 'icon', mod: { [props.icon]: true } },
     { block: props.className }
   ]
   return <i className={ bem(iconClassNames) } />
