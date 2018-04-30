@@ -94,7 +94,6 @@ export function setTimer (serviceName: string, expiresAt: number) {
       const tickTime = Math.round(serviceMap[serviceName].settings.tokenLifeTime / 100)
       const tick = () => dispatch(timerTick(serviceName, expiresAt))
       const timerId = window.setInterval(tick, tickTime * 1000)
-      tick()
       dispatch({
         type: SERVICE_SET_TIMER,
         payload: {
@@ -102,6 +101,7 @@ export function setTimer (serviceName: string, expiresAt: number) {
           id: timerId
         }
       })
+      tick()
     }
   }
 }
@@ -135,13 +135,13 @@ export function connectService (serviceName: string) {
     if (tokenData) {
       serviceMap[serviceName].saveTokenData(tokenData)
       const expiresAt = setExpirationTime(serviceMap[serviceName], tokenData)
+      dispatch(setTimer(serviceName, expiresAt))
       const state = getState().services
       // When the crosstab action is used, it normally mounts a service before
       // this action creator runs, so there is no need to mount the service again
       if (state.list[serviceName] && !state.list[serviceName].mounted) {
         dispatch(mountService(serviceName))
       }
-      dispatch(setTimer(serviceName, expiresAt))
     }
   }
 }
@@ -178,6 +178,7 @@ export function addService (serviceName: string) {
       try {
         const parsed = rawData
         serviceMap[serviceName].getToken(parsed, () => {
+          dispatch(disconnectService(serviceName))
           serviceMap[serviceName].saveTokenData(parsed, () => {
             putToken(serviceName, parsed)
             dispatch(connectService(serviceName))
