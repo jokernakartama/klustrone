@@ -31,7 +31,11 @@ export function getList (path: string|null = null, isTrash: boolean|null = null)
       const API = getAPI(getState)
       API.getResourceList(path, {
         success: (data) => {
-          dispatch(updateList(data))
+          // when response is recieved after switching service
+          // it should not update resource list of other service.
+          if (getState().services.active === API.settings.stateName) {
+            dispatch(updateList(data))
+          }
         },
         error: () => {
         },
