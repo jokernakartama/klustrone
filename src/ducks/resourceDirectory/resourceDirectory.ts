@@ -20,7 +20,11 @@ export function getMeta (path: string|null = null): (...args) => Promise {
       const API = getAPI(getState)
       API.getResourceMeta(path, {
         success: (data) => {
-          dispatch(updateDir(data))
+          // when response is recieved after switching service
+          // it should not update a directory of other service.
+          if (getState().services.active === API.settings.stateName) {
+            dispatch(updateDir(data))
+          }
         },
         error: () => {
         },
