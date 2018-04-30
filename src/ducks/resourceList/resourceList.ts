@@ -1,12 +1,12 @@
 import Promise from 'promise-polyfill'
 import { appWarning } from '~/ducks/modal'
 
-const initialState = {}
+const initialState = null
 
 export const RESOURCE_LIST_UPDATE = 'resourcelist::update_list'
 export const RESOURCE_UPDATE = 'resourcelist::update_resource'
 
-export function updateList (list: IResourceListActionPayload = initialState): IResourceListAction {
+export function updateList (list: IResourceListActionPayload|null = initialState): IResourceListAction {
   return {
     type: RESOURCE_LIST_UPDATE,
     payload: list
