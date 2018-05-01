@@ -1,8 +1,13 @@
 import { setKey, getKey } from '~/utils/session'
 
-const VIEW_SETTINGS_KEY = 'view'
+export const VIEW_SETTINGS_KEY = 'view'
 
 const initialState = getKey(VIEW_SETTINGS_KEY) || 'tile'
+
+export enum ViewActionPayload {
+  TILE = 'tile',
+  LIST = 'list'
+}
 
 export const VIEW_CHANGE = 'listview::change'
 
