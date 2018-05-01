@@ -27,11 +27,10 @@ class ServiceManager extends React.PureComponent<IServiceManagerContainerProps, 
 
   constructor (props) {
     super(props)
+    const { connectService } = props.serviceListActions
     this.toggleChildrenVisibility = this.toggleChildrenVisibility.bind(this)
-  }
-
-  public componentDidMount () {
-    const { connectService } = this.props.serviceListActions
+    // It is pretty important to set the initial state of services
+    // as soon as possible to avoid additional rendering of other components
     for (const service in serviceMap) {
       if (serviceMap[service].saveTokenData) {
         connectService(service)
