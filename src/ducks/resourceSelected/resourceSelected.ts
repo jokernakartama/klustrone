@@ -11,7 +11,7 @@ export function select (id: string|null = initialState): IResourceSelectedAction
 
 export function deselect () {
   return function (dispatch): void {
-    select(null)
+    dispatch(select(null))
   }
 }
 
