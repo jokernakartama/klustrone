@@ -9,18 +9,18 @@ const createStore = configureStore([thunk])
 describe('ducks/view.ts', function () {
   describe('setView', function () {
     it('should create an action to set view', function () {
-      const view = dux.ViewActionPayload.TILE
+      const view = dux.viewType.TILE
       const expected = {
         type: dux.VIEW_CHANGE,
         payload: view
       }
-      expect(dux.setView(dux.ViewActionPayload.TILE)).to.deep.equal(expected)
+      expect(dux.setView(dux.viewType.TILE)).to.deep.equal(expected)
     })
   })
   describe('changeView', function () {
     it('should dispatch an action to set view and save the view\'s state in session storage', function () {
-      const view = dux.ViewActionPayload.LIST
-      const store = createStore({ view: dux.ViewActionPayload.TILE})
+      const view = dux.viewType.LIST
+      const store = createStore({ view: dux.viewType.TILE})
       const expected = {
         type: dux.VIEW_CHANGE,
         payload: view
@@ -34,12 +34,12 @@ describe('ducks/view.ts', function () {
   })
   describe('view reducer', function () {
     it('should handle VIEW_CHANGE', function () {
-      const view = dux.ViewActionPayload.LIST
+      const view = dux.viewType.LIST
       const action = {
         type: dux.VIEW_CHANGE,
         payload: view
       }
-      expect(reducer(dux.ViewActionPayload.TILE, action)).to.equal(view)
+      expect(reducer(dux.viewType.TILE, action)).to.equal(view)
     })
   })
 })
