@@ -48,16 +48,16 @@ describe('ducks/modal.ts', function() {
     it('should dispatch an action to open modal window', function () {
       const store = createStore({ modal: false })
       const expected = {
-      type: dux.MODAL_OPEN,
-      payload: {
-        type,
-        message,
-        title,
-        data,
-        accept,
-        decline
+        type: dux.MODAL_OPEN,
+        payload: {
+          type,
+          message,
+          title,
+          data,
+          accept,
+          decline
+        }
       }
-    }
       store.dispatch(dux.openDialog(type, message, data, { accept, decline, title }))
       const dispatchedActions = store.getActions()
       expect(dispatchedActions).to.deep.equal([expected])
@@ -126,11 +126,27 @@ describe('ducks/modal.ts', function() {
     })
   })
   describe('modal reducer', function() {
+    const type = 'info'
+    const message = 'information message'
+    const title = 'the title'
+    const data = true
+    const accept = 'OK'
+    const decline = 'CANCEL'
+    const state = {
+      type,
+      message,
+      title,
+      data,
+      accept,
+      decline
+    }
     it('should handle MODAL_OPEN', function () {
-      expect(true).to.equal(true)
+      const action = dux.openModal(type, message, data, title, accept, decline)
+      expect(reducer(false, action)).to.deep.equal(state)
     })
     it('should handle MODAL_CLOSE', function () {
-      expect(true).to.equal(true)
+      const action = dux.closeModal()
+      expect(reducer(state, action)).to.equal(false)
     })
   })
 })
