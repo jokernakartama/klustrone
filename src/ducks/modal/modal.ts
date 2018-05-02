@@ -9,7 +9,7 @@ Promise._unhandledRejectionFn = () => {}
 const initialState = false
 
 export const MODAL_OPEN: string = 'modal::open'
-export const MODAL_CLOSED: string = 'modal::closed'
+export const MODAL_CLOSE: string = 'modal::closed'
 
 // Seems like there is no other way to pass the value of an argument of one function
 // to another one as not an argument, except using global variables
@@ -70,7 +70,7 @@ export function openModal (type: ModalType, message: string = '', data: any = fa
 
 export function closeModal (): IModalAction {
   return {
-    type: MODAL_CLOSED
+    type: MODAL_CLOSE
   }
 }
 
@@ -78,7 +78,7 @@ const actionsMap = {
   [MODAL_OPEN]: (state, action) => {
     return action.payload
   },
-  [MODAL_CLOSED]: () => {
+  [MODAL_CLOSE]: () => {
     return false
   },
 }
@@ -114,7 +114,7 @@ const actionsMap = {
 /**
  * Replaces window.alert
  * @param {string} message Message to be shown in the dialog
- * @param {object} option Additional parameters
+ * @param {object} opts Additional parameters
  * @returns {Promise}
  */
 export function appInfo (dispatch) {
@@ -150,7 +150,7 @@ export function appWarning (dispatch) {
 /**
  * Replaces window.confirm
  * @param {string} message Message to be shown in the dialog
- * @param {object} option Additional parameters
+ * @param {object} opts Additional parameters
  * @returns {Promise}
  */
 export function appConfirm (dispatch) {
@@ -164,7 +164,7 @@ export function appConfirm (dispatch) {
 /**
  * Replaces window.prompt
  * @param {string} message Message to be shown in the dialog
- * @param {object} option Additional parameters
+ * @param {object} opts Additional parameters
  * @returns {Promise}
  */
 export function appPrompt (dispatch) {
