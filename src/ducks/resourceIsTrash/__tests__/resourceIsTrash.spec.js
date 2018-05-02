@@ -3,7 +3,7 @@ import * as dux from '../resourceIsTrash'
 import reducer from '../resourceIsTrash'
 
 describe('ducks/resourceIsTrash.ts', function() {
-  describe('updateDir', function() {
+  describe('resourceIsTrash', function() {
     it('should create an action to update trash flag', function () {
       const isTrash = true
       const expected = {
