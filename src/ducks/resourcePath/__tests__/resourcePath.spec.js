@@ -4,7 +4,7 @@ import reducer from '../resourcePath'
 
 describe('ducks/resourcePath.ts', function() {
   describe('updateResourcePath', function() {
-    it('should create an action to update trash flag', function () {
+    it('should create an action to update resource path', function () {
       const path = 'test'
       const expected = {
         type: dux.RESOURCES_PATH_UPDATE,
