@@ -1,6 +1,6 @@
 import CloudAPI from './CloudAPI'
-import AX from '~/utilities/ajax'
-import { default as pathJoin, dirname, getNameFromPath } from '~/utilities/path.join'
+import AX from '~/utils/ajax'
+import { default as pathJoin, dirname, getNameFromPath } from '~/utils/path.join'
 import yandexDiskConfig from './configs/YandexDisk.config'
 
 const AUTH_TYPE = 'OAuth'
@@ -108,6 +108,7 @@ class YandexDisk extends CloudAPI {
    * @param path {string} Parsed resource query path (generally with no slash at start)
    */
   static createPath (path) {
+    if (path === '') return this.names.rootPathIdentifier
     if (path.slice(0, 1) === '/') {
       return path
     } else {
@@ -152,7 +153,7 @@ class YandexDisk extends CloudAPI {
         'anyway': '!201'
       })
       .on('success', () => {
-        this.getResourceMeta(destination, callback)
+        this.getResource(destination, callback)
       })
       .on('exist', (body, resp) => {
         if (typeof func.exist === 'function') func.exist(body, resp)
@@ -173,7 +174,7 @@ class YandexDisk extends CloudAPI {
   /**
    * @see {@link https://tech.yandex.ru/disk/poligon/#!//v1/disk/resources/GetResource}
    */
-  static getResourceMeta (path, func = {}, params = {}) {
+  static getResource (path, func = {}, params = {}) {
     params['path'] = this.createPath(path)
     AX.get(this.urls.resourceMeta, params)
       .headers({'Authorization': AUTH_TYPE + ' ' + this.accessToken})
@@ -200,22 +201,29 @@ class YandexDisk extends CloudAPI {
   }
 
   /**
-   * @see YandexDisk.getFilesList
+   * @see YandexDisk.getResource
    */
-  static getResource (path, func = {}, trash = false) {
-    // just calls another method because we can get resource information later
-    this.getFilesList(path, func, trash)
+  static getResourceMeta (path, func = {}) {
+    path = this.createPath(path)
+    var params = {
+      fields: 'name,modified,created,path,type'
+    }
+    var success = func.success
+    var callbacks = Object.assign({}, func, {
+      success: (body, resp) => {
+        var resourceMeta = this.serialize(body)
+        if (typeof success === 'function') success(resourceMeta, resp)
+      }
+    })
+    this.getResource(path, callbacks, params)
+    return false
   }
 
-  static getFilesList (path, func = {}, trash = false) {
-    // normalize root path
-    if (path === '') {
-      path = this.names.rootPathIdentifier
-    } else {
-      path = this.createPath(path)
-    }
+  static getResourceList (path, func = {}, trash = false) {
+    path = this.createPath(path)
     var url = trash ? this.urls.trashList : this.urls.filesList
     var urlParams = {}
+    urlParams['fields'] = this.names.listParentObject
     urlParams[this.names.limitUrlParamName] = this.settings.listLimit
     urlParams['path'] = trash ? '/' : path
     AX.get(url, urlParams)
@@ -228,7 +236,6 @@ class YandexDisk extends CloudAPI {
       })
       .on('success', (body, resp) => {
         var list = this.serialize(body[this.names.listParentObject])
-        list.current = this.serialize(body)
         if (typeof func.success === 'function') func.success(list, resp)
       })
       .on('fail', (body, resp) => {
@@ -274,7 +281,7 @@ class YandexDisk extends CloudAPI {
   }
 
   static getPublicLink (path, func = {}) {
-    this.getResourceMeta(path, func, {fields: this.names.itemPublicUrlKey})
+    this.getResource(path, func, {fields: this.names.itemPublicUrlKey})
   }
 
   /**
@@ -428,19 +435,19 @@ class YandexDisk extends CloudAPI {
     var destination = pathJoin(parent, newname)
     var success = func.success
     var anyway = func.anyway
-    var resourceMeta
+    var isSucceed = false
     var dataCallback = Object.assign({}, func, {
-      success: (body, resp) => {
-        resourceMeta = this.serialize(body)
-        if (typeof success === 'function') success(resourceMeta, resp)
+      success: (meta, resp) => {
+        isSucceed = true
+        if (typeof success === 'function') success(meta, resp)
       }
     })
     var actionCallback = Object.assign({}, func, {
       success: () => {
-        this.getResourceMeta(destination, dataCallback)
+        this.getResource(destination, dataCallback)
       },
       anyway: (body, resp) => {
-        if (typeof anyway === 'function' && !resourceMeta) anyway(body, resp)
+        if (typeof anyway === 'function' && !isSucceed) anyway(body, resp)
       }
     })
     this.copyOrMove(false, resourcePath, destination, actionCallback)
@@ -499,7 +506,7 @@ class YandexDisk extends CloudAPI {
       .send()
     return false
   }
-  
+
   /**
    * @see {@link https://tech.yandex.ru/disk/poligon/#!//v1/disk/trash/resources/ClearTrash}
    */

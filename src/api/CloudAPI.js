@@ -36,17 +36,17 @@ const MESSAGE_SOURCE_IDENTIFIER = 'cloud-api-postcode-method'
 class CloudAPI {
   /**
    * Any settings for API
-   * @property {string} winHeight - authorization window height, used in openAuthWindow()
-   * @property {string} winWidth - authorization window width, used in openAuthWindow()
-   * @property {number} noRefreshBorder - the minimum time from which the token is
-   * considered as infinite (to set refresh or revoke timeouts)
-   * @property {*} anyParameter - any parameter which are used in code
+   * @property {string} winHeight - Authorization window height, used in openAuthWindow()
+   * @property {string} winWidth - Authorization window width, used in openAuthWindow()
+   * @property {number} tokenLifeTime - Token lifetime provided by service in seconds.
+   * Set it if it's short enough (for example, less than a day). Defined lifetime can be
+   * used to show time to token expiration in percents rather than in seconds.
+   * @property {*} anyParameter - Any parameter which is used in code
    */
   static get settings () {
     return {
       winHeight: '600',
       winWidth: '800',
-      noRefreshBorder:  86400 // a day should be enough
     }
   }
 
@@ -56,7 +56,7 @@ class CloudAPI {
    * @property {object} authorize - Used in openAuthWindow()
    * @property {string} authorize.path - Authorization url
    * @property {object} authorize.params - Authorization url GET parameters
-   * @property {(string|object)} anyUrlName - any property to use in queries
+   * @property {(string|object)} anyUrlName - Any property to use in queries
    * @example
    * // somewhere in our api we use this.urls.token
    * return {
@@ -79,19 +79,19 @@ class CloudAPI {
    * Set api response object identifiers
    * for internal usage
    * @abstract
-   * @property {string} serviceName - used in openAuthWindow
-   * @property {string} limitUrlParamName - limit parameter key
-   * @property {string} listKey - key to get a resources list
-   * @property {string} listParentObject - may be useful if raw response contains
+   * @property {string} serviceName - Used in openAuthWindow
+   * @property {string} limitUrlParamName - Limit parameter key
+   * @property {string} listKey - Key to get a resources list
+   * @property {string} listParentObject - May be useful if raw response contains
    * a resource list in third level of nesting
-   * @property {string} itemIdKey - key to get resource id
-   * @property {string} itemTypeKey - key to get resource type
-   * @property {string} itemDirKey - value to consider resource as directory
-   * @property {string} itemFileKey - value to consider resource as file
-   * @property {string} itemNameKey - key to get resource name
-   * @property {string} itemModifiedKey - key to get resource date
-   * @property {string} itemPreviewKey - key to get resource preview
-   * @property {string} itemSizeKey - key to get resource size
+   * @property {string} itemIdKey - Key to get the resource id
+   * @property {string} itemTypeKey - Key to get the resource type
+   * @property {string} itemDirKey - Value to consider the resource as directory
+   * @property {string} itemFileKey - Value to consider resource as file
+   * @property {string} itemNameKey - Key to get resource name
+   * @property {string} itemModifiedKey - Key to get resource date
+   * @property {string} itemPreviewKey - Key to get resource preview
+   * @property {string} itemSizeKey - Key to get resource size
    * @example
    * return {
    *  'serviceName': 'disk',
@@ -150,7 +150,7 @@ class CloudAPI {
   /**
    * @abstract
    * @param {object} rawData
-   * @returns {(string|null)} Shared link or null
+   * @returns {(string|null)} - Shared link or null
    */
   static isShared (rawData) {
   }
@@ -232,6 +232,7 @@ class CloudAPI {
     resource.publicLink = this.isShared(rawData)
     return resource
   }
+
   /**
    * Serializes raw response data to directory object or file object.
    * @param {object} rawData
@@ -240,14 +241,12 @@ class CloudAPI {
   static serialize (rawData) {
     var serialized
     if (this.isList(rawData)) {
-      serialized = {
-        resources: {}
-      }
+      serialized = {}
       rawData[this.names.listKey].forEach((item) => {
         if (this.isDir(item)) {
-          serialized.resources[item[this.names.itemIdKey]] = this.parseDir(item)
+          serialized[item[this.names.itemIdKey]] = this.parseDir(item)
         } else if (this.isFile(item)) {
-          serialized.resources[item[this.names.itemIdKey]] = this.parseFile(item)
+          serialized[item[this.names.itemIdKey]] = this.parseFile(item)
         }
       })
     } else {
@@ -279,40 +278,32 @@ class CloudAPI {
   }
 
   /**
-   * Obtains metadata of the resource.
+   * Obtains raw metadata of the resource.
    * @abstract
    * @param {string} identifier - Path or id, depending on the service
    * @param {object} func - Object of callbacks: success, error, fail, anyway
-   * @param {function} func.success - Takes the response body as the first argument
+   * @param {function} func.success - Takes a raw resource meta as the first argument
    * @param {function} func.error - Takes the response body as the first argument
    * @param {function} func.fail - Takes the response body (or null if it's not provided)
    * as the first argument
    * @param {function} func.anyway - Takes the response body as the first argument
    * @param {object} params - Any parameters (e.g. fields for request)
    */
-  static getResourceMeta (identifier, func = {}, params = {}) {
+  static getResource (identifier, func = {}, params = {}) {
   }
 
   /**
-   * Get resource parameters by identifier. Generally, it is used for directory listing.
-   * In most cases, it should get information whether the directory is root or
-   * not and get its parent identifier (path or id),
-   * so the data can be calculated (if path is used) or recieved by request
-   * (if id is used, e. g. for Google Drive).
+   * Obtains metadata of the resource.
    * @abstract
-   * @see getResourceList
-   * @param {string} identifier - Resource identifier (path or id)
+   * @param {string} identifier - Path or id, depending on the service
    * @param {object} func - Object of callbacks: success, error, fail, anyway
-   * @param {function} func.success - Takes an object of the resource data
-   * as the first argument. The object contains serialized resource own meta in the "current" key
-   * and list of serialized its' children meta in the "resources" key
+   * @param {function} func.success - Takes a serialized resource meta as the first argument
    * @param {function} func.error - Takes the response body as the first argument
    * @param {function} func.fail - Takes the response body (or null if it's not provided)
    * as the first argument
    * @param {function} func.anyway - Takes the response body as the first argument
-   * @param {boolean} trash - Whether only trashed files should be included
    */
-  static getResource (identifier, func = {}, trash = false) {
+  static getResourceMeta (identifier, func = {}) {
   }
 
   /**
@@ -320,11 +311,8 @@ class CloudAPI {
    * In most cases, it is called by getResource(), if the second one has succeed
    * (if it uses request).
    * @abstract
-   * @see getResource()
    * @see parseList()
-   * @param {string} identifier - Unlike others this method uses unspecified
-   * type of parameter, because services use different concepts of their hierarchy,
-   * so, for Dropbox, a folder path is enough, for Google Drive it should use a parent id.
+   * @param {string} identifier -  Path or id, depending on the service
    * @param {object} func - Object of callbacks: success, error, fail, anyway
    * @param {function} func.success - Takes a serialized resources list as the first argument.
    * @param {function} func.error - Takes the response body as the first argument
@@ -366,7 +354,7 @@ class CloudAPI {
   }
 
   /**
-   * Unpublishes resource.
+   * Unpublishes the resource.
    * @abstract
    * @param {string} identifier - Resource identifier (path or id)
    * @param {object} func - Object of callbacks: success, error, fail, anyway
@@ -395,7 +383,7 @@ class CloudAPI {
   }
 
   /**
-   * Removes a resource
+   * Removes the resource
    * @abstract
    * @param {string} identifier - Resource identifier (path or id)
    * @param {object} func - Object of callbacks: success, error, fail, anyway
@@ -410,7 +398,7 @@ class CloudAPI {
   }
 
   /**
-   * Deletes a resource permanently
+   * Deletes the resource permanently
    * @abstract
    * @see removeResource()
    * @param {string} identifier - Resource identifier (path or id)
@@ -539,7 +527,7 @@ class CloudAPI {
    */
   static openAuthWindow (callback) {
     var params = urlStr(this.urls.authorize.params)
-    var win = window.open(this.urls.authorize.path + '?' + params, 'auth' + this.names.serviceName, 'width=' + this.settings.winWidth + ',height=' + this.settings.winHeight)
+    var win = window.open(this.urls.authorize.path + '?' + params, 'serviceAuthorizationWindow', 'width=' + this.settings.winWidth + ',height=' + this.settings.winHeight)
     var onMessage = function onMessage (e) {
       if (e.data.source === MESSAGE_SOURCE_IDENTIFIER) {
         window.removeEventListener('message', onMessage)
@@ -571,6 +559,7 @@ class CloudAPI {
    */
   static saveTokenData (data, callback = () => {}) {
     this.accessToken = data['token']
+    this.uuu = 'hey'
     callback(data)
   }
 

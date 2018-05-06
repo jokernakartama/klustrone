@@ -1,6 +1,7 @@
+import Promise from 'promise-polyfill'
 import CloudAPI from './CloudAPI'
-import AX from '~/utilities/ajax'
-import { default as pathJoin, dirname, getNameFromPath } from '~/utilities/path.join'
+import AX from '~/utils/ajax'
+import { default as pathJoin, dirname, getNameFromPath } from '~/utils/path.join'
 import DropboxConfig from './configs/Dropbox.config'
 
 const AUTH_TYPE = 'Bearer'
@@ -201,7 +202,7 @@ class Dropbox extends CloudAPI {
       }
     }
     const query = function (arraySlice) {
-      return new window.Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         var entries = []
         for (let i = 0; i < arraySlice.length; i++) {
           entries.push({
@@ -231,7 +232,7 @@ class Dropbox extends CloudAPI {
         }
       })
     }
-    return window.Promise.all(slices.map(query))
+    return Promise.all(slices.map(query))
   }
 
   static createThumbnail (data) {
@@ -253,7 +254,7 @@ class Dropbox extends CloudAPI {
       }
     }
     return result
-  } 
+  }
 
   /**
    * Does nothing except error handling
@@ -304,7 +305,7 @@ class Dropbox extends CloudAPI {
   /**
    * @see {@link https://www.dropbox.com/developers/documentation/http/documentation#files-get_metadata}
    */
-  static getResourceMeta (path, func = {}, params = {}) {
+  static getResource (path, func = {}, params = {}) {
     if (path === '/' || path === '') {
       // getting metadata of root directory is unsupported so we use a preset
       if (typeof func.success === 'function') func.success(ROOT_DIR_DATA, ROOT_DIR_RESPONSE)
@@ -337,45 +338,26 @@ class Dropbox extends CloudAPI {
   }
 
   /**
-   * @see Dropbox.getResourceMeta
-   * @see Dropbox.getFilesList
+   * @see Dropbox.getResource
    */
-  static getResource (path, func = {}, trash = false) {
-    var resourceMeta
+  static getResourceMeta (path, func = {}) {
     var success = func.success
-    var anyway = func.anyway
-    var getFilesListCallbacks = Object.assign({}, func, {
-      success: (list, resp) => {
-        var resource = {
-          current: resourceMeta,
-          resources: list
-        }
-        if (typeof success === 'function') success(resource, resp)
+    var callbacks = Object.assign({}, func, {
+      success: (body, resp) => {
+        var resourceMeta = this.serialize(body)
+        if (typeof success === 'function') success(resourceMeta, resp)
       }
     })
-    var getResourceCallbacks = Object.assign({}, func, {
-      success: (body) => {
-        resourceMeta = this.serialize(body)
-        this.getFilesList(path, getFilesListCallbacks, trash)
-      },
-      anyway: (body, resp) => {
-        if (resourceMeta === undefined && anyway) anyway(body, resp)
-      }
-    })
-    if (!trash) {
-      this.getResourceMeta(path, getResourceCallbacks)
-    } else {
-      if (typeof func.fail === 'function') func.fail('Not provided', null)
-      if (typeof func.anyway === 'function') func.anyway('Not provided', null)
-    }
+    this.getResource(path, callbacks)
+    return false
   }
 
   /**
    * @see {@link https://www.dropbox.com/developers/documentation/http/documentation#files-list_folder}
    */
-  static getFilesList (path, func = {}, trash = false) {
+  static getResourceList (path, func = {}, trash = false) {
     if (!trash) {
-      const getSharedLinksPromise = new window.Promise((resolve) => { this.getAllSharedLinks(resolve) })
+      const getSharedLinksPromise = new Promise((resolve) => { this.getAllSharedLinks(resolve) })
       AX.post(this.urls.filesList)
         .headers({'Authorization': AUTH_TYPE + ' ' + this.accessToken})
         .status({
@@ -385,7 +367,8 @@ class Dropbox extends CloudAPI {
           'anyway': '!200'
         })
         .on('success', (body, resp) => {
-          var list = this.serialize(body).resources
+          var list = this.serialize(body)
+          /*
           var pathsArray = []
           for (let item in list) {
             if (list[item].type === 'picture') pathsArray.push(this.createPath(list[item].path))
@@ -393,6 +376,11 @@ class Dropbox extends CloudAPI {
           this.getThumbnailBatch(pathsArray)
             .then((thumbsData) => {
               list = this.mergeThumbnailsWithList(list, thumbsData)
+              return getSharedLinksPromise
+            })
+          */
+          Promise.resolve()
+            .then(() => {
               return getSharedLinksPromise
             })
             .then((recievedLinks) => {
@@ -420,6 +408,9 @@ class Dropbox extends CloudAPI {
         .send.json({
           path: path !== '' ? this.createPath(path) : ''
         })
+    } else {
+      if (typeof func.fail === 'function') func.fail('Not provided', null)
+      if (typeof func.anyway === 'function') func.anyway('Not provided', null)
     }
     return false
   }
@@ -548,7 +539,7 @@ class Dropbox extends CloudAPI {
             if (typeof func.anyway === 'function') func.anyway(body, resp)
           })
           .send.json({
-            url: publicUrl 
+            url: publicUrl
           })
       },
       anyway: (body, resp) => {
@@ -651,7 +642,7 @@ class Dropbox extends CloudAPI {
       success: (body, resp) => {
         resourceMeta = this.serialize(body)
         // As Dropbox api is designed to make this method really heavy and slow, because
-        // there is no possibility to obtain a public link and preview data from Dropbox.getResourceMeta()
+        // there is no possibility to obtain a public link and preview data from Dropbox.getResource()
         // and the recieved resource data appears to be merged with already existed,
         // it's a more rational way to just delete preview and public link (so them will not be changed in the app).
         // Initially, CloudAPI.renameResource() supposed to use only name in success callback,
@@ -665,7 +656,7 @@ class Dropbox extends CloudAPI {
     })
     var actionCallback = Object.assign({}, func, {
       success: () => {
-        this.getResourceMeta(destination, dataCallback)
+        this.getResource(destination, dataCallback)
       },
       anyway: (body, resp) => {
         if (typeof anyway === 'function' && !resourceMeta) anyway(body, resp)

@@ -1,5 +1,5 @@
 import CloudAPI from './CloudAPI'
-import AX from '~/utilities/ajax'
+import AX from '~/utils/ajax'
 import googleDriveConfig from './configs/GoogleDrive.config'
 
 const AUTH_TYPE = 'Bearer'
@@ -20,7 +20,7 @@ class GoogleDrive extends CloudAPI {
       stateName: googleDriveConfig.name,
       redirectURI: googleDriveConfig.redirectURI,
       listLimit: 99999,
-      expirationHoard: 30
+      tokenLifeTime: 3600
     }
   }
 
@@ -207,8 +207,7 @@ class GoogleDrive extends CloudAPI {
   /**
    * @see {@link https://developers.google.com/drive/v2/reference/files/get}
    */
-  static getResourceMeta (id, func = {}, params = {}) {
-    if (id === '' || id === '/') id = this.names.rootPathIdentifier
+  static getResource (id, func = {}, params = {}) {
     AX.get(this.urls.resourceMeta + id, params)
       .headers({'Authorization': AUTH_TYPE + ' ' + this.accessToken})
       .status({
@@ -234,38 +233,28 @@ class GoogleDrive extends CloudAPI {
   }
 
   /**
-   * @see GoogleDrive.getResourceMeta
-   * @see GoogleDrive.getFilesList
+   * @see GoogleDrive.getResource
    */
-  static getResource (id, func = {}, trash = false) {
-    var resourceMeta
-    var success = func.success
-    var anyway = func.anyway
-
-    var getFilesListCallbacks = Object.assign({}, func, {
-      success: (list, resp) => {
-        list.current = resourceMeta
-        if (typeof success === 'function') success(list, resp)
-      }
-    })
-    var getResourceCallbacks = Object.assign({}, func, {
-      success: (body) => {
-        resourceMeta = this.serialize(body)
-        this.getFilesList(id, getFilesListCallbacks, trash)
-      },
-      anyway: (body, resp) => {
-        if (resourceMeta === undefined && anyway) anyway(body, resp)
-      }
-    })
-    this.getResourceMeta(id, getResourceCallbacks, {
+  static getResourceMeta (id, func = {}) {
+    if (id === '' || id === '/') id = this.names.rootPathIdentifier
+    var params = {
       fields: 'id,title,parents,mimeType'
+    }
+    var success = func.success
+    var callbacks = Object.assign({}, func, {
+      success: (body, resp) => {
+        var resourceMeta = this.serialize(body)
+        if (typeof success === 'function') success(resourceMeta, resp)
+      }
     })
+    this.getResource(id, callbacks, params)
+    return false
   }
 
   /**
    * @see {@link https://developers.google.com/drive/v2/reference/files/list}
    */
-  static getFilesList (id, func = {}, trash = false) {
+  static getResourceList (id, func = {}, trash = false) {
     // normalize root id
     if (id === '' || id === '/') id = this.names.rootPathIdentifier
     var urlParams = {
@@ -302,7 +291,7 @@ class GoogleDrive extends CloudAPI {
   }
 
   /**
-   * @see GoogleDrive.getResourceMeta
+   * @see GoogleDrive.getResource
    */
   static getDownloadLink (id, func = {}) {
     var success = func.success
@@ -314,13 +303,13 @@ class GoogleDrive extends CloudAPI {
         }
       }
     })
-    this.getResourceMeta(id, callback, {
+    this.getResource(id, callback, {
       fields: 'webContentLink,title,mimeType'
     })
   }
 
   /**
-   * @see GoogleDrive.getResourceMeta
+   * @see GoogleDrive.getResource
    */
   static getPublicLink (item, func = {}) {
     var success = func.success
@@ -330,7 +319,7 @@ class GoogleDrive extends CloudAPI {
         if (typeof success === 'function') success(publicUrl, resp)
       }
     })
-    this.getResourceMeta(item, callback, {
+    this.getResource(item, callback, {
       fields: this.names.itemPublicUrlKey
     })
   }
@@ -518,9 +507,9 @@ class GoogleDrive extends CloudAPI {
       },
       anyway: (body, resp) => {
         if (typeof func.anyway === 'function' && !title) func.anyway(body, resp)
-      } 
+      }
     })
-    this.getResourceMeta(id, callback, {
+    this.getResource(id, callback, {
       fields: this.names.itemNameKey
     })
     return false
@@ -577,7 +566,7 @@ class GoogleDrive extends CloudAPI {
       .send()
     return false
   }
-  
+
   /**
    * @see {@link https://developers.google.com/drive/v2/reference/files/emptyTrash}
    */
