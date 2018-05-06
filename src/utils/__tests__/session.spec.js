@@ -32,10 +32,13 @@ describe('utils/session.ts', function() {
       const otherTab = window.open(window.location.href, 'other window')
       const data = 1234
       const key = 'num'
-      session.setKey(key, data)
-      const expected = JSON.parse(window.sessionStorage[key])
-      expect(expected).to.equal(data)
-      expect(JSON.parse(otherTab.sessionStorage[key])).to.equal(data)
+      session.start()
+        .then(function () {
+          session.setKey(key, data)
+          const expected = JSON.parse(window.sessionStorage[key])
+          expect(expected).to.equal(data)
+          expect(JSON.parse(otherTab.sessionStorage[key])).to.equal(data)
+        })
     })
   })
   describe('session.removeKey', function() {

@@ -17,10 +17,6 @@ function forceUpdate (): void {
 export const start = function (excludedKeys: string[] = []): Promise {
   return new Promise(function (resolve: () => void) {
     let lastRecievedData: string
-    if (window.sessionStorage.length === 0) {
-      window.localStorage.setItem('getWindowSessionStorage', Date.now().toString())
-      window.localStorage.removeItem('getWindowSessionStorage')
-    }
     window.addEventListener('storage', function (event) {
       if (event.key === 'getWindowSessionStorage' && event.newValue !== null) {
         // another tab requests the current tab data
@@ -42,6 +38,10 @@ export const start = function (excludedKeys: string[] = []): Promise {
         lastRecievedData = event.newValue
       }
     })
+    if (window.sessionStorage.length === 0) {
+      window.localStorage.setItem('getWindowSessionStorage', Date.now().toString())
+      window.localStorage.removeItem('getWindowSessionStorage')
+    }
 
     window.setTimeout(() => {
       resolve()
