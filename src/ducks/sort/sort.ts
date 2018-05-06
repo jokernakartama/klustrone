@@ -1,6 +1,7 @@
 import { setKey, getKey } from '~/utils/session'
+import { keys } from '~/constants'
 
-export const SORTING_SETTINGS_KEY = 'sort'
+export const SORTING_SETTINGS_KEY = keys.SORT_SETTINGS
 const initialState = getKey(SORTING_SETTINGS_KEY) || { field: 'name', asc: true }
 
 export const RESOURCES_SORT_CHANGE = 'resourcessort::change'

@@ -1,6 +1,7 @@
 import { setKey, getKey } from '~/utils/session'
+import { keys } from '~/constants'
 
-export const VIEW_SETTINGS_KEY = 'view'
+export const VIEW_SETTINGS_KEY = keys.VIEW_SETTINGS
 
 const initialState = getKey(VIEW_SETTINGS_KEY) || 'tile'
 
