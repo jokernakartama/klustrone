@@ -75,7 +75,7 @@ export function deleteResource (path: string) {
   }
 }
 
-export function restoreResource (path: string, permanently: boolean = false): (...args) => Promise {
+export function restoreResource (path: string, overwrite: boolean = false): (...args) => Promise {
   return (dispatch, getState, getAPI): Promise => {
     return new Promise ((resolve) => {
       const API = getAPI(getState)
@@ -92,7 +92,7 @@ export function restoreResource (path: string, permanently: boolean = false): (.
         fail: (body, resp) => {
           resolve(body, resp)
         }
-      }, permanently)
+      }, overwrite)
     })
   }
 }
@@ -116,11 +116,11 @@ export function purgeTrash (): (...args) => Promise {
   }
 }
 
-export function downloadResource (serviceName: string, path: string): (...args) => Promise {
+export function downloadResource (path: string): (...args) => Promise {
   return (dispatch, getState, getAPI): Promise => {
     return new Promise ((resolve) => {
       const API = getAPI(getState)
-      API.getDownloadLink({
+      API.getDownloadLink(path, {
         success: (href) => {
           window.location.href = href
         },
@@ -136,7 +136,7 @@ export function downloadResource (serviceName: string, path: string): (...args) 
   }
 }
 
-export function publishResource (serviceName: string, path: string): (...args) => Promise {
+export function publishResource (path: string): (...args) => Promise {
   return (dispatch, getState, getAPI): Promise => {
     return new Promise ((resolve) => {
       const API = getAPI(getState)
@@ -265,7 +265,7 @@ const actionsMap = {
   },
   [RESOURCE_UPDATE]: (state, action) => {
     // copy resources list to modify
-    const list = Object.assign({}, state.resources.list)
+    const list = Object.assign({}, state)
     const resource = list[action.payload.id] || {}
     // modify the resource
     if (action.payload.value !== null) {
@@ -273,10 +273,7 @@ const actionsMap = {
     } else {
       delete list[action.payload.id]
     }
-    return {
-      ...state,
-      resources: list
-    }
+    return list
   }
 }
 
