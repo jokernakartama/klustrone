@@ -40,6 +40,7 @@ interface IFileResource {
 }
 
 interface IAPIurls {
+  (): string|object
   authorize: {
     path: string
     params: object
@@ -48,12 +49,17 @@ interface IAPIurls {
 }
 
 interface IAPInames {
-  serviceName: string
+  (): any
   [otherNames: string]: string
 }
 
+interface IAPISettings {
+  (): any
+  [otherSettings: string]: any
+}
+
 interface ICloudAPI {
-  settings: () => object
+  settings: () => IAPISettings
   urls: () => IAPIurls
   names: () => IAPInames
   isDir: (item: object) => boolean
@@ -88,4 +94,8 @@ interface ICloudAPI {
   saveTokenData: (data?: token, cb?: (data?: token) => void) => void
   revokeAuthorization: (cb?: () => void) => void
   [anyMethod: string]: (...args: any[]) => any
+}
+
+interface IServiceMap {
+  [serviceName: string]: ICloudAPI
 }
