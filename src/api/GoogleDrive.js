@@ -60,7 +60,6 @@ class GoogleDrive extends CloudAPI {
 
   static get names () {
     return {
-      'serviceName': 'drive',
       'limitUrlParamName': 'limit',
       'listKey': 'items',
       'listParentObject': null,

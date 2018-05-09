@@ -38,6 +38,7 @@ class CloudAPI {
    * Any settings for API
    * @property {string} winHeight - Authorization window height, used in openAuthWindow()
    * @property {string} winWidth - Authorization window width, used in openAuthWindow()
+   * @property {string} stateName - Service name as identifier (to use it in url or as a class name)
    * @property {number} tokenLifeTime - Token lifetime provided by service in seconds.
    * Set it if it's short enough (for example, less than a day). Defined lifetime can be
    * used to show time to token expiration in percents rather than in seconds.

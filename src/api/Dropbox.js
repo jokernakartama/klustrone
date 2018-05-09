@@ -82,7 +82,6 @@ class Dropbox extends CloudAPI {
 
   static get names () {
     return {
-      'serviceName': 'dropbox',
       'pathQueryPrefix': '/',
       'limitUrlParamName': 'limit',
       'listKey': 'entries',

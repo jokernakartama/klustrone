@@ -53,7 +53,6 @@ class YandexDisk extends CloudAPI {
 
   static get names () {
     return {
-      'serviceName': 'disk',
       'pathQueryPrefix': '/',
       'limitUrlParamName': 'limit',
       'listKey': 'items',
