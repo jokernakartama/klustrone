@@ -1,4 +1,4 @@
-import { serviceMap } from '~/api/index.js'
+import { serviceMap as defaultServiceMap  } from '~/api/index.js'
 import { checkToken, putToken, removeToken } from '~/utils/tokenBag'
 import expirationTime from '~/utils/expirationTime'
 import { appError } from '~/ducks/modal'
@@ -6,7 +6,7 @@ import { appError } from '~/ducks/modal'
 const initialState = {
 }
 
-Object.keys(serviceMap).forEach((serviceName) => {
+Object.keys(defaultServiceMap).forEach((serviceName) => {
   initialState[serviceName] = {
     name: serviceName,
     mounted: false
@@ -19,10 +19,10 @@ export const SERVICE_SET_TIMER = 'service::service_set_timer'
 export const SERVICE_CLEAR_TIMER = 'service::service_clear_timer'
 export const SERVICE_TIMER_TICK = 'service::service_timer_tick'
 
-function setExpirationTime (Service, data) {
-  const tokenLifeTime = Service.settings.tokenLifeTime
+function setExpirationTime (Service: ICloudAPI, data: ITokenData) {
+  const settings = Service.settings as IAPISettings
   let expiresAt = null
-  if (tokenLifeTime && data['expires_in'] && data['expires_at'] && tokenLifeTime >= data['expires_in']) {
+  if (settings.tokenLifeTime && data['expires_in'] && data['expires_at'] && settings.tokenLifeTime >= data['expires_in']) {
     expiresAt = data['expires_at']
   }
   return expiresAt
@@ -61,12 +61,14 @@ export function unmountService (serviceName: string) {
  * If time is expired, disconnects service.
  * @param {string} serviceName
  * @param {number} expiresAt
+ * @param {object} serviceMap
  * @returns {function} - Action creator
  */
-export function timerTick (serviceName: string, expiresAt: number) {
+export function timerTick (serviceName: string, expiresAt: number, serviceMap: IServiceMap = defaultServiceMap) {
   return function (dispatch) {
     const time = expiresAt - expirationTime(0)
-    const timePerc = Math.round(time / serviceMap[serviceName].settings.tokenLifeTime * 100)
+    const settings = serviceMap[serviceName].settings as IAPISettings
+    const timePerc = Math.round(time / settings.tokenLifeTime * 100)
     if (time > 0) {
       dispatch({
         type: SERVICE_TIMER_TICK,
@@ -76,7 +78,7 @@ export function timerTick (serviceName: string, expiresAt: number) {
         }
       })
     } else {
-      dispatch(disconnectService(serviceName))
+      dispatch(disconnectService(serviceName, serviceMap))
     }
   }
 }
@@ -85,14 +87,16 @@ export function timerTick (serviceName: string, expiresAt: number) {
  * Sets timer to decrease expiration time each second.
  * @param {string} serviceName
  * @param {number} expiresAt
+ * @param {object} serviceMap
  * @returns {function} - Action creator
  */
-export function setTimer (serviceName: string, expiresAt: number) {
+export function setTimer (serviceName: string, expiresAt: number, serviceMap: IServiceMap = defaultServiceMap) {
   return function (dispatch) {
     dispatch(clearTimer(serviceName))
-    if (expiresAt !== null && expiresAt > 0 && serviceMap[serviceName].settings.tokenLifeTime) {
-      const tickTime = Math.round(serviceMap[serviceName].settings.tokenLifeTime / 100)
-      const tick = () => dispatch(timerTick(serviceName, expiresAt))
+    const settings = serviceMap[serviceName].settings as IAPISettings
+    if (expiresAt !== null && expiresAt > 0 && settings.tokenLifeTime) {
+      const tickTime = Math.round(settings.tokenLifeTime / 100)
+      const tick = () => dispatch(timerTick(serviceName, expiresAt, serviceMap))
       const timerId = window.setInterval(tick, tickTime * 1000)
       dispatch({
         type: SERVICE_SET_TIMER,
@@ -127,15 +131,16 @@ export function clearTimer (serviceName: string) {
 /**
  * Checks the service availability for connection.
  * @param {string} serviceName
+ * @param {object} serviceMap
  * @returns {(null|number)} - setInterval ID
  */
-export function connectService (serviceName: string) {
+export function connectService (serviceName: string, serviceMap: IServiceMap = defaultServiceMap) {
   return function (dispatch, getState): void {
     const tokenData = checkToken(serviceName)
     if (tokenData) {
-      serviceMap[serviceName].saveTokenData(tokenData)
-      const expiresAt = setExpirationTime(serviceMap[serviceName], tokenData)
-      dispatch(setTimer(serviceName, expiresAt))
+      serviceMap[serviceName].saveTokenData(tokenData as ITokenData)
+      const expiresAt = setExpirationTime(serviceMap[serviceName], tokenData as ITokenData)
+      dispatch(setTimer(serviceName, expiresAt, serviceMap))
       const state = getState().services
       // When the crosstab action is used, it normally mounts a service before
       // this action creator runs, so there is no need to mount the service again
@@ -149,9 +154,10 @@ export function connectService (serviceName: string) {
 /**
  * Unmounts the service and clears its timer (if used), then removes the service token.
  * @param {string} serviceName
+ * @param {object} serviceMap
  * @returns {function} - Action creator
  */
-export function disconnectService (serviceName: string) {
+export function disconnectService (serviceName: string, serviceMap: IServiceMap = defaultServiceMap) {
   return function (dispatch, getState): void {
     const state = getState().services
     serviceMap[serviceName].revokeAuthorization(() => {
@@ -170,9 +176,10 @@ export function disconnectService (serviceName: string) {
 /**
  * Opens a service authorization window.
  * @param {string} serviceName
+ * @param {object} serviceMap
  * @returns {function} - Action creator
  */
-export function addService (serviceName: string) {
+export function addService (serviceName: string, serviceMap: IServiceMap = defaultServiceMap) {
   return function (dispatch) {
     serviceMap[serviceName].openAuthWindow((rawData, win) => {
       try {
@@ -181,7 +188,7 @@ export function addService (serviceName: string) {
           dispatch(disconnectService(serviceName))
           serviceMap[serviceName].saveTokenData(parsed, () => {
             putToken(serviceName, parsed)
-            dispatch(connectService(serviceName))
+            dispatch(connectService(serviceName, serviceMap))
           })
         }, () => {
           appError(dispatch)('Cannot get token from recieved url')
