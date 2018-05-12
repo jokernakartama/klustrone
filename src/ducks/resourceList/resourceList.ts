@@ -56,7 +56,7 @@ export function removeResource (path: string, permanently: boolean = false): (..
       const API = getAPI(getState)
       API[action](path, {
         success: () => {
-          dispatch(getList(path)).then((body, resp) => resolve(body, resp))
+          dispatch(getList()).then((body, resp) => resolve(body, resp))
         },
         error: (body, resp) => {
           resolve(body, resp)
@@ -208,11 +208,10 @@ export function renameResource (path: string, value: string): (...args) => Promi
   }
 }
 
-export function pasteResource (path: string, destination: string): (...args) => Promise {
+export function pasteResource (path: string, destination: string, isCopy: boolean = true): (...args) => Promise {
   return (dispatch, getState, getAPI): Promise => {
     return new Promise ((resolve) => {
       const API = getAPI(getState)
-      const isCopy = getState().buffer.isCopy
       const action = isCopy ? 'copyResourceTo' : 'moveResourceTo'
       API[action](path, destination, {
         success: (data, resp) => {
