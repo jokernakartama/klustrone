@@ -5,6 +5,7 @@ import * as activeServiceActions from '~/ducks/activeService'
 import * as resourcePathActions from '~/ducks/resourcePath'
 import * as resourceIsTrashActions from '~/ducks/resourceIsTrash'
 import * as resourceListActions from '~/ducks/resourceList'
+import * as resourceSelectedActions from '~/ducks/resourceSelected'
 import * as loadingActions from '~/ducks/loading'
 import * as resourceDirectioryActions from '~/ducks/resourceDirectory'
 import * as serviceListActions from '~/ducks/serviceList'
@@ -20,6 +21,7 @@ interface IFileManagerContainerProps {
   resourceListActions: any
   loadingActions: any
   resourceDirectioryActions: any
+  resourceSelectedActions: any
   serviceListActions: any
   services: IServiceListState
 }
@@ -100,9 +102,11 @@ class FileManager extends React.Component<IFileManagerContainerProps, IFileManag
   }
 
   public componentDidMount () {
+    const { deselect } = this.props.resourceSelectedActions
     this.unlisten = history.listen((location) => {
       const nextState = setStatus(this.props, this.state)
       if (nextState) {
+        deselect()
         this.updateStore(nextState.service, nextState.path, nextState.isTrash)
         this.clearDirectory(nextState)
         this.loadDirectory(nextState)
@@ -212,15 +216,9 @@ class FileManager extends React.Component<IFileManagerContainerProps, IFileManag
     const { updateResourcePath } = this.props.resourcePathActions
     const { selectService } = this.props.activeServiceActions
     const { updateTrashFlag } = this.props.resourceIsTrashActions
-    if (!this.state || this.state.service !== service) {
-      selectService(service)
-    }
-    if (!this.state || this.state.path !== path) {
-      updateResourcePath(path)
-    }
-    if (!this.state || this.state.isTrash !== isTrash) {
-      updateTrashFlag(isTrash)
-    }
+    selectService(service)
+    updateResourcePath(path)
+    updateTrashFlag(isTrash)
   }
 }
 
@@ -236,6 +234,7 @@ function mapDispatchToProps (dispatch) {
     resourcePathActions: bindActionCreators(resourcePathActions, dispatch),
     resourceIsTrashActions: bindActionCreators(resourceIsTrashActions, dispatch),
     resourceListActions: bindActionCreators(resourceListActions, dispatch),
+    resourceSelectedActions: bindActionCreators(resourceSelectedActions, dispatch),
     loadingActions: bindActionCreators(loadingActions, dispatch),
     resourceDirectioryActions: bindActionCreators(resourceDirectioryActions, dispatch),
     serviceListActions: bindActionCreators(serviceListActions, dispatch)
