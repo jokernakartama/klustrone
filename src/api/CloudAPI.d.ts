@@ -25,6 +25,7 @@ interface IDirResource {
   isRoot: boolean
   type: string
   path: string
+  preview?: optional 
   publicLink: optional
 }
 
