@@ -7,4 +7,9 @@ describe('Component <Icon />', () => {
     expect(wrapper.hasClass('icon_larr')).to.equal(true)
     expect(wrapper.hasClass('content__icon')).to.equal(true)
   })
+  it('should render children components', function () {
+    const someText = 'some text'
+    const wrapper = enzyme.render(<Icon icon='screen'>{ someText }</Icon>)
+    expect(wrapper.text()).to.equal(someText)
+  })
 })
