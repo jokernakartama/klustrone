@@ -185,7 +185,7 @@ export function addService (serviceName: string, serviceMap: IServiceMap = defau
       try {
         const parsed = rawData
         serviceMap[serviceName].getToken(parsed, () => {
-          dispatch(disconnectService(serviceName))
+          dispatch(disconnectService(serviceName, serviceMap))
           serviceMap[serviceName].saveTokenData(parsed, () => {
             putToken(serviceName, parsed)
             dispatch(connectService(serviceName, serviceMap))
