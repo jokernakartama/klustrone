@@ -22,6 +22,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "cross-tab-middleware": "^1.1.0",
+    "history": "^4.7.2",
     "promise-polyfill": "^7.1.2",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
