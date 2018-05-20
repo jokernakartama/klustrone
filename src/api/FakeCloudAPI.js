@@ -36,9 +36,9 @@ export function fakeToken (service, expires_in, value = 'token') {
 } 
 
 export function getFakeResource (dir = false, resource = {}) {
-  return Object.assign({}, resourceTemplate(dir), resource)
+  const result = Object.assign({}, resourceTemplate(dir), resource)
+  return result
 }
-
 export function getFakeList (addResource = false) {
   const dirsCount = Math.random() * (4 - 0)
   const filesCount = Math.random() * (4 - 0)
@@ -117,7 +117,7 @@ class FakeCloudAPI extends CloudAPI {
    * @param {function} func.success - Calls with fake resource as an argument
    */
   static getResourceMeta (path, func = {}) {
-    if (path === 'success' && typeof func.success === 'function') func.success(getFakeResource(true))
+    if (path === 'success' && typeof func.success === 'function') func.success(getFakeResource(true, { path }))
     if (path === 'fail' && typeof func.fail === 'function') func.fail('fail')
     if (path === 'error' && typeof func.error === 'function') func.error('error')
     if (typeof func.anyway === 'function') func.anyway('anyway')

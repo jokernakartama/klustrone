@@ -17,6 +17,10 @@ export function updateDir (dir: IDirResource|null = initialState): IResourceDire
 export function getMeta (path: string|null = null): (...args) => Promise {
   return (dispatch, getState, getAPI): Promise => {
     return new Promise ((resolve) => {
+      if (path === null) {
+        const state = getState()
+        if (path === null && state.resources.dir !== null) path = state.resources.dir.path
+      }
       const API = getAPI(getState)
       API.getResourceMeta(path, {
         success: (data) => {
