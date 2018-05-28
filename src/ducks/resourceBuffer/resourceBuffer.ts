@@ -1,16 +1,27 @@
 import { serviceMap } from '~/api/'
+import { keys } from '~/constants'
+import { setKey, getKey } from '~/utils/session'
 
 const initialState = {}
 Object.keys(serviceMap).forEach((name) => {
-  initialState[name] = {
+  const saved = getKey(keys.BUFFER_PREFIX + name) || {}
+  initialState[name] = Object.assign({
     id: null,
     path: null, // to use in queries
     copy: true // to use the right method
-  }
+  }, saved)
 })
 
-export const BUFFER_COPY_FLAG_SET = 'buffer::copy_flag_set'
 export const BUFFER_UPDATE = 'buffer::update'
+
+export function saveBuffer (id: string, path: string, service: string, copy: boolean): void {
+  const data = {
+    id,
+    path,
+    copy
+  }
+  setKey(keys.BUFFER_PREFIX + service, data)
+}
 
 export function updateBuffer (id: string, path: string, service: string, copy: boolean): IResourceBufferAction {
   return {
@@ -27,27 +38,22 @@ export function updateBuffer (id: string, path: string, service: string, copy: b
   }
 }
 
-export function setCopyFlag (serviceName: string, isCopy: boolean): IResourceBufferAction {
-  return {
-    type: BUFFER_COPY_FLAG_SET,
-    meta: {
-      crossTab: true
-    },
-    payload: isCopy
+export function copyResource (id: string, path: string, service: string) {
+  return function (dispatch) {
+    saveBuffer(id, path, service, true)
+    dispatch(updateBuffer(id, path, service, true))
+  }
+}
+
+export function cutResource (id: string, path: string, service: string) {
+  return function (dispatch) {
+    saveBuffer(id, path, service, true)
+    dispatch(updateBuffer(id, path, service, false))
   }
 }
 
 const actionsMap = {
   [BUFFER_UPDATE]: (state, action) => {
-    const buffer = Object.assign({}, state)
-    buffer[action.payload.service] = {
-      id: action.payload.id,
-      path: action.payload.path,
-      copy: action.payload.copy
-    }
-    return buffer
-  },
-  [BUFFER_COPY_FLAG_SET]: (state, action) => {
     const buffer = Object.assign({}, state)
     buffer[action.payload.service] = {
       id: action.payload.id,
