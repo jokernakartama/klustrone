@@ -6,7 +6,7 @@ const initialState = getKey(SORTING_SETTINGS_KEY) || { field: 'name', asc: true 
 
 export const RESOURCES_SORT_CHANGE = 'resourcessort::change'
 
-export function sortResourcesList (field = 'name', asc = true) {
+export function sortResourcesList (field: string = 'name', asc: boolean = true) {
   return function (dispatch) {
     setKey(SORTING_SETTINGS_KEY, {
       field,
