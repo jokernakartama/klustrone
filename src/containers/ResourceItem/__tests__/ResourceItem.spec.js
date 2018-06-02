@@ -6,7 +6,6 @@ import {
   RESOURCE_TYPE_ROOT_NAME,
   RESOURCE_TYPE_TRASH_NAME
 } from '~/api'
-import { SIGTRAP } from 'constants';
 
 describe('Component <ResourceItem />', () => {
   it('should render presentational component as an endpoint', () => {
@@ -24,7 +23,7 @@ describe('Component <ResourceItem />', () => {
       expect(fakeEvent.preventDefault.called).to.be.true
     })
   })
-  describe.only('ResourceItem.onDoubleClickHandler', () => {
+  describe('ResourceItem.onDoubleClickHandler', () => {
     let wrapper
     function setProps (props) {
       wrapper = enzyme.shallow(<ResourceItem { ...props } />)
