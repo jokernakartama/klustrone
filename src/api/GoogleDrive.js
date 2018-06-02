@@ -490,8 +490,7 @@ class GoogleDrive extends CloudAPI {
             'anyway': 'all'
           })
           .on('success', (body, resp) => {
-            var resourceMeta = this.serialize(body)
-            if (typeof func.success === 'function') func.success(resourceMeta, resp)
+            if (typeof func.success === 'function') func.success(body, resp)
           })
           .on('fail', (body, resp) => {
             if (typeof func.fail === 'function') func.fail(body, resp)
