@@ -4929,28 +4929,6 @@
         "minimist": "1.2.0"
       }
     },
-    "karma-mocha-reporter": {
-      "version": "2.2.5",
-      "dev": true,
-      "requires": {
-        "chalk": "^2.1.0",
-        "log-symbols": "^2.1.0",
-        "strip-ansi": "^4.0.0"
-      },
-      "dependencies": {
-        "ansi-regex": {
-          "version": "3.0.0",
-          "dev": true
-        },
-        "strip-ansi": {
-          "version": "4.0.0",
-          "dev": true,
-          "requires": {
-            "ansi-regex": "^3.0.0"
-          }
-        }
-      }
-    },
     "karma-phantomjs-launcher": {
       "version": "1.0.4",
       "dev": true,
