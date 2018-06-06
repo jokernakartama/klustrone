@@ -60,7 +60,9 @@ module.exports = {
     extensions: ['.js', '.jsx', '.tsx', '.ts'],
     // set the same aliases in tsconfig.json
     alias: {
-      '~': sourcePath
+      '~': sourcePath,
+      // add an extra alias for stylus loader
+      'src': sourcePath
     },
     modules: [
       nodeModulesPath,
