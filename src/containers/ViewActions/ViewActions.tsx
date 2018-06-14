@@ -13,6 +13,7 @@ interface IViewActionsContainerProps {
 class ViewActions extends React.PureComponent<IViewActionsContainerProps> {
   constructor (props) {
     super(props)
+    this.changeView = this.changeView.bind(this)
   }
 
   public render () {
