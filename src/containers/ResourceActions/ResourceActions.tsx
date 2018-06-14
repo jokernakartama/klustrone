@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as listActions from '~/ducks/resourceList'
+import * as dirActions from '~/ducks/resourceDirectory'
 import * as loadingActions from '~/ducks/loading'
 import * as bufferActions from '~/ducks/resourceBuffer'
 
@@ -12,7 +13,10 @@ interface IResourceActionsContainerProps {
   active: string
   selected: string|null
   buffer: object
+  isTrash: boolean
   listActions: any
+  loadingActions: any
+  dirActions: any
   bufferActions: any
 }
 
@@ -25,6 +29,9 @@ class ResourceActions extends React.PureComponent<IResourceActionsContainerProps
 
   constructor (props) {
     super(props)
+    this.purge = this.purge.bind(this)
+    this.update = this.update.bind(this)
+    this.makeDir = this.makeDir.bind(this)
     this.paste = this.paste.bind(this)
     this.copy = this.copy.bind(this)
     this.cut = this.cut.bind(this)
@@ -36,8 +43,16 @@ class ResourceActions extends React.PureComponent<IResourceActionsContainerProps
   }
 
   public render () {
-    const { children } = this.props
-    const actions = {
+    const { children, isTrash, selected, list, buffer, active } = this.props
+    const info = selected !== null && list[selected] ? list[selected] : null
+    const bufferData = active && buffer && buffer[active] ? buffer[active] : null
+    const props = {
+      isTrash,
+      info,
+      buffer: bufferData,
+      update: this.update,
+      makeDir: this.makeDir,
+      purge: this.purge,
       paste: this.paste,
       copy: this.copy,
       cut: this.cut,
@@ -47,8 +62,34 @@ class ResourceActions extends React.PureComponent<IResourceActionsContainerProps
       remove: this.remove,
       download: this.download
     }
-    const content = React.isValidElement(children) ? React.cloneElement(children, actions) : children || null
+    const content = React.isValidElement(children) ? React.cloneElement(children, props) : children || null
     return content
+  }
+  private update (): void {
+    const { loadingStart, loadingEnd } = this.props.loadingActions
+    const { getMeta } = this.props.dirActions
+    const { getList } = this.props.listActions
+    loadingStart()
+    Promise.all([
+      getMeta(),
+      getList()
+    ])
+      .then(() => {
+        loadingEnd()
+      })
+  }
+  private makeDir (name): void {
+    const { makeDir } = this.props.listActions
+    makeDir(name)
+  }
+  private purge () {
+    const { purgeTrash } = this.props.listActions
+    const { loadingStart, loadingEnd } = this.props.loadingActions
+    loadingStart()
+    purgeTrash()
+      .then(() => {
+        loadingEnd()
+      })
   }
 
   private paste (): void {
@@ -128,6 +169,7 @@ class ResourceActions extends React.PureComponent<IResourceActionsContainerProps
 function mapStateToProps (state) {
   return {
     selected: state.resources.selected,
+    isTrash: state.resources.isTrash,
     list: state.resources.list,
     buffer: state.buffer,
     active: state.services.active,
@@ -138,6 +180,7 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     listActions: bindActionCreators(listActions, dispatch),
+    dirActions: bindActionCreators(dirActions, dispatch),
     loadingActions: bindActionCreators(loadingActions, dispatch),
     bufferActions: bindActionCreators(bufferActions, dispatch),
   }

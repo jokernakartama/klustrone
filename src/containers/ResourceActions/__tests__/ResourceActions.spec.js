@@ -47,6 +47,12 @@ describe('Component <ResourceActions />', () => {
       context: { store }
     })
     const expectedProps = [
+      'isTrash',
+      'info',
+      'buffer',
+      'update',
+      'makeDir',
+      'purge',
       'paste',
       'copy',
       'cut',
@@ -54,7 +60,7 @@ describe('Component <ResourceActions />', () => {
       'publish',
       'unpublish',
       'remove',
-      'download'
+      'download',
     ]
     const child = wrapper.dive()
     expect(child.props()).to.include.keys(...expectedProps)
