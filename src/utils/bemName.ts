@@ -27,7 +27,7 @@ function bemModifier (block: string, mod: IBEMEntityObjectModifier): string {
       if (typeof modifierValue === 'string') {
         modifier = modifier + ' ' + block + MODIFIER_DELIMETER + propName + MODIFIER_VALUE_DELIMETER + c2k(modifierValue)
       } else {
-        modifier =  modifierValue ? modifier + ' ' + block + MODIFIER_DELIMETER + propName : ''
+        modifier =  modifierValue ? modifier + ' ' + block + MODIFIER_DELIMETER + propName : modifier + ''
       }
     })
     // because joining makes an extra space symbol if modifier's value is false

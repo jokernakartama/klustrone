@@ -23,6 +23,7 @@ describe('utils/bemName.ts', function() {
         block: 'list',
         elem: 'item',
         mod: {
+          theme: 'custom',
           hidden: false,
           active: true
         }
@@ -31,7 +32,7 @@ describe('utils/bemName.ts', function() {
       expect(bemName(block).split(' ')).to.have.members(['block'])
       expect(bemName(blockMod).split(' ')).to.have.members(['block', 'block_theme_default', 'block_visible'])
       expect(bemName(blockModBoolFalse).split(' ')).to.have.members(['block'])
-      expect(bemName(elementMod).split(' ')).to.have.members(['list__item', 'list__item_active'])
+      expect(bemName(elementMod).split(' ')).to.have.members(['list__item', 'list__item_theme_custom', 'list__item_active'])
     })
     it('should convert camelCase names to kebab-case', function () {
       const camelCasedBlock = {
