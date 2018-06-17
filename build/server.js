@@ -1,38 +1,28 @@
-var config = require('./config/server.config')
-if (!process.env.NODE_ENV) {
-  process.env.NODE_ENV = 'development' // JSON.parse(config.dev.env.NODE_ENV)
-}
-var path = require('path')
-var rootDir = path.join(__dirname, '../')
-var ora = require('ora')
-var path = require('path')
-var express = require('express')
-var webpack = require('webpack')
-var proxyMiddleware = require('http-proxy-middleware')
+const path = require('path')
+const express = require('express')
+const webpack = require('webpack')
+const proxyMiddleware = require('http-proxy-middleware')
+const ora = require('ora')
+const rootDir = path.join(__dirname, '../')
+const config = require('./config/server.config')
+const webpackConfig = require('./config/webpack.dev')
 
-// ora is used to show nice animation when a process needs time
-var spinner = ora({
-  text: 'Starting dev server...',
-  spinner: 'earth'
+const spinner = ora({
+  text: 'Starting dev server...'
 })
 
-// we don't need development enviroment when the app is testing
-var webpackConfig = process.env.NODE_ENV === 'testing'
-  ? require('./config/webpack.prod')
-  : require('./config/webpack.dev')
-
-var port = process.env.PORT || config.port
+const port = process.env.PORT || config.port
 // https://github.com/chimurai/http-proxy-middleware
-var proxy = config.proxy
-var app = express()
-var compiler = webpack(webpackConfig)
+const proxy = config.proxy
+const app = express()
+const compiler = webpack(webpackConfig)
 
-var devMiddleware = require('webpack-dev-middleware')(compiler, {
+const devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
   logLevel: 'silent'
 })
 
-var hotMiddleware = require('webpack-hot-middleware')(compiler, {
+const hotMiddleware = require('webpack-hot-middleware')(compiler, {
   log: () => {},
   heartbeat: 2000
 })
@@ -47,7 +37,7 @@ compiler.plugin('compilation', function (compilation) {
 
 // proxy api requests
 Object.keys(proxy).forEach(function (context) {
-  var options = proxy[context]
+  const options = proxy[context]
   if (typeof options === 'string') {
     options = { target: options }
   }
@@ -65,13 +55,13 @@ app.use(devMiddleware)
 app.use(hotMiddleware)
 
 // serve pure static assets
-var staticPath = path.posix.join(config.assetsPublicPath, config.assetsSubDirectory)
+const staticPath = path.posix.join(config.assetsPublicPath, config.assetsSubDirectory)
 app.use(staticPath, express.static(path.join(rootDir, 'static')))
 
-var uri = 'http://0.0.0.0:' + port
+const uri = 'http://0.0.0.0:' + port
 
-var _resolve
-var readyPromise = new Promise(resolve => {
+let _resolve
+const readyPromise = new Promise(resolve => {
   _resolve = resolve
 })
 
@@ -82,8 +72,7 @@ devMiddleware.waitUntilValid(() => {
   _resolve()
 })
 
-
-var server = app.listen(port, (error) => {
+const server = app.listen(port, (error) => {
   if (error) {
     console.log('\n', error)
   }

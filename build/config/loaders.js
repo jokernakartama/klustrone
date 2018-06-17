@@ -1,10 +1,9 @@
-var path = require('path')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
-var loaderOptions = require('./loaders.config')
-var sourceMap = true
+const path = require('path')
+const loaderOptions = require('./loaders.config')
+const sourceMap = true
 
 module.exports = function (list) {
-  var loaders = []
+  const loaders = []
   for (var i = 0; i < list.length; i++) {
     loaders.push({
       loader: list[i] + '-loader',
