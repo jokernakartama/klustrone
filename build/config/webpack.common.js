@@ -1,17 +1,12 @@
-var webpack = require('webpack')
-var path = require('path')
-// Extracts all css files in one
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
-var nodeEnv = process.env.NODE_ENV || 'development'
-var isProduction = nodeEnv === 'production'
+const webpack = require('webpack')
+const path = require('path')
 // paths
-var rootDir = path.join(__dirname, '../../')
-var nodeModulesPath = path.join(rootDir, 'node_modules')
-var buildPath = path.join(rootDir, 'dist')
-var sourcePath = path.join(rootDir, 'src')
+const rootDir = path.join(__dirname, '../../')
+const nodeModulesPath = path.join(rootDir, 'node_modules')
+const buildPath = path.join(rootDir, 'dist')
+const sourcePath = path.join(rootDir, 'src')
 
-
-var rules = [
+const rules = [
   {
     test: /\.(js|jsx)$/,
     include: sourcePath,
@@ -32,21 +27,11 @@ var rules = [
   }
 ]
 
-var plugins = [
-  new webpack.DefinePlugin({
-    'process.env': {
-      NODE_ENV: JSON.stringify(nodeEnv),
-    },
-  }),
-  new webpack.NoEmitOnErrorsPlugin() // prevents Webpack from outputting anything into a bundle on errors
-]
-
-
 module.exports = {
   devtool: false,
   context: sourcePath,
   entry: {
-    app: ['babel-polyfill', path.join(sourcePath, 'index.tsx')]
+    app: ['babel-polyfill', path.join(sourcePath, 'index.tsx')],
   },
   output: {
     path: buildPath,
@@ -69,5 +54,7 @@ module.exports = {
       rootDir
     ],
   },
-  plugins
+  optimization: {
+    noEmitOnErrors: true
+  }
 }
