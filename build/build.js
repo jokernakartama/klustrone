@@ -1,15 +1,12 @@
-var config = require('./config/build.config')
-var webpack = require('webpack')
-var webpackConfig = require('./config/webpack.prod')
-process.env.NODE_ENV = 'production'
+const path = require('path')
+const webpack = require('webpack')
+const rm = require('rimraf')
+const ora = require('ora')
+const webpackConfig = require('./config/webpack.prod')
+const config = require('./config/build.config')
 
-var ora = require('ora')
-var rm = require('rimraf')
-var path = require('path')
-
-var spinner = ora({
-  text: 'Building for production...',
-  spinner: 'bouncingBar'
+const spinner = ora({
+  text: 'Building for production...'
 })
 spinner.start()
 
@@ -26,7 +23,7 @@ rm(path.join(config.assetsRoot, config.assetsSubDirectory), err => {
       chunks: false,
       chunkModules: false
     }) + '\n\n')
-    console.log('  Build complete.\n')
+    console.log(' Build complete \n')
   })
 })
  
