@@ -1,3 +1,4 @@
+import './embed.styl'
 import { start as startSession } from '~/utils/session'
 import React from 'react'
 import ReactDOM from 'react-dom'
