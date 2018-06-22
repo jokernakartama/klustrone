@@ -1,4 +1,4 @@
-import './styles/icon.styl'
+import './styles/UIIconView.styl'
 import React from 'react'
 import bem from '~/utils/bemName'
 
