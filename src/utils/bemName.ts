@@ -1,12 +1,3 @@
-interface IBEMEntityObjectModifier {
-  [modifier: string]: string|boolean
-}
-
-interface IBEMEntityObject {
-  block: string
-  elem?: string
-  mod?: IBEMEntityObjectModifier
-}
 const ELEMENT_DELIMETER = '__'
 const MODIFIER_DELIMETER = '_'
 const MODIFIER_VALUE_DELIMETER = '_'
