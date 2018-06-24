@@ -1,6 +1,6 @@
 import React from 'react'
 import { CloudAPI } from '~/api'
-import TokenRecieverView from '~/components/TokenRecieverView'
+import TokenRecieverView from './View'
 
 const TokenReciever: React.SFC = () => {
   const error = !CloudAPI.postCode()
