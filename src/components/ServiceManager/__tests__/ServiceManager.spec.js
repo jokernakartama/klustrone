@@ -16,8 +16,7 @@ describe('Component <ServiceManager />', () => {
   }
   const state = {
     services: {
-      list,
-      active
+      list
     }
   }
   let store
@@ -29,16 +28,17 @@ describe('Component <ServiceManager />', () => {
     const wrapper = enzyme.shallow(<ServiceManager />, {
       context: { store }
     })
-
-    expect(wrapper.props().active).to.equal(state.services.list[state.services.active])
+    expect(wrapper.props().list).to.deep.equal(state.services.list)
   })
 
-  it('should render presentational component', () => {
-    const wrapper = enzyme.shallow(<ServiceManager />, {
+  it('should render child components', () => {
+    const ChildComponent = (props) => {
+      return <div className='child-component'>Any content</div>
+    }
+    const wrapper = enzyme.shallow(<ServiceManager><ChildComponent /></ServiceManager>, {
       context: { store }
     })
-
-    expect(wrapper.dive().name()).to.equal('ServiceManagerView')
+    expect(wrapper.exists(ChildComponent)).to.be.true
   })
 
   it('should connect each service from service map on componentDidMount', () => {
@@ -50,7 +50,6 @@ describe('Component <ServiceManager />', () => {
     })
     const servicesCount = Object.keys(serviceMap).length
     const connectDispatchesCount = dispatchSpy.callCount
-
     expect(didMountSpy.calledOnce).to.equal(true)
     expect(connectDispatchesCount).to.equal(servicesCount)
   })
