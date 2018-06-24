@@ -15,6 +15,10 @@ enum loc {
 
   DIALOG_NEW_NAME = 'Enter new name',
   DIALOG_NEW_DIR = 'Enter the directory name',
+  DIALOG_CONFIRM_REMOVE = 'Remove the resource?',
+  DIALOG_SERVICE_UNMOUNTED = 'The service is not mounted, would you like to mount it?',
+  DIALOG_SERVICE_UPDATED = 'The service is mounted now, would you like to display the directory resources?',
+  DIALOG_CONFIRM = 'Confirm',
 
   SORT_ASCENDING = 'Ascending',
   SORT_DESCENDING = 'Descending',
@@ -38,6 +42,7 @@ enum loc {
   M_ACTION_PANEL_VIEW_BUTTON = 'VIEW',
   M_ACTION_PANEL_SORT_BUTTON = 'SORT',
   M_ACTION_PANEL_ACTIONS_BUTTON = 'ACTN',
+  M_CHOOSE_SERVICE = 'Push'
 }
 
 export default loc
