@@ -1,0 +1,117 @@
+@import '~src/global'
+
+MOBILE_ICON_TILE = 50px
+MOBILE_ICON_LIST = 28px
+FILETYPES = 'dir',
+            'plaintext',
+            'document',
+            'archive',
+            'script',
+            'video',
+            'file',
+            'audio',
+            'picture',
+            'image',
+            'webpage',
+            'rootlink',
+            'trashlink'
+
+.resource
+    text-decoration: none
+    position: relative
+    @media MOBILE
+        font-family: MOBILE_SMALL_FONT
+        font-size: 14px
+    &_view
+        &_tile
+            display: inline-block
+            text-align: center
+            vertical-align: top
+            box-sizing: border-box
+            padding: 5px
+            @media MOBILE
+                @media MOBILE_WIDE
+                    width: 16.5%
+                @media MOBILE_AVERAGE
+                    width: 24.5%
+                @media MOBILE_NARROW
+                    width: 32.5%
+        &_list
+            display: flex
+            width: auto
+            margin: 0
+            padding: 0 10px 0 3px
+            align-items: center
+            @media MOBILE
+                height: 32px
+                border-top: 2px dotted LCD_BLACK
+                &:first-child
+                    border-top: none
+                ^[0]_selected& 
+                    & + ^[0]
+                        border-top-style: solid
+    &__title
+        @media MOBILE
+            font-weight: 500
+            font-family: inherit
+            text-overflow: ellipsis
+            overflow: hidden
+            white-space: nowrap
+            font-size: inherit
+            line-height: 20px
+            color: inherit
+            ~/_view_tile &
+                font-size: inherit
+            ~/_view_list &
+                padding: 0 5px
+    &_selected
+        background-color: LCD_BLACK
+        color: LCD_BEIGE
+            
+    &__icon
+        @media MOBILE
+            background-image: url('/static/klustr/img/mobile-resource-types.svg')
+        ~/_view_tile &
+            @media MOBILE
+                background-size: auto MOBILE_ICON_TILE*2
+                height: MOBILE_ICON_TILE
+                width: MOBILE_ICON_TILE
+        ~/_view_list &
+            @media MOBILE
+                background-size: auto MOBILE_ICON_LIST*2
+                height: MOBILE_ICON_LIST
+                min-width: MOBILE_ICON_LIST
+                width: MOBILE_ICON_LIST
+        &_type
+            for type, i in FILETYPES
+                &_{type}
+                    ~/_view_tile &
+                        background-position: -(MOBILE_ICON_TILE*i) 0
+                        ~/_selected&
+                            background-position: -(MOBILE_ICON_TILE*i) MOBILE_ICON_TILE
+                    ~/_view_list &
+                        background-position: -(MOBILE_ICON_LIST*i) 0
+                        ~/_selected&
+                            background-position: -(MOBILE_ICON_LIST*i) MOBILE_ICON_LIST
+    &__publicity-icon
+        position: absolute
+        @media MOBILE
+            background-color: LCD_BLACK
+            border: 2px solid LCD_BEIGE
+        ~/_selected &
+            background-color: LCD_BEIGE
+            border-color: LCD_BLACK
+        ~/_view_tile &
+            height: 8px
+            right: calc(50% - 24px)
+            top: 42px
+            width: 8px
+            ~/_type_dir&
+                right: calc(50% - 27px)
+                top: 45px
+    &__size
+        display: none
+        @media MOBILE
+            font-family: inherit
+            font-size: inherit
+            font-weight: 500
