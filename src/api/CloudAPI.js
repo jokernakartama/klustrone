@@ -213,6 +213,7 @@ class CloudAPI {
     resource.type = 'dir'
     resource.path = this.getItemPath(rawData)
     resource.publicLink = this.isShared(rawData)
+    if (resource.isRoot) resource.name = this.settings.stateName + ':'
     return resource
   }
 
