@@ -10,6 +10,7 @@ declare namespace IResourceListItemComponent {
     view: any
     preview?: string|null
     type?: string
+    size?: number
     isSelected?: boolean
     isPublic?: boolean
     isTrash?: boolean

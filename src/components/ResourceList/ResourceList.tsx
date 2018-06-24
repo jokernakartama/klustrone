@@ -56,6 +56,7 @@ class ResourceList extends React.PureComponent<IResourceListComponent.Props> {
             view={ view }
             name={ resources[id].name }
             path={ resources[id].path }
+            size={ resources[id].size }
             href={ createHref(resources[id].path, serviceName, resources[id].type, isTrash) }
             isPublic={ resources[id].publicLink === null ? false : true }
             isSelected={ id === selected }

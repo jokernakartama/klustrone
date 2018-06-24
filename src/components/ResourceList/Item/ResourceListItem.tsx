@@ -16,7 +16,7 @@ class ResourceListItem extends React.PureComponent<IResourceListItemComponent.Pr
   }
 
   public render () {
-    const { id, href, type, view, path, name, isSelected, isTrash, isPublic } = this.props
+    const { id, href, type, view, path, name, isSelected, isTrash, isPublic, size } = this.props
     return (
       <ResourceListItemView
         id={ id }
@@ -25,6 +25,7 @@ class ResourceListItem extends React.PureComponent<IResourceListItemComponent.Pr
         name={ name }
         path={ path }
         type={ type }
+        size={ size }
         isSelected={ isSelected }
         isTrash={ isTrash }
         isPublic={ isPublic }
