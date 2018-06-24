@@ -1,15 +1,9 @@
-import './styles/scrollArea.styl'
+import './styles/UIScrollAreaView.styl'
 import React from 'react'
 import { Scrollbars } from 'react-custom-scrollbars'
 import bem from '~/utils/bemName'
 
-interface IScrollAreaComponentProps {
-  children?: React.ReactNode
-  style?: object
-  className?: string
-}
-
-const ScrollArea: React.SFC<IScrollAreaComponentProps> = ({ style, className, children }) => {
+const UIScrollAreaView: React.SFC<IUIScrollAreaViewComponent.Props> = ({ style, className, children }) => {
   const blockName = 'scroll-area'
   const scrollAreaClassNames = [
     { block: blockName }
@@ -28,7 +22,9 @@ const ScrollArea: React.SFC<IScrollAreaComponentProps> = ({ style, className, ch
 
   const defaults = {
     autoHide: true,
-    autoHeight: true,
+    autoHeight: false,
+    autoHeightMin: 0,
+    autoHeightMax: 500,
     renderView: scrollArea,
     thumbMinSize: 30,
     renderTrackHorizontal: (props) => scrollAreaTrackHorizontal(props),
@@ -44,4 +40,4 @@ const ScrollArea: React.SFC<IScrollAreaComponentProps> = ({ style, className, ch
   )
 }
 
-export default ScrollArea
+export default UIScrollAreaView
