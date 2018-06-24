@@ -2,7 +2,6 @@ import React from 'react'
 import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import FileManager from '../FileManager'
-import { renderStatus } from '../FileManager'
 import { RESOURCES_TRASH_FLAG_UPDATE } from '~/ducks/resourceIsTrash/resourceIsTrash'
 import { SERVICE_SELECT } from '~/ducks/activeService/activeService'
 import { RESOURCES_PATH_UPDATE } from '~/ducks/resourcePath/resourcePath'
@@ -43,7 +42,7 @@ describe('Component <FileManager />', () => {
     expect(wrapper.props().services).to.deep.equal(state.services.list)
   })
 
-  it('should render presentational component if service was mounted initially', () => {
+  it('should render a presentational component if service was mounted initially', () => {
     const store = mockStore(state)
     const wrapper = enzyme.shallow(<FileManager />, {
       context: { store }
