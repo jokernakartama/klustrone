@@ -1,5 +1,5 @@
 import React from 'react'
-import ResourceItemView from '~/components/ResourceItemView/'
+import ResourceListItemView from './View'
 import { history } from '~/utils/history'
 import {
   RESOURCE_TYPE_DIR_NAME,
@@ -7,21 +7,7 @@ import {
   RESOURCE_TYPE_TRASH_NAME
 } from '~/api'
 
-interface IResourceItemContainerProps {
-  id?: string
-  href?: string
-  name?: string
-  path: string
-  view: any
-  preview?: string|null
-  type?: string
-  isSelected?: boolean
-  isPublic?: boolean
-  isTrash?: boolean
-  select?: () => void
-}
-
-class ResourceItem extends React.PureComponent<IResourceItemContainerProps> {
+class ResourceListItem extends React.PureComponent<IResourceListItemComponent.Props> {
   constructor (props) {
     super(props)
     this.onClickHandler = this.onClickHandler.bind(this)
@@ -32,7 +18,7 @@ class ResourceItem extends React.PureComponent<IResourceItemContainerProps> {
   public render () {
     const { id, href, type, view, path, name, isSelected, isTrash, isPublic } = this.props
     return (
-      <ResourceItemView
+      <ResourceListItemView
         id={ id }
         href={ href }
         view={ view }
@@ -65,4 +51,4 @@ class ResourceItem extends React.PureComponent<IResourceItemContainerProps> {
   }
 }
 
-export default ResourceItem
+export default ResourceListItem

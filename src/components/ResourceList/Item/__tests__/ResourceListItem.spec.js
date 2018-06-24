@@ -1,5 +1,5 @@
 import React from 'react'
-import ResourceItem from '../ResourceItem'
+import ResourceListItem from '../ResourceListItem'
 import { history, APPLICATION_SERVER_DIRECTORY } from '~/utils/history'
 import {
   RESOURCE_TYPE_DIR_NAME,
@@ -7,14 +7,14 @@ import {
   RESOURCE_TYPE_TRASH_NAME
 } from '~/api'
 
-describe('Component <ResourceItem />', () => {
-  it('should render presentational component as an endpoint', () => {
-    const wrapper = enzyme.shallow(<ResourceItem />)
-    expect(wrapper.name()).to.equal('ResourceItemView')
+describe('Component <ResourceListItem />', () => {
+  it('should render a presentational component as an endpoint', () => {
+    const wrapper = enzyme.shallow(<ResourceListItem />)
+    expect(wrapper.name()).to.equal('ResourceListItemView')
   })
-  describe('ResourceItem.onClickHandler', () => {
+  describe('ResourceListItem.onClickHandler', () => {
     it('should prevent default action on left click', () => {
-      const wrapper = enzyme.shallow(<ResourceItem />)
+      const wrapper = enzyme.shallow(<ResourceListItem />)
       const fakeEvent = {
         button: 0,
         preventDefault: sinon.spy()
@@ -23,10 +23,10 @@ describe('Component <ResourceItem />', () => {
       expect(fakeEvent.preventDefault.called).to.be.true
     })
   })
-  describe('ResourceItem.onDoubleClickHandler', () => {
+  describe('ResourceListItem.onDoubleClickHandler', () => {
     let wrapper
     function setProps (props) {
-      wrapper = enzyme.shallow(<ResourceItem { ...props } />)
+      wrapper = enzyme.shallow(<ResourceListItem { ...props } />)
     }
 
     it('should prevent opening directories when "isTrash" property is set to true', () => {
