@@ -25,6 +25,7 @@ interface IDirResource {
   isRoot: boolean
   type: string
   path: string
+  size?: number
   preview?: optional 
   publicLink: optional
 }
@@ -34,7 +35,7 @@ interface IFileResource {
   name: string
   modified: string
   type: string
-  size: number
+  size?: number
   path: string
   preview: optional
   publicLink: optional
