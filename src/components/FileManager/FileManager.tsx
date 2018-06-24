@@ -9,37 +9,27 @@ import * as resourceSelectedActions from '~/ducks/resourceSelected'
 import * as loadingActions from '~/ducks/loading'
 import * as resourceDirectioryActions from '~/ducks/resourceDirectory'
 import * as serviceListActions from '~/ducks/serviceList'
-import FileManagerView from '~/components/FileManagerView'
-import { renderStatus } from '~/components/FileManagerView/FileManagerView'
+import FileManagerView from './View'
+import FileManagerUpdated from './Updated'
+import FileManagerUnmounted from './Unmounted'
+import NotFound from '~/components/NotFound'
 import { parseLocation } from '~/api'
 import { history } from '~/utils/history'
 
-interface IFileManagerContainerProps {
-  resourcePathActions: any
-  activeServiceActions: any
-  resourceIsTrashActions: any
-  resourceListActions: any
-  loadingActions: any
-  resourceDirectioryActions: any
-  resourceSelectedActions: any
-  serviceListActions: any
-  services: IServiceListState
-}
-
-interface IFileManagerContainerState {
-  status: renderStatus
-  service: string
-  path: string
-  isTrash: boolean
+export enum renderStatus {
+  MOUNTED, // when the service is mounted initially
+  UNMOUNTED, // when the service is unmounted
+  UPDATED, // when the service is mounted recently, but resource list is null
+  UNAVAILABLE // when the service does not exist in serviceMap
 }
 
 /**
  * Returns proper state according props and history changes.
- * @param {IFileManagerContainerProps} props - Next props
- * @param {IFileManagerContainerState} state - Previous state
- * @returns {(IFileManagerContainerState|false)}
+ * @param {IFileManagerComponent.Props} props - Next props
+ * @param {IFileManagerComponent.State} state - Previous state
+ * @returns {(IFileManagerComponent.State|false)}
  */
-function setStatus (props: IFileManagerContainerProps, state?: IFileManagerContainerState): IFileManagerContainerState|null {
+function setStatus (props: IFileManagerComponent.Props, state?: IFileManagerComponent.State): IFileManagerComponent.State|null {
   const data = parseLocation(history.location.pathname)
   if (data) {
     const nextService = data.service
@@ -79,12 +69,12 @@ function setStatus (props: IFileManagerContainerProps, state?: IFileManagerConta
     }
   } else {
     // In fact, as the component renders in a proper <Route />,
-    // the location is always can be parsed correctly.
+    // the location always can be parsed correctly.
     return null
   }
 }
 
-class FileManager extends React.Component<IFileManagerContainerProps, IFileManagerContainerState> {
+class FileManager extends React.Component<IFileManagerComponent.Props, IFileManagerComponent.State> {
   protected static getDerivedStateFromProps (nextProps, prevState) {
     const nextState = setStatus(nextProps, prevState)
     return nextState
@@ -108,7 +98,7 @@ class FileManager extends React.Component<IFileManagerContainerProps, IFileManag
       if (nextState) {
         deselect()
         this.updateStore(nextState.service, nextState.path, nextState.isTrash)
-        this.clearDirectory(nextState)
+        this.clearDirectory(nextState, true)
         this.loadDirectory(nextState)
         this.setState(nextState)
       }
@@ -140,19 +130,26 @@ class FileManager extends React.Component<IFileManagerContainerProps, IFileManag
   public render () {
     const { children } = this.props
     const status = this.state.status
-    return (
-      <FileManagerView serviceStatus={ status } action={ this.getAction() }>
-        { children }
-      </FileManagerView>
-    )
+    const action = this.getAction()
+    let content = null
+    if (status === renderStatus.UNAVAILABLE) {
+      content = <NotFound />
+    } else if (status === renderStatus.UPDATED) {
+      content = <FileManagerUpdated action={ action } />
+    } else if (status === renderStatus.UNMOUNTED) {
+      content = <FileManagerUnmounted action={ action } />
+    } else if (status === renderStatus.MOUNTED) {
+      content = <FileManagerView> { children } </FileManagerView>
+    }
+    return content
   }
 
   /**
    * Clears directory data when a service changes.
-   * @param {IFileManagerContainerState} nextState
+   * @param {IFileManagerComponent.State} nextState
    * @param {boolean} force - Whether the action should be forced
    */
-  private clearDirectory (nextState: IFileManagerContainerState, force: boolean = false): void {
+  private clearDirectory (nextState: IFileManagerComponent.State, force: boolean = false): void {
     const { updateList } = this.props.resourceListActions
     const { updateDir } = this.props.resourceDirectioryActions
     if (nextState.service !== this.state.service || force) {
@@ -164,10 +161,10 @@ class FileManager extends React.Component<IFileManagerContainerProps, IFileManag
   /**
    * Loads resource list and directory meta
    * if the service is mounted
-   * @param {IFileManagerContainerState} nextState
+   * @param {IFileManagerComponent.State} nextState
    * @param {boolean} force - Whether the action should be forced
    */
-  private loadDirectory (nextState: IFileManagerContainerState, force: boolean = false): void {
+  private loadDirectory (nextState: IFileManagerComponent.State, force: boolean = false): void {
     const { getList } = this.props.resourceListActions
     const { getMeta } = this.props.resourceDirectioryActions
     const { loadingStart, loadingEnd } = this.props.loadingActions
