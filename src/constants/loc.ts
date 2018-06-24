@@ -19,6 +19,8 @@ enum loc {
   DIALOG_SERVICE_UNMOUNTED = 'The service is not mounted, would you like to mount it?',
   DIALOG_SERVICE_UPDATED = 'The service is mounted now, would you like to display the directory resources?',
   DIALOG_CONFIRM = 'Confirm',
+  DIALOG_TOKEN_RECIEVED = 'Token has been recieved',
+  DIALOG_TOKEN_NOT_RECIEVED = 'Cannot recieve a token from the url',
 
   SORT_ASCENDING = 'Ascending',
   SORT_DESCENDING = 'Descending',
