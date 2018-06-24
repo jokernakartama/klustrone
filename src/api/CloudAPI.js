@@ -74,6 +74,7 @@ class CloudAPI {
    * }
    */
   static get urls () {
+    return {}
   }
 
   /**
