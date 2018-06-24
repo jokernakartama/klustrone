@@ -4,7 +4,6 @@ import crossTabMiddleware from 'cross-tab-middleware'
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly'
 import { serviceMap } from '~/api'
 
-import error from '~/ducks/error'
 import modal from '~/ducks/modal'
 import activeService from '~/ducks/activeService'
 import serviceList from '~/ducks/serviceList'
@@ -35,7 +34,6 @@ const rootReducer = combineReducers({
   buffer,
   sort,
   view,
-  error,
   modal,
   loading
 })
