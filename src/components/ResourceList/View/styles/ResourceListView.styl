@@ -1,0 +1,18 @@
+@import '~src/global'
+
+.resource-list
+    @media MOBILE
+        box-sizing: border-box
+        height: 100%
+        overflow: auto !important
+        box-sizing: border-box
+        &_view
+            &_tile
+                padding: 10px
+        &-wrapper
+            @media MOBILE_PORTRAIT
+                height: calc(100% - 64px)
+            @media MOBILE_LANDSCAPE
+                height: calc(100% - 20px)
+                width: calc(100% - 25vh)
+                max-width calc(100% - 80px)
