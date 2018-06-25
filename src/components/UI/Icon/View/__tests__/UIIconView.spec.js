@@ -7,7 +7,7 @@ describe('Component <UIIconView />', () => {
     expect(wrapper.hasClass('icon_larr')).to.equal(true)
     expect(wrapper.hasClass('content__icon')).to.equal(true)
   })
-  it('should render children components', function () {
+  it('should render child components', function () {
     const someText = 'some text'
     const wrapper = enzyme.render(<UIIconView icon='screen'>{ someText }</UIIconView>)
     expect(wrapper.text()).to.equal(someText)
