@@ -1,0 +1,62 @@
+@import '~src/global'
+
+.dropdown
+    &__content-wrapper
+        z-index: 1
+        @media MOBILE
+            position: fixed
+            top: 0
+            left: 0
+            width: 100%
+            height: 100%
+            display: none
+            justify-content: center
+            align-content: center
+            &_visible
+                display: flex
+        @media DESKTOP
+            height: 0
+            overflow: hidden
+            position: absolute
+            transition: 0.2s
+            &_visible
+                height: auto
+    &__content
+        @media MOBILE
+            background-color: LCD_BEIGE
+            color: LCD_BLACK
+            display: block
+            max-height: calc(100vh - 44px)
+            margin-bottom: 22px
+            box-sizing: border-box
+            align-self: center
+            border: 2px solid LCD_BLACK
+            border-radius: 2px
+            box-shadow: 1px 1px 0px LCD_SHADOWCOLOR, 1px 1px 0px LCD_SHADOWCOLOR inset
+            padding: 18px 20px
+
+    &__cancel
+        display: none
+        @media MOBILE
+            display: block
+
+    &__option
+        line-height: 1em
+        padding: 2px 0
+        &_type
+            &_separator
+                border-bottom: 2px solid LCD_BLACK
+                box-shadow: 1px 1px 0px LCD_SHADOWCOLOR
+                margin: 5px 0
+                padding: 0
+            &_radio^[1]_checked:after
+                background-color: LCD_BLACK
+                box-shadow: 1px 1px 0px LCD_SHADOWCOLOR
+                border-radius: 50%
+                content: ""
+                display: inline-block
+                height: 6px
+                margin-left: 8px
+                vertical-align: middle
+                width: 6px
+
