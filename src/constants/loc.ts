@@ -11,6 +11,8 @@ enum loc {
   ACTION_DOWNLOAD = 'Download',
   ACTION_REMOVE = 'Remove',
 
+  LINK_LABEL_HOME = 'Home',
+  IS_LOADING = 'Loading...',
   PROPERTY_PUBLIC = 'Public',
 
   DIALOG_NEW_NAME = 'Enter new name',
