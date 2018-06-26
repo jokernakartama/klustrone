@@ -1,0 +1,22 @@
+@import '~src/global'
+
+.content
+    padding-top: 32px
+
+.loading-spinner
+    @media MOBILE
+        display: none
+
+.input
+    user-select: text
+    &_type_text
+        @media MOBILE
+            background-color: LCD_BLACK
+            border-color: LCD_BLACK
+            border-radius: 2px
+            border-style: solid
+            border-width: 0;
+            color: LCD_BEIGE
+            font-size: inherit
+            height: 1.5em
+            padding: 0 0.25em
