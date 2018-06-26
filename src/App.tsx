@@ -1,8 +1,11 @@
 import React from 'react'
 import { Router, Route, Switch } from 'react-router-dom'
+import { withRouter } from 'react-router'
 import Main from './components/Main'
 import TokenReciever from './components/TokenReciever'
 import { history } from './utils/history'
+
+const MainWithRouter = withRouter(Main)
 
 const App: React.SFC = () => {
   return (
@@ -12,7 +15,7 @@ const App: React.SFC = () => {
           <TokenReciever />
         </Route>
         <Route path='/*'>
-          <Main />
+          <MainWithRouter />
         </Route>
       </Switch>
     </Router>
