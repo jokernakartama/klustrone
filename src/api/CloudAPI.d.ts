@@ -18,19 +18,8 @@ interface ITokenData {
   expires_at?: number
   expires_in: number
 }
-interface IDirResource {
-  id: string
-  name: string
-  parent: optional
-  isRoot: boolean
-  type: string
-  path: string
-  size?: number
-  preview?: optional 
-  publicLink: optional
-}
 
-interface IFileResource {
+interface IResourceData {
   id: string
   name: string
   modified: string
@@ -39,6 +28,11 @@ interface IFileResource {
   path: string
   preview: optional
   publicLink: optional
+}
+
+interface IResourceDirData extends IResourceData {
+  parent: optional
+  isRoot: boolean
 }
 
 interface IAPIurls {
@@ -72,8 +66,8 @@ interface ICloudAPI {
   getItemPath: (item: object) => optional
   getParent: (data: object) => optional
   getPreview: (data: object) => optional
-  parseDir: (data: object) => IDirResource
-  parseFile: (data: object) => IFileResource
+  parseDir: (data: object) => IResourceDirData
+  parseFile: (data: object) => IResourceData
   serialize: (data: object) => SerializedResource
   makeDir: (id: string, name: string, cb?: IMethodCallback) => void
   getResourceMeta: (id: string, cb?: IMethodCallback, p?: object) => void

@@ -1,5 +1,5 @@
 interface IResourceListActionPayload {
-  [resourceId: string]: IDirResource|IFileResource
+  [resourceId: string]: IResourceDirData|IResourceData
 }
 
 interface IResourceActionPayload {

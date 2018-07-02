@@ -1,4 +1,4 @@
 interface IResourceDirectoryAction {
     type?: string
-    payload?: IDirResource|null
+    payload?: IResourceDirData|null
 } 

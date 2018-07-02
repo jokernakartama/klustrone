@@ -4,7 +4,7 @@ const initialState = null
 
 export const RESOURCE_DIRECTORY_UPDATE = 'resourcedirectory::update'
 
-export function updateDir (dir: IDirResource|null = initialState): IResourceDirectoryAction {
+export function updateDir (dir: IResourceDirData|null = initialState): IResourceDirectoryAction {
   return {
     type: RESOURCE_DIRECTORY_UPDATE,
     payload: dir

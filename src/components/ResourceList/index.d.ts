@@ -8,7 +8,7 @@ declare namespace IResourceListComponent {
     selected: string|null
     view: any
     resources: IResourceListActionPayload|null
-    directory: IDirResource|null
+    directory: IResourceDirData|null
     sort: ISortActionPayload
     isTrash: boolean
     resourceSelectedActions: any
