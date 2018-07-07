@@ -18,7 +18,9 @@ class YandexDisk extends CloudAPI {
       winWidth: '800',
       clientId: yandexDiskConfig.id,
       stateName: yandexDiskConfig.name,
-      listLimit: 99999
+      listLimit: 99999,
+      // minimal timeout before next checking an acync operation status
+      asyncDelay: 500
     }
   }
 
@@ -357,10 +359,14 @@ class YandexDisk extends CloudAPI {
     AX.delete(this.urls.remove, urlParams)
       .headers({'Authorization': AUTH_TYPE + ' ' + this.accessToken})
       .status({
-        'success': [202, 204],
+        'success': 204,
+        'async': 202,
         'error': 404,
         'fail': ['!404', '!202', '!204'],
         'anyway': 'all'
+      })
+      .on('async', (body) => {
+        this.getAsyncState (body.href, func)
       })
       .on('success', (body, resp) => {
         if (typeof func.success === 'function') func.success(body, resp)
@@ -382,7 +388,36 @@ class YandexDisk extends CloudAPI {
    * @see {@link https://tech.yandex.ru/disk/poligon/#!//v1/disk/resources/DeleteResource}
    */
   static deleteResource (path, func) {
-    this.removeResource(path, func, {permanently: true})
+    this.removeResource(path, func, {permanently: true, force_async: true})
+  }
+
+  static getAsyncState (url, func = {}) {
+    AX.get(url)
+      .headers({'Authorization': AUTH_TYPE + ' ' + this.accessToken})
+      .status({
+        'success': 200,
+        'error': 404,
+        'fail': ['!404', '!200'],
+        'anyway': 'all'
+      })
+      .on('success', (body, resp) => {
+        if (body.status === 'in-progress') {
+          const newRequest = () => this.getAsyncState (url, func)
+          window.setTimeout(newRequest, this.settings.asyncDelay)
+        } else {
+          if (typeof func.success === 'function') func.success(body, resp)
+        }
+      })
+      .on('fail', (body, resp) => {
+        if (typeof func.fail === 'function') func.fail(body, resp)
+      })
+      .on('error', (body, resp) => {
+        if (typeof func.error === 'function') func.error(body, resp)
+      })
+      .on('anyway', (body, resp) => {
+        if (typeof func.anyway === 'function') func.anyway(body, resp)
+      })
+      .send()
   }
 
   static copyOrMove (copy, currentPath, destination, func) {
@@ -391,16 +426,21 @@ class YandexDisk extends CloudAPI {
     var urlParams = {
       from: this.createPath(currentPath),
       path: this.createPath(destination),
+      force_async: true,
       overwrite: false
     }
     AX.post(url, urlParams)
       .headers({'Authorization': AUTH_TYPE + ' ' + this.accessToken})
       .status({
-        'success': [201, 202],
+        'success': 201,
+        'async': 202,
         'error': 404,
         'exist': 409,
         'fail': ['!404', '!201', '!409'],
         'anyway': 'all'
+      })
+      .on('async', (body) => {
+        this.getAsyncState (body.href, func)
       })
       .on('success', (body, resp) => {
         if (typeof func.success === 'function') func.success(body, resp)
@@ -436,8 +476,9 @@ class YandexDisk extends CloudAPI {
     var anyway = func.anyway
     var isSucceed = false
     var dataCallback = Object.assign({}, func, {
-      success: (meta, resp) => {
+      success: (body, resp) => {
         isSucceed = true
+        var meta = this.serialize(body)
         if (typeof success === 'function') success(meta, resp)
       }
     })
