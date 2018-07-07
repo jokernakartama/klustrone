@@ -45,7 +45,8 @@ class FileManager extends React.Component<IFileManagerComponent.Props, IFileMana
     if (
       (this.state.status !== prevState.status && nextStatus === renderStatus.MOUNTED) ||
       this.props.path !== prevProps.path ||
-      this.props.isTrash !== prevProps.isTrash
+      this.props.isTrash !== prevProps.isTrash ||
+      this.props.active !== prevProps.active && this.state.status === renderStatus.MOUNTED
     ) {
       deselect()
       this.clearDirectory()
