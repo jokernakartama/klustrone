@@ -1,0 +1,87 @@
+@import '~src/global'
+
+ICON_HEIGHT = 18px
+
+SERVICES = 'klustr',
+           'disk',
+           'drive',
+           'dropbox',
+           'box',
+           'onedrive'
+
+.mobile-service-panel
+    background-color: LCD_BEIGE
+    border-bottom: 1px solid #999
+    color: LCD_BEIGE
+    box-sizing: content-box
+    display: flex
+    height: 22px
+    left: 0
+    line-height: 20px
+    position: fixed
+    top: 0
+    width: 100%
+    z-index: 3
+    &__icon
+        opacity: 0.1
+        vertical-align: middle
+        height: ICON_HEIGHT
+        width: ICON_HEIGHT
+        margin: 0 3px
+        background-size: auto ICON_HEIGHT*2
+        &_active
+            opacity: 1
+    &__services-wrapper
+        padding: 0 2px
+        height: 100%
+        & .icon
+            background-image: url('/static/klustr/img/mobile-services.svg')
+    &__percents-wrapper
+        margin-left: auto
+        height: 100%
+        padding: 0 3px
+        & .icon
+            background-image: url('/static/klustr/img/mobile-icons.svg')
+    &__percents
+        font-family: 'alarm clock'
+        font-size: 16px
+        display: inline-block
+        height: 18px
+        line-height: 20px
+        vertical-align: middle
+        position: relative
+        width: 2.25em
+        font-weight: 700
+        text-align: right
+        white-space: nowrap
+        &:before
+            content: '000'
+            position: absolute
+            top: 0px
+            right: 0
+            opacity: 0.1
+    &__mounts-wrapper
+        height: 100%
+        padding: 0 3px
+        & .icon
+            background-image: url('/static/klustr/img/mobile-icons.svg')
+            
+    &__icon_type_
+        for service, i in SERVICES
+            &{service}
+                background-position: -(ICON_HEIGHT*i) 0
+                .dropdown__button:active &
+                    background-position: -(ICON_HEIGHT*i) ICON_HEIGHT
+        &disconnect
+            background-position: -(ICON_HEIGHT) 0
+        &connect
+            background-position: 0 0
+        &percent
+            margin: 0
+            width: ICON_HEIGHT*0.8
+            height: ICON_HEIGHT*0.8
+            background-size: auto ICON_HEIGHT*2*0.8
+            background-position: -(ICON_HEIGHT*2*0.8) 0
+
+
+
