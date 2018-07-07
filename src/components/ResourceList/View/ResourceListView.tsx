@@ -7,9 +7,9 @@ const BLOCK_NAME = 'resource-list'
 
 const ResourceListView: React.SFC<IResourceListViewComponent.Props> = ({ view, children}) => {
   const blockName = bem({ block: BLOCK_NAME, mod: { view } })
-  const wrapperClassName = bem({ block: BLOCK_NAME + '-wrapper' })
+  const wrapperClass = bem({ block: BLOCK_NAME + '-wrapper' })
   return (
-    <div className={ wrapperClassName }>
+    <div className={ wrapperClass }>
       <UIScrollArea className={ blockName }>
         { children }
       </UIScrollArea>

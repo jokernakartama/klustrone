@@ -5,10 +5,10 @@
         box-sizing: border-box
         height: 100%
         overflow: auto !important
-        box-sizing: border-box
         &_view
             &_tile
-                padding: 10px
+                & > .scroll-area__content
+                    padding: 10px
         &-wrapper
             @media MOBILE_PORTRAIT
                 height: calc(100% - 64px)
