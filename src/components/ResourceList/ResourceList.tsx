@@ -1,8 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { loc } from '~/constants'
-import * as resourceSelectedActions from '~/ducks/resourceSelected'
 import {
   createHref,
   serviceMap,
@@ -13,10 +11,22 @@ import {
 import ResourceListItem from './Item'
 import ResourceListView from './View'
 
-class ResourceList extends React.PureComponent<IResourceListComponent.Props> {
+class ResourceList extends React.Component<IResourceListComponent.Props> {
+  public shouldComponentUpdate (nextProps: IResourceListComponent.Props) {
+    const nextDir = nextProps.directory
+    const nextList = nextProps.resources
+    const nextService = nextProps.serviceName
+    const prevService = this.props.serviceName
+    const nextIsTrash = nextProps.isTrash
+    const prevIsTrash = this.props.isTrash
+    if (nextService === prevService && (nextDir === null || nextList === null || nextIsTrash !== prevIsTrash)) {
+      return false
+    } else {
+      return true
+    }
+  }
   public render () {
-    const { sort, resources, selected, view, directory, isTrash, serviceName } = this.props
-    const { select } = this.props.resourceSelectedActions
+    const { sort, resources, view, directory, isTrash, serviceName } = this.props
     let resList = null
     let parentLink = null
     let trashLink = null
@@ -47,7 +57,6 @@ class ResourceList extends React.PureComponent<IResourceListComponent.Props> {
         )
       }
       resList = sortList(resources, sort.field, sort.asc).map((id, index) => {
-        const $select = () => select(id)
         return (
           <ResourceListItem
             id={ id }
@@ -59,9 +68,7 @@ class ResourceList extends React.PureComponent<IResourceListComponent.Props> {
             size={ resources[id].size }
             href={ createHref(resources[id].path, serviceName, resources[id].type, isTrash) }
             isPublic={ resources[id].publicLink === null ? false : true }
-            isSelected={ id === selected }
             preview={ (resources[id].type === 'picture' || resources[id].type === 'image') ? resources[id].preview : null }
-            select={ $select }
             type={ resources[id].type }
           />
         )
@@ -85,15 +92,8 @@ function mapStateToProps (state) {
     resources: state.resources.list,
     directory: state.resources.dir,
     sort: state.sort,
-    selected: state.resources.selected,
     view: state.view
   }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    resourceSelectedActions: bindActionCreators(resourceSelectedActions, dispatch)
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ResourceList)
+export default connect(mapStateToProps)(ResourceList)

@@ -11,9 +11,9 @@ declare namespace IResourceListItemComponent {
     preview?: string|null
     type?: string
     size?: number
-    isSelected?: boolean
     isPublic?: boolean
     isTrash?: boolean
-    select?: () => void
+    selected: string|null
+    resourceSelectedActions: any
   }
 }

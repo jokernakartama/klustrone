@@ -15,8 +15,7 @@ describe('Component <ResourceList />', () => {
       path: '/',
       isTrash: false,
       dir: getFakeResource(true),
-      list: getFakeList(),
-      selected: null
+      list: getFakeList()
     },
     sort: {
       field: 'size',
@@ -31,7 +30,6 @@ describe('Component <ResourceList />', () => {
     })
     expect(wrapper.props().serviceName).to.equal(state.services.active)
     expect(wrapper.props().path).to.equal(state.resources.path)
-    expect(wrapper.props().selected).to.equal(state.resources.selected)
     expect(wrapper.props().view).to.equal(state.view)
     expect(wrapper.props().sort).to.deep.equal(state.sort)
     expect(wrapper.props().resources).to.deep.equal(state.resources.list)

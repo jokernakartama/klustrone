@@ -1,5 +1,8 @@
 import React from 'react'
 import ResourceListItemView from './View'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import * as resourceSelectedActions from '~/ducks/resourceSelected'
 import { history } from '~/utils/history'
 import {
   RESOURCE_TYPE_DIR_NAME,
@@ -16,7 +19,8 @@ class ResourceListItem extends React.PureComponent<IResourceListItemComponent.Pr
   }
 
   public render () {
-    const { id, href, type, view, path, name, isSelected, isTrash, isPublic, size } = this.props
+    const { id, href, type, view, path, name, isTrash, isPublic, size, selected } = this.props
+    const isSelected = id === selected
     return (
       <ResourceListItemView
         id={ id }
@@ -35,10 +39,13 @@ class ResourceListItem extends React.PureComponent<IResourceListItemComponent.Pr
       />
     )
   }
+
   private onClickHandler (e) {
+    const { id } = this.props
+    const { select } = this.props.resourceSelectedActions
     // keep ability to open link in new tab by middle click
     if (e.button === 0) e.preventDefault()
-    if (this.props.select) this.props.select()
+    if (id) select(id)
   }
   private onDoubleClickHandler () {
     const { type, isTrash, href } = this.props
@@ -52,4 +59,16 @@ class ResourceListItem extends React.PureComponent<IResourceListItemComponent.Pr
   }
 }
 
-export default ResourceListItem
+function mapStateToProps (state) {
+  return {
+    selected: state.resources.selected
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    resourceSelectedActions: bindActionCreators(resourceSelectedActions, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ResourceListItem)
