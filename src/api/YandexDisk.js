@@ -336,7 +336,9 @@ class YandexDisk extends CloudAPI {
         'anyway': 'all'
       })
       .on('success', (body, resp) => {
-        if (typeof func.success === 'function') func.success(body, resp)
+        if (body);
+        const data = this.isShared({ [this.names.itemPublicUrlKey]: false })
+        if (typeof func.success === 'function') func.success(data, resp)
       })
       .on('fail', (body, resp) => {
         if (typeof func.fail === 'function') func.fail(body, resp)
