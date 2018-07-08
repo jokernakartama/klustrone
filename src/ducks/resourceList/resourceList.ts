@@ -1,5 +1,6 @@
 import Promise from 'promise-polyfill'
-import { appWarning } from '~/ducks/modal'
+import { appWarning, appConfirm } from '~/ducks/modal'
+import { loc } from '~/constants'
 
 const initialState = null
 
@@ -84,6 +85,10 @@ export function restoreResource (path: string, overwrite: boolean = false): (...
           dispatch(getList()).then((body, resp) => resolve(body, resp))
         },
         exist: (body, resp) => {
+          appConfirm(dispatch)(loc.DIALOG_RESOURCE_TO_OVERWRITE)
+          .then(() => {
+            restoreResource(path, true)
+          })
           resolve(body, resp)
         },
         error: (body, resp) => {
@@ -221,7 +226,7 @@ export function pasteResource (path: string, destination: string, isCopy: boolea
           resolve(body, resp)
         },
         exist: (body, resp) => {
-          appWarning(dispatch)('Resource with the same path already exists in current directory.')
+          appWarning(dispatch)(loc.DIALOG_RESOURCE_EXISTS)
           resolve(body, resp)
         },
         fail: (body, resp) => {
@@ -247,7 +252,7 @@ export function makeDir (dirName: string): (...args) => Promise {
         error: () => {
         },
         exist: () => {
-          appWarning(dispatch)('The directory "' + dirName + '" already exists')
+          appWarning(dispatch)(loc.DIALOG_DIRECTORY_EXISTS)
         },
         fail: () => {},
         anyway: (body, resp) => {
