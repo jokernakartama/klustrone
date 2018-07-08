@@ -1,0 +1,3 @@
+import { default as _ActionsPanelMobileServiceBtnView } from './ActionsPanelMobileServiceBtnView'
+const ActionsPanelMobileServiceBtnView = _ActionsPanelMobileServiceBtnView
+export default ActionsPanelMobileServiceBtnView
