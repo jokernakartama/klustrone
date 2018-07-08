@@ -6,3 +6,4 @@ TODO
 *.kate-swp
 /src/api/configs/
 /coverage
+/static
