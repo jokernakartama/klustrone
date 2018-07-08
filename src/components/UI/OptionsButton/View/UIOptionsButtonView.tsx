@@ -1,6 +1,7 @@
 import './styles/UIOptionsButtonView.styl'
 import React from 'react'
 import bem from '~/utils/bemName'
+import UIScrollArea from '~/components/UI/ScrollArea'
 
 const BLOCK_NAME = 'dropdown'
 
@@ -19,6 +20,7 @@ const UIOptionsButtonView: React.SFC<IUIOptionsButtonViewComponent.Props> = (pro
   const btnClass = bem({ block: BLOCK_NAME, elem: 'button' })
   const wrapperClass = bem([{ block: BLOCK_NAME, elem: 'content-wrapper', mod: { visible } }, { block: 'overlay' }])
   const contentClass = bem({ block: BLOCK_NAME, elem: 'content', mod: { visible } })
+  const scrollClass = bem({ block: BLOCK_NAME, elem: 'scroll-area' })
 
   const content = !options ? null : options.map((opt, i) => {
     const optClass = bem({
@@ -42,7 +44,9 @@ const UIOptionsButtonView: React.SFC<IUIOptionsButtonViewComponent.Props> = (pro
       </button>
       <div className={ wrapperClass }>
         <div className={ contentClass }>
-          { content }
+          <UIScrollArea className={ scrollClass }>
+            { content }
+          </UIScrollArea>
         </div>
       </div>
     </div>

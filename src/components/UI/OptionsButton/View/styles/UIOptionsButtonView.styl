@@ -5,10 +5,10 @@
         z-index: 1
         @media MOBILE
             position: fixed
-            top: 0
+            top: 23px
             left: 0
             width: 100%
-            height: 100%
+            bottom: 0
             display: none
             justify-content: center
             align-content: center
@@ -32,8 +32,9 @@
             align-self: center
             border: 2px solid LCD_BLACK
             border-radius: 2px
+            position: relative
             box-shadow: 1px 1px 0px LCD_SHADOWCOLOR, 1px 1px 0px LCD_SHADOWCOLOR inset
-            padding: 18px 20px
+            padding: 0px 2px 0px 20px
 
     &__cancel
         display: none
@@ -41,13 +42,11 @@
             display: block
 
     &__option
-        line-height: 1em
-        padding: 2px 0
+        line-height: 2em
         &_type
             &_separator
                 border-bottom: 2px solid LCD_BLACK
                 box-shadow: 1px 1px 0px LCD_SHADOWCOLOR
-                margin: 5px 0
                 padding: 0
             &_radio^[1]_checked:after
                 background-color: LCD_BLACK
@@ -59,4 +58,9 @@
                 margin-left: 8px
                 vertical-align: middle
                 width: 6px
-
+    &__scroll-area
+        max-height: calc(100vh - 64px)
+        padding-right: 18px
+        box-sizing: border-box
+        & .scroll-area__content
+            padding-bottom: 8px
