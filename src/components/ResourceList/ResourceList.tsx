@@ -15,10 +15,15 @@ class ResourceList extends React.Component<IResourceListComponent.Props> {
   public shouldComponentUpdate (nextProps: IResourceListComponent.Props) {
     const nextDir = nextProps.directory
     const nextList = nextProps.resources
-    const nextService = nextProps.serviceName
-    const prevService = this.props.serviceName
+    const nextService = nextProps.service
+    const prevService = this.props.service
     const nextIsTrash = nextProps.isTrash
     const prevIsTrash = this.props.isTrash
+    // When a directory updates
+    // path or service changes immediately unlike the directory resource list
+    // therefore system resource labels like "parent dir" and "trash"
+    // can be displayed before other directory content, what looks wierd.
+    // This condition makes the content to be rendered after resource list was fully loaded
     if (nextService === prevService && (nextDir === null || nextList === null || nextIsTrash !== prevIsTrash)) {
       return false
     } else {
@@ -26,7 +31,7 @@ class ResourceList extends React.Component<IResourceListComponent.Props> {
     }
   }
   public render () {
-    const { sort, resources, view, directory, isTrash, serviceName } = this.props
+    const { sort, resources, view, directory, isTrash, service } = this.props
     let resList = null
     let parentLink = null
     let trashLink = null
@@ -39,19 +44,19 @@ class ResourceList extends React.Component<IResourceListComponent.Props> {
             key={ RESOURCE_TYPE_ROOT_NAME }
             view={ view }
             path={ parent }
-            href={ createHref(parent, serviceName, RESOURCE_TYPE_ROOT_NAME, false) }
+            href={ createHref(parent, service, RESOURCE_TYPE_ROOT_NAME, false) }
             type={ RESOURCE_TYPE_ROOT_NAME }
           />
         )
       }
-      if (!isTrash && directory.isRoot && !serviceMap[serviceName].settings.trashBinIsUnsupported) {
+      if (!isTrash && directory.isRoot && !serviceMap[service].settings.trashBinIsUnsupported) {
         trashLink = (
           <ResourceListItem
             name={ loc.RESOURCE_LABEL_TRASH }
             key={ RESOURCE_TYPE_TRASH_NAME }
             view={ view }
             path='trash'
-            href={ createHref('', serviceName, RESOURCE_TYPE_TRASH_NAME, true) }
+            href={ createHref('', service, RESOURCE_TYPE_TRASH_NAME, true) }
             type={ RESOURCE_TYPE_TRASH_NAME }
           />
         )
@@ -66,7 +71,7 @@ class ResourceList extends React.Component<IResourceListComponent.Props> {
             name={ resources[id].name }
             path={ resources[id].path }
             size={ resources[id].size }
-            href={ createHref(resources[id].path, serviceName, resources[id].type, isTrash) }
+            href={ createHref(resources[id].path, service, resources[id].type, isTrash) }
             isPublic={ resources[id].publicLink === null ? false : true }
             preview={ (resources[id].type === 'picture' || resources[id].type === 'image') ? resources[id].preview : null }
             type={ resources[id].type }
@@ -86,9 +91,9 @@ class ResourceList extends React.Component<IResourceListComponent.Props> {
 
 function mapStateToProps (state) {
   return {
-    serviceName: state.services.active,
-    path: state.resources.path,
-    isTrash: state.resources.isTrash,
+    service: state.active.service,
+    path: state.active.path,
+    isTrash: state.active.isTrash,
     resources: state.resources.list,
     directory: state.resources.dir,
     sort: state.sort,

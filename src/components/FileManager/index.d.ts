@@ -11,15 +11,10 @@ declare namespace IFileManagerComponent {
     resourceSelectedActions: any
     serviceListActions: any
     services: IServiceListState
-    active: string
-    path: string
-    isTrash: boolean
+    active: IActiveState
   }
 
   interface State {
     status: renderStatus
-    service: string
-    path: string
-    isTrash: boolean
   }
 }

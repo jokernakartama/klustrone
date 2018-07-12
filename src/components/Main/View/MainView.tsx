@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom'
 import { Route, Switch } from 'react-router-dom'
 import { TRASH_URL_IDENTIFIER } from '~/api'
 import bem from '~/utils/bemName'
-import { loc } from '~/constants'
 import UIDialog from '~/components/UI/Dialog'
 import HomePage from '~/components/HomePage'
 import StaticPage from '~/components/StaticPage'
@@ -14,6 +13,7 @@ import ServicePanel from '~/components/ServicePanel'
 import ResourceInfo from '~/components/ResourceInfo'
 import ActionsPanel from '~/components/ActionsPanel'
 import ResourceList from '~/components/ResourceList'
+import LoadingSpinner from '~/components/LoadingSpinner'
 
 const renderStaticPage = (matches) => {
   return (
@@ -23,7 +23,6 @@ const renderStaticPage = (matches) => {
 
 const MainView: React.SFC<IMainViewComponent.Props> = ({ loading }) => {
   const contentClass = bem({ block: 'content', mod: { loading } })
-  const spinnerClass = bem({ block: 'loading-spinner', mod: { loading } })
   return (
     <div className='main'>
       <ServiceManager>
@@ -47,9 +46,9 @@ const MainView: React.SFC<IMainViewComponent.Props> = ({ loading }) => {
             render={ renderStaticPage }
           />
         </Switch>
+        <LoadingSpinner loading={ loading }/>
       </div>
       { ReactDOM.createPortal(<UIDialog />, window.document.getElementById('modal')) }
-      <div className={ spinnerClass }>{ loc.IS_LOADING }</div>
     </div>
   )
 }

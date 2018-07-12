@@ -34,23 +34,54 @@ class FileManager extends React.Component<IFileManagerComponent.Props, IFileMana
     }
   }
 
-  public componentDidUpdate (prevProps, prevState) {
-    const { deselect } = this.props.resourceSelectedActions
+  public componentDidUpdate (prevProps: IFileManagerComponent.Props, prevState: IFileManagerComponent.State) {
     const nextStatus = this.setStatus(prevProps)
     if (nextStatus !== this.state.status && nextStatus !== null) {
       this.setState({
         status: nextStatus
       })
     }
+    const prevService = prevProps.active.service
+    const nextService = this.props.active.service
+    const prevPath = prevProps.active.path
+    const nextPath = this.props.active.path
+    const prevIsTrash = prevProps.active.isTrash
+    const nextIsTrash = this.props.active.isTrash
+
+    const isPathChanged = prevPath !== nextPath
+    const isServiceChanged = prevService !== nextService
+    const isTrashFlagChanged = prevIsTrash !== nextIsTrash
+    const isStatusChanged = prevService === nextService && this.state.status === renderStatus.UPDATED
     if (
-      (this.state.status !== prevState.status && nextStatus === renderStatus.MOUNTED) ||
-      this.props.path !== prevProps.path ||
-      this.props.isTrash !== prevProps.isTrash ||
-      this.props.active !== prevProps.active && this.state.status === renderStatus.MOUNTED
+      nextStatus === renderStatus.MOUNTED &&
+      (isPathChanged || isServiceChanged || isTrashFlagChanged || isStatusChanged)
     ) {
-      deselect()
-      this.clearDirectory()
       this.loadDirectory()
+    }
+  }
+
+  public shouldComponentUpdate (nextProps: IFileManagerComponent.Props, nextState: IFileManagerComponent.State) {
+    const nextStatus = this.setStatus(this.props)
+    const prevService = this.props.active.service
+    const nextService = nextProps.active.service
+    const prevPath = this.props.active.path
+    const nextPath = nextProps.active.path
+    const prevIsTrash = this.props.active.isTrash
+    const nextIsTrash = nextProps.active.isTrash
+    const prevStatus = this.state.status
+    const nextMounted = nextProps.services[nextService].mounted
+    const prevMounted = this.props.services[prevService].mounted
+
+    if (
+      prevService !== nextService ||
+      prevStatus !== nextStatus ||
+      prevPath !== nextPath ||
+      prevIsTrash !== nextIsTrash ||
+      (prevMounted !== nextMounted && prevService === nextService)
+    ) {
+      return true
+    } else {
+      return false
     }
   }
 
@@ -85,12 +116,12 @@ class FileManager extends React.Component<IFileManagerComponent.Props, IFileMana
     const { getList } = this.props.resourceListActions
     const { getMeta } = this.props.resourceDirectioryActions
     const { loadingStart, loadingEnd } = this.props.loadingActions
-    const { path, isTrash } = this.props
+    const { active } = this.props
 
     loadingStart()
     Promise.all([
-      getMeta(path),
-      getList(path, isTrash)
+      getMeta(active.path),
+      getList(active.path, active.isTrash)
     ])
       .then(() => {
         loadingEnd()
@@ -110,21 +141,22 @@ class FileManager extends React.Component<IFileManagerComponent.Props, IFileMana
       }
     } else if (status === renderStatus.UNMOUNTED) {
       action = () => {
-        if (this.state) addService(active)
+        if (this.state) addService(active.service)
       }
     }
     return action
   }
 
   private setStatus (prevProps?: IFileManagerComponent.Props): renderStatus {
-    const activeService = this.props.services[this.props.active]
+    const serviceName = this.props.active.service
+    const activeService = this.props.services[serviceName]
     let nextStatus
     if (activeService) {
       // If previous state exists, service has not been changed and
       // status is about to change from UNMOUNTED to MOUNTED
       // simply mark resource list as "can be recieved"
       // instead of immidiate loading.
-      if (this.state && this.state.status === renderStatus.UNMOUNTED && activeService.mounted && prevProps && prevProps.active === this.props.active) {
+      if (this.state && this.state.status === renderStatus.UNMOUNTED && activeService.mounted && prevProps && prevProps.active.service === serviceName) {
         nextStatus = renderStatus.UPDATED
       } else if (activeService.mounted) {
         nextStatus = renderStatus.MOUNTED
@@ -137,7 +169,7 @@ class FileManager extends React.Component<IFileManagerComponent.Props, IFileMana
       // is going to switch from UPDATED to MOUNTED. This behavior
       // would be incorrect, as the MOUNTED status should be set only when
       // the service is switched or on the initial boot (when there is no state).
-      if (activeService.mounted && this.state && this.state.status === renderStatus.UPDATED && prevProps.active === this.props.active) {
+      if (activeService.mounted && this.state && this.state.status === renderStatus.UPDATED && prevProps.active.service === serviceName) {
         return null
       }
     } else {
@@ -149,10 +181,8 @@ class FileManager extends React.Component<IFileManagerComponent.Props, IFileMana
 
 function mapStateToProps (state) {
   return {
-    services: state.services.list,
-    active: state.services.active,
-    path: state.resources.path,
-    isTrash: state.resources.isTrash
+    services: state.services,
+    active: state.active
   }
 }
 

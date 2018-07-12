@@ -1,9 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import * as activeServiceActions from '~/ducks/activeService'
-import * as resourcePathActions from '~/ducks/resourcePath'
-import * as resourceIsTrashActions from '~/ducks/resourceIsTrash'
+import * as activeStateActions from '~/ducks/activeState'
 import * as resourceListActions from '~/ducks/resourceList'
 import * as resourceSelectedActions from '~/ducks/resourceSelected'
 import * as resourceDirectioryActions from '~/ducks/resourceDirectory'
@@ -36,25 +34,19 @@ class Main extends React.PureComponent<IMainComponent.Props> {
    * Parses location to update initial store data
    */
   private updateStore (): void {
-    const { updateResourcePath } = this.props.resourcePathActions
-    const { selectService, clearServiceSelection } = this.props.activeServiceActions
-    const { updateTrashFlag } = this.props.resourceIsTrashActions
+    const { clearStates, updateStates } = this.props.activeStateActions
     const { deselect } = this.props.resourceSelectedActions
     const { updateList } = this.props.resourceListActions
     const { updateDir } = this.props.resourceDirectioryActions
     const data = parseLocation(history.location.pathname)
     if (data) {
+      deselect()
+      updateList(null)
+      updateDir(null)
       if (data.service) {
-        selectService(data.service)
-        updateResourcePath(data.path)
-        updateTrashFlag(data.isTrash)
+        updateStates(data)
       } else {
-        deselect()
-        updateList(null)
-        updateDir(null)
-        updateTrashFlag(false)
-        clearServiceSelection()
-        updateResourcePath('')
+        clearStates()
       }
     }
   }
@@ -68,12 +60,10 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    activeServiceActions: bindActionCreators(activeServiceActions, dispatch),
-    resourcePathActions: bindActionCreators(resourcePathActions, dispatch),
-    resourceIsTrashActions: bindActionCreators(resourceIsTrashActions, dispatch),
+    activeStateActions: bindActionCreators(activeStateActions, dispatch),
     resourceListActions: bindActionCreators(resourceListActions, dispatch),
     resourceSelectedActions: bindActionCreators(resourceSelectedActions, dispatch),
-    resourceDirectioryActions: bindActionCreators(resourceDirectioryActions, dispatch),
+    resourceDirectioryActions: bindActionCreators(resourceDirectioryActions, dispatch)
   }
 }
 

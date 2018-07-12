@@ -14,10 +14,8 @@ describe('Component <FileManager />', () => {
     }
   }
   const state = {
-    services: {
-      list,
-      active
-    },
+    services: list,
+    active: { service: active },
     resources: {
       path: '/',
       isTrash: false
@@ -29,7 +27,7 @@ describe('Component <FileManager />', () => {
     const wrapper = enzyme.shallow(<FileManager />, {
       context: { store }
     })
-    expect(wrapper.props().services).to.deep.equal(state.services.list)
+    expect(wrapper.props().services).to.deep.equal(state.services)
   })
 
   it('should render a presentational component if service was mounted initially', () => {

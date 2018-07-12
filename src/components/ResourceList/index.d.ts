@@ -3,12 +3,12 @@ export as namespace IResourceListComponent
 
 declare namespace IResourceListComponent {
   interface Props {
-    serviceName: string
-    path: string
+    service: string
+    path: ActiveStatePath
     view: any
     resources: IResourceListActionPayload|null
     directory: IResourceDirData|null
     sort: ISortActionPayload
-    isTrash: boolean
+    isTrash: ActiveStateTrashFlag
   }
 }
