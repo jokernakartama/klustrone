@@ -308,6 +308,7 @@ class Dropbox extends CloudAPI {
     if (path === '/' || path === '') {
       // getting metadata of root directory is unsupported so we use a preset
       if (typeof func.success === 'function') func.success(ROOT_DIR_DATA, ROOT_DIR_RESPONSE)
+      if (typeof func.anyway === 'function') func.anyway(ROOT_DIR_DATA, ROOT_DIR_RESPONSE)
     } else {
       AX.post(this.urls.resourceMeta, params)
         .headers({'Authorization': AUTH_TYPE + ' ' + this.accessToken})
