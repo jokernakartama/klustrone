@@ -7,7 +7,7 @@ declare namespace IServicePanelDesktopViewComponent {
   interface Props {
     visible: boolean
     selected: string|null
-    active: string|null
+    active: ActiveStateService
     list: IServiceListState
     toggle: () => void
     pull: (service: string) => void

@@ -6,7 +6,7 @@ export as namespace IServicePanelComponent
 declare namespace IServicePanelComponent {
   interface Props {
     serviceListActions: any
-    active: string|null
+    active: ActiveStateService
     list: IServiceListState
   }
 }

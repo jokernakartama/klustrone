@@ -117,7 +117,7 @@ export function setTimer (serviceName: string, expiresAt: number, serviceMap: IS
  */
 export function clearTimer (serviceName: string) {
   return function (dispatch, getState) {
-    const list = getState().services.list
+    const list = getState().services
     if (list[serviceName] && list[serviceName].timerId) {
       window.clearInterval(list[serviceName].timerId)
       dispatch({
@@ -144,7 +144,7 @@ export function connectService (serviceName: string, serviceMap: IServiceMap = d
       const state = getState().services
       // When the crosstab action is used, it normally mounts a service before
       // this action creator runs, so there is no need to mount the service again
-      if (state.list[serviceName] && !state.list[serviceName].mounted) {
+      if (state[serviceName] && !state[serviceName].mounted) {
         dispatch(mountService(serviceName))
       }
     }
@@ -164,7 +164,7 @@ export function disconnectService (serviceName: string, serviceMap: IServiceMap 
       dispatch(clearTimer(serviceName))
       // When the crosstab action is used, it normally unmounts a service before
       // this action creator runs, so there is no need to unmount the service again
-      if (state.list[serviceName] && state.list[serviceName].mounted) {
+      if (state[serviceName] && state[serviceName].mounted) {
         dispatch(unmountService(serviceName))
       }
       // the token removes from all tabs

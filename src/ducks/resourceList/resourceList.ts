@@ -34,7 +34,7 @@ export function getList (path: string|null = null, isTrash: boolean|null = null)
         success: (data) => {
           // when response is recieved after switching service
           // it should not update resource list of other service.
-          if (getState().services.active === API.settings.stateName) {
+          if (getState().active.service === API.settings.stateName) {
             dispatch(updateList(data))
           }
         },

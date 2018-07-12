@@ -5,7 +5,7 @@ export as namespace IActionsPanelMobileServiceBtnComponent
 
 declare namespace IActionsPanelMobileServiceBtnComponent {
   interface Props {
-    active: string
+    service: ActiveStateService
     list: IServiceListState
     serviceListActions: any
     blockName: string

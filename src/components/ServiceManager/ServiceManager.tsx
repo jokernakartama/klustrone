@@ -50,7 +50,7 @@ class ServiceManager extends React.PureComponent<IServiceManagerComponent.Props>
 
 function mapStateToProps (state) {
   return {
-    list: state.services.list
+    list: state.services
   }
 }
 

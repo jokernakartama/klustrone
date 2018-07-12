@@ -17,8 +17,8 @@ describe('ducks/resourceList.ts', function () {
       buffer: {
         isCopy: true
       },
-      services: {
-        active: FakeCloudAPI.settings.stateName
+      active: {
+        service: FakeCloudAPI.settings.stateName
       },
       resources: {
         list: null,

@@ -25,9 +25,9 @@ class ActionsPanel extends React.PureComponent<IActionsPanelComponent.Props> {
   }
 
   public render () {
-    const { isTrash, selected, list, buffer, active } = this.props
-    const info = selected !== null && list[selected] ? list[selected] : null
-    const bufferData = active && buffer && buffer[active] ? buffer[active] : null
+    const { isTrash, selected, list, buffer, service } = this.props
+    const info = selected !== null && list !== null && list[selected] ? list[selected] : null
+    const bufferData = service && buffer && buffer[service] ? buffer[service] : null
     const props = {
       isTrash,
       info,
@@ -85,36 +85,36 @@ class ActionsPanel extends React.PureComponent<IActionsPanelComponent.Props> {
   }
   private paste (): void {
     const { pasteResource } = this.props.listActions
-    const { active, path, buffer } = this.props
+    const { service, path, buffer } = this.props
     const copy = this.copy
-    if (buffer[active]) {
-      pasteResource(buffer[active].path, path, buffer[active].copy)
+    if (buffer[service]) {
+      pasteResource(buffer[service].path, path, buffer[service].copy)
         .then(() => {
           // when resource has been moved it's path can be modified
           // so we should copy newly relocated resource to able to paste it further
-          if (!buffer[active].copy) copy(buffer[active].id)
+          if (!buffer[service].copy) copy(buffer[service].id)
         })
     }
   }
 
   private copy (id?: string): void {
     const { copyResource } = this.props.bufferActions
-    const { list, selected, active } = this.props
-    if (list !== null && active) {
+    const { list, selected, service } = this.props
+    if (list !== null && service) {
       if (id && list[id]) {
         // manually set resource to copy
-        copyResource(id, list[id].path, active)
+        copyResource(id, list[id].path, service)
       } else if (selected !== null && list[selected]) {
-        copyResource(list[selected].id, list[selected].path, active)
+        copyResource(list[selected].id, list[selected].path, service)
       }
     }
   }
 
   private cut (): void {
     const { cutResource } = this.props.bufferActions
-    const { list, selected, active } = this.props
-    if (list !== null && selected !== null && list[selected] && active) {
-      cutResource(list[selected].id, list[selected].path, active)
+    const { list, selected, service } = this.props
+    if (list !== null && selected !== null && list[selected] && service) {
+      cutResource(list[selected].id, list[selected].path, service)
     }
   }
 
@@ -160,11 +160,11 @@ class ActionsPanel extends React.PureComponent<IActionsPanelComponent.Props> {
 function mapStateToProps (state) {
   return {
     selected: state.resources.selected,
-    isTrash: state.resources.isTrash,
+    isTrash: state.active.isTrash,
     list: state.resources.list,
     buffer: state.buffer,
-    active: state.services.active,
-    path: state.resources.path
+    service: state.active.service,
+    path: state.active.path
   }
 }
 

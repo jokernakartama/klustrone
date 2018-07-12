@@ -17,19 +17,15 @@ describe('Component <ActionsPanel />', () => {
       copy: true
     }
   }
-  const active = 'fake'
+  const service = 'fake'
   const isTrash = false
   const state = {
     resources: {
       selected,
-      list,
-      path,
-      isTrash
+      list
     },
     buffer,
-    services: {
-      active
-    }
+    active: { service, path, isTrash }
   }
   let store
   beforeEach(() => {
@@ -40,11 +36,11 @@ describe('Component <ActionsPanel />', () => {
       context: { store }
     })
     expect(wrapper.props().selected).to.equal(state.resources.selected)
-    expect(wrapper.props().isTrash).to.equal(state.resources.isTrash)
+    expect(wrapper.props().isTrash).to.equal(state.active.isTrash)
     expect(wrapper.props().list).to.deep.equal(state.resources.list)
     expect(wrapper.props().buffer).to.deep.equal(state.buffer)
-    expect(wrapper.props().active).to.equal(state.services.active)
-    expect(wrapper.props().path).to.equal(state.resources.path)
+    expect(wrapper.props().service).to.equal(state.active.service)
+    expect(wrapper.props().path).to.equal(state.active.path)
   })
   it('should render a presentational component', () => {
     const wrapper = enzyme.shallow(<ActionsPanel />, {

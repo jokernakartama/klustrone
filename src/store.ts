@@ -5,13 +5,11 @@ import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly'
 import { serviceMap } from '~/api'
 
 import modal from '~/ducks/modal'
-import activeService from '~/ducks/activeService'
+import activeState from '~/ducks/activeState'
 import serviceList from '~/ducks/serviceList'
 import resourceList from '~/ducks/resourceList'
 import resourceDirectory from '~/ducks/resourceDirectory'
 import resourceSelected from '~/ducks/resourceSelected'
-import resourceIsTrash from '~/ducks/resourceIsTrash'
-import resourcePath from '~/ducks/resourcePath'
 import loading from '~/ducks/loading'
 import sort from '~/ducks/sort'
 import view from '~/ducks/view'
@@ -22,15 +20,11 @@ const composeEnhancers = composeWithDevTools({}) || compose
 const rootReducer = combineReducers({
   resources: combineReducers({
     list: resourceList,
-    path: resourcePath,
     dir: resourceDirectory,
     selected: resourceSelected,
-    isTrash: resourceIsTrash
   }),
-  services: combineReducers({
-    list: serviceList,
-    active: activeService
-  }),
+  services: serviceList,
+  active: activeState,
   buffer,
   sort,
   view,
@@ -40,7 +34,7 @@ const rootReducer = combineReducers({
 
 function getAPI (getState: () => any) {
   const state = getState()
-  return serviceMap[state.services.active]
+  return serviceMap[state.active.service]
 }
 
 export function configureStore (initialState?: object) {

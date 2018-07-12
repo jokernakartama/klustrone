@@ -31,12 +31,12 @@ describe('ducks/resourceDirectory.ts', function () {
           dir
         },
         services: {
-          list: {
-            [FakeCloudAPI.settings.stateName]: {
-              mounted: true
-            }
+          [FakeCloudAPI.settings.stateName]: {
+            mounted: true
           },
-          active: FakeCloudAPI.settings.stateName
+        },
+        active: {
+          service: FakeCloudAPI.settings.stateName
         }
       })
       store.dispatch(dux.getMeta())

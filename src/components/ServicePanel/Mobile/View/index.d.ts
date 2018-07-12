@@ -5,7 +5,7 @@ export as namespace IServicePanelMobileViewComponent
 
 declare namespace IServicePanelMobileViewComponent {
   interface Props {
-    active: string|null
+    active: ActiveStateService
     list: IServiceListState
     percents: number|null
     isActiveMounted: boolean

@@ -7,7 +7,6 @@ import { serviceMap } from '~/api'
 const mockStore = configureStore([thunk])
 
 describe('Component <ServiceManager />', () => {
-  const active = 'cloud'
   const list = {
     cloud: {
       name: 'cloud',
@@ -15,9 +14,7 @@ describe('Component <ServiceManager />', () => {
     }
   }
   const state = {
-    services: {
-      list
-    }
+    services: list
   }
   let store
   beforeEach(() => {
@@ -28,7 +25,7 @@ describe('Component <ServiceManager />', () => {
     const wrapper = enzyme.shallow(<ServiceManager />, {
       context: { store }
     })
-    expect(wrapper.props().list).to.deep.equal(state.services.list)
+    expect(wrapper.props().list).to.deep.equal(state.services)
   })
 
   it('should render child components', () => {

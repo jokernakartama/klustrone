@@ -5,7 +5,7 @@ export as namespace IServicePanelViewComponent
 
 declare namespace IServicePanelViewComponent {
   interface Props {
-    active: string|null
+    active: ActiveStateService
     list: IServiceListState
     unmount: (service: string) => void
     mount: (service: string) => void

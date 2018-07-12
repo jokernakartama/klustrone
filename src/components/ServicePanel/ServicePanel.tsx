@@ -36,8 +36,8 @@ class ServicePanel extends React.PureComponent<IServicePanelComponent.Props> {
 
 function mapStateToProps (state) {
   return {
-    active: state.services.active,
-    list: state.services.list
+    active: state.active.service,
+    list: state.services
   }
 }
 

@@ -7,9 +7,9 @@ const mockStore = configureStore([thunk])
 
 describe('Component <ActionsPanelMobileServiceBtn />', () => {
   const state = {
-    services: {
-      list: { fake: { name: 'fake', mounted: false } },
-      active: 'fake'
+    services: { fake: { name: 'fake', mounted: false } },
+    active: {
+      service: 'fake'
     }
   }
   let store
@@ -20,8 +20,8 @@ describe('Component <ActionsPanelMobileServiceBtn />', () => {
     const wrapper = enzyme.shallow(<ActionsPanelMobileServiceBtn />, {
       context: { store }
     })
-    expect(wrapper.props().list).to.deep.equal(state.services.list)
-    expect(wrapper.props().active).to.equal(state.services.active)
+    expect(wrapper.props().list).to.deep.equal(state.services)
+    expect(wrapper.props().service).to.equal(state.active.service)
   })
   it('should render a presentational component', () => {
     const wrapper = enzyme.shallow(<ActionsPanelMobileServiceBtn />, {

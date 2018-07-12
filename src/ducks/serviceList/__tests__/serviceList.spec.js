@@ -22,11 +22,9 @@ describe('ducks/serviceList.ts', function () {
   beforeEach(function () {
     store = createStore({
       services: {
-        list: {
-          [serviceName]: {
-            mounted: true,
-            name: serviceName
-          }
+        [serviceName]: {
+          mounted: true,
+          name: serviceName
         }
       }
     })
@@ -89,12 +87,10 @@ describe('ducks/serviceList.ts', function () {
       const expiresAt = expirationTime(1)
       store = createStore({
         services: {
-          list: {
-            [serviceName]: {
-              mounted: true,
-              name: serviceName,
-              timerId: 1
-            }
+          [serviceName]: {
+            mounted: true,
+            name: serviceName,
+            timerId: 1
           }
         }
       })
@@ -113,11 +109,9 @@ describe('ducks/serviceList.ts', function () {
       putToken(serviceName, tokenData)
       store = createStore({
         services: {
-          list: {
-            [serviceName]: {
-              mounted: false,
-              name: serviceName,
-            }
+          [serviceName]: {
+            mounted: false,
+            name: serviceName,
           }
         }
       })
@@ -136,7 +130,7 @@ describe('ducks/serviceList.ts', function () {
     })
   })
   describe('disconnectService', function () {
-    it('should dispatch SERVICE_MOUNT to disconnect service', function () {
+    it('should dispatch SERVICE_UNMOUNT to disconnect service', function () {
       store.dispatch(dux.disconnectService(serviceName, serviceMap))
       const expected = {
         type: dux.SERVICE_UNMOUNT,

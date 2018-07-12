@@ -5,14 +5,14 @@ import * as serviceListActions from '~/ducks/serviceList'
 import ActionsPanelMobileServiceBtnView from './View'
 
 const ActionsPanelMobileServiceBtn: React.SFC<IActionsPanelMobileServiceBtnComponent.Props> = (props) => {
-  const { list, active, blockName } = props
+  const { list, service, blockName } = props
   const { addService, disconnectService } = props.serviceListActions
-  const mount = active !== null ? () => addService(active) : () => {}
-  const unmount = active !== null ? () => disconnectService(active) : () => {}
+  const mount = service !== null ? () => addService(service) : () => {}
+  const unmount = service !== null ? () => disconnectService(service) : () => {}
   return (
     <ActionsPanelMobileServiceBtnView
       list={ list }
-      active={ active }
+      active={ service }
       mount={ mount }
       unmount={ unmount }
       blockName={ blockName }
@@ -22,8 +22,8 @@ const ActionsPanelMobileServiceBtn: React.SFC<IActionsPanelMobileServiceBtnCompo
 
 function mapStateToProps (state) {
   return {
-    active: state.services.active,
-    list: state.services.list
+    service: state.active.service,
+    list: state.services
   }
 }
 

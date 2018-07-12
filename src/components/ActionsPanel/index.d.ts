@@ -5,7 +5,7 @@ declare namespace IActionsPanelComponent {
   interface Props {
     list: IResourceListActionPayload
     path: string
-    active: string
+    service: string
     selected: string|null
     buffer: IResourceBufferActionPayload
     isTrash: boolean
