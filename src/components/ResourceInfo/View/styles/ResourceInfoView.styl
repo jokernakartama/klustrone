@@ -1,0 +1,36 @@
+@import '~src/global'
+
+.mobile-resource-info
+    background-color: LCD_BLACK
+    color: LCD_BEIGE
+    position: fixed
+    bottom: 0
+    box-sizing: border-box
+    height: 20px
+    font-family: 'mikropix', monospace
+    font-size: 14px
+    line-height: 18px
+    padding: 0 8px
+    left: 0
+    width: 100%
+    display: flex
+    &__description
+        color: inherit
+        font-size: inherit
+        font-family: inherit
+        white-space: nowrap
+        text-overflow: ellipsis
+        overflow: hidden
+        display: block
+        width: calc(100% - 100px)
+    &__size
+        color: inherit
+        font-size: inherit
+        font-family: inherit
+        white-space: nowrap
+        text-overflow: ellipsis
+        overflow: hidden
+        display: block
+        margin-right: auto
+        width: 100px
+        text-align: right
