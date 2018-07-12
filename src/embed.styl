@@ -1,0 +1,52 @@
+@import '~src/global'
+
+@font-face
+    font-family: 'Mikropix'
+    font-style: normal
+    src: url(/static/klustr/fonts/5mikropix.ttf)
+@font-face
+    font-family: 'alarm clock'
+    font-style: normal
+    src: url(/static/klustr/fonts/alarm_clock.ttf)
+@font-face
+    font-family: 'NineteenNinetyThree'
+    font-style: normal
+    src: url(/static/klustr/fonts/Nineteen%20Ninety%20Three.otf)
+
+html
+    min-height: 100%
+
+*
+    @media MOBILE
+        font-family: 'NineteenNinetyThree', monospace
+        font-weight: 500
+        color: LCD_BLACK
+        font-size: 18px
+        text-shadow: 1px 1px 0px LCD_SHADOWCOLOR
+        -webkit-tap-highlight-color: transparent
+        -webkit-touch-callout: none
+    &:focus
+    &:active
+        outline: none
+
+body > textarea
+    user-select: text
+
+body
+    margin: 0
+    height: 100%
+    @media MOBILE
+        background-color: LCD_BEIGE
+
+    @media DESKTOP
+        background-color: #fff
+
+@media MOBILE
+    .hide-on-mobile
+        display: none !important
+    .overlay
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAADpnpUWHRSYXcgcHJvZmlsZSB0eXBlIGV4aWYAAHjarZZrktwqDIX/axVZAhIvsRwMpuru4C4/h4c93ZPpziTEVFu0wOKgD7Dp/P+/Rj9wiVEl56OGFILB5ZJLklFRM6887mzcuM9LluVnP90NApeFtfOvhuU/4UcfXv20rDgZfv8QKJ2r4XhuyCuQ6BrgUrQGsjwHMCsw5RXIyhrZzf/HnJYJSePjFMrq31b7SIP2qeHmbJTgA0eHuxMTY0ioqxgXkbfahbYiqT/njxXo03+6ugo0yWnZGtylK7SQb9Vm2IA7o717BXU7PH16QyloCZmIerry+v56p5wu6Qv5M+qrxi/8D6RpJPRqsJ8Ihdt+6Wf/4adHpIPbw8gh3CM/+Y9yD3GTowtfa1VbO+fssguYcliTuqYyauh39GyNpwJKxM8b7cnuJaEotkTBOqpYZAdK4cQCjI0dV87c+By2cIFEJ6dEWJEilgvBqYCRpAzcrhduEm2yFfDFFiwHC6/cWngMm8ZwhRUDV1bC6mAE47FCNgp9p1NrfUMxG71zBV3SdxpUdHLMZBjdQITbSqofCb7K56tztSDoR5oVE8zm6BGA//D8sbjsAG3R0cPODcyxrgBIERR4iGELAiaw9RzYRBGKzEikAlCGdLFODmBh76VCpDhsK8DBLsDYeCby6CpephsHIUB4G8hGsEk2A5ZzHusnOsUayt56570PPnr1yedgQ99hIcTQT9QcbXTRxxBj1JhiJrXq1GvQqKpJc5JkceL6hP2YNKWUMwbNiJzxdEaHnA857OEOf4QjHnqkIxehYosrvoQSi5ZUcpVqK/ZxDTVWranmk08spdOd/gxnPPVMZ25Yas0213wLLTZtiVq+qS2sv5Q/oMaLmgxSvWO8qcEb4xWC+3HiOzMQE8cAHjsBtiTSmRll56ST68xMEuwKLxDpO5zKnRgIupPFN77ZfZDzhEPzn3AjgJB/QY46um+Q+5XbV9RqHi86Owj1bdiTaix2Hx7SLIpAOH9Grb8yv7L0qgFnYYqzelZk9G0UWHoVJX9by7S0r2Va2tcyLe1rmZb2tUxL+1qmpX0t9zra1TKl0L6WKYX2tUwptK9lSqF9LVMK7WuZUujvohztfLUgvx0DX7W9fuAsNaOGr7Q895p5dLyztr5ecbQtZVnalvL7o/abUpalbSlfnEd/J2VZ2pby9vD/EynL0raUpxNyR8qytC3l+XW0IWVZ2pZyndnbUqAE3zOJfgK2NOcH+z57KAAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAd0SU1FB+IGDBMkAcpBligAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAG0lEQVQI12NYsKrjPwMDAwPD////mRes6vgPAEbDCKMd0vLzAAAAAElFTkSuQmCC")
+
+@media DESKTOP
+    .hide-on-desktop
+        display: none !important
