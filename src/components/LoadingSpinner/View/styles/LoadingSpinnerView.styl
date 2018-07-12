@@ -1,0 +1,22 @@
+@import '~src/global'
+
+.loading-spinner
+    @media MOBILE
+        padding: 20px
+        border: 2px solid LCD_BLACK
+        background-color: LCD_BEIGE
+        border-radius: 2px
+        box-shadow: 1px 1px 0px LCD_SHADOWCOLOR, 1px 1px 0px LCD_SHADOWCOLOR inset
+        margin-bottom: 20px
+    &-wrapper
+        @media MOBILE
+            display: none
+            position: fixed
+            align-items: center
+            justify-content: center
+            top: 23px
+            right: 0
+            left: 0
+            bottom: 0
+            &_active
+                display: flex
