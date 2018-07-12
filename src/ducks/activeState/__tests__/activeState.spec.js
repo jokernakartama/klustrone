@@ -5,7 +5,7 @@ import reducer from '../activeState'
 
 const createStore = configureStore([thunk])
 
-describe.only('ducks/activeState.ts', () => {
+describe('ducks/activeState.ts', () => {
   describe('clearStates', function () {
     it('should create an action to reset an active path, a service and a trash flag', () => {
       const expected = {

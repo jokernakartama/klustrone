@@ -7,7 +7,7 @@ const initialState: IActiveState = {
 export const ACTIVESTATE_CLEAR = 'activestate::clear'
 export const ACTIVESTATE_UPDATE = 'activestate::update'
 
-export function clearStates (): IActiveServiceAction {
+export function clearStates (): IActiveStateAction {
   return {
     type: ACTIVESTATE_CLEAR
   }
