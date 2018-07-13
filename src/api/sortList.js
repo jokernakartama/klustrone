@@ -12,46 +12,59 @@ const PUBLIC_LINK_FIELD_NAME = 'publicLink'
  * @returns {array} - Sorted list of resource ids
  */
 export default function sortList (o, field = DEFAULT_SORT_FIELD, asc = true) {
-  var sorted = Object.keys(o)
+  const sorted = Object.keys(o)
   sorted.sort(function (a, b) {
-    var j = o[a][field]
-    var k = o[b][field]
+    let j = o[a][field]
+    let k = o[b][field]
+    let offset = 0
     if (!j || !k) {
       j = Boolean(!j)
       k = Boolean(!k)
     }
     if ((o[a].type === DIR_TYPE_NAME && o[b].type !== DIR_TYPE_NAME) || (o[a].type !== DIR_TYPE_NAME && o[b].type === DIR_TYPE_NAME)) {
       // directories first
-      return o[b].type === DIR_TYPE_NAME
+      offset = o[b].type === DIR_TYPE_NAME
     } else {
       if (o[a].type === DIR_TYPE_NAME && o[b].type === DIR_TYPE_NAME) {
         // directories can be sorted only by name
         if (field === DEFAULT_SORT_FIELD && !asc) {
-          return o[b].name > o[a].name
+          offset = o[b].name > o[a].name
         } else if (field === PUBLIC_LINK_FIELD_NAME) {
           if (asc) {
-            return j > k
+            offset = j > k
           } else {
-            return k > j
+            offset = k > j
           }
+          if (j && k) offset = o[a].name > o[b].name
         } else {
-          return o[a].name > o[b].name
+          offset = o[a].name > o[b].name
         }
       } else {
         if (field === TYPE_FIELD_NAME) {
+          let aExt = getFileExtention(o[a].name)
+          let bExt = getFileExtention(o[b].name)
           if (asc) {
-            return getFileExtention(o[a].name) > getFileExtention(o[b].name)
+            offset = aExt > bExt
           } else {
-            return getFileExtention(o[b].name) > getFileExtention(o[a].name)
+            offset = bExt > aExt
           }
+          if (aExt === bExt) offset = o[a].name > o[b].name
         } else {
           if (asc) {
-            return j > k
+            offset = j > k
           } else {
-            return k > j
+            offset = k > j
           }
+          if (j === k) offset = o[a].name > o[b].name
         }
       }
+    }
+    if (offset === true) {
+      return 1
+    } else if (offset === false) {
+      return -1
+    } else {
+      return offset
     }
   })
   return sorted
