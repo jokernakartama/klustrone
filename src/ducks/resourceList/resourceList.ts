@@ -27,7 +27,7 @@ export function getList (path: string|null = null, isTrash: boolean|null = null)
       if (path === null || isTrash === null) {
         const state = getState()
         if (path === null && state.resources.dir !== null) path = state.resources.dir.path
-        if (isTrash === null) isTrash = state.resources.isTrash
+        if (isTrash === null) isTrash = state.active.isTrash
       }
       const API = getAPI(getState)
       API.getResourceList(path, {
