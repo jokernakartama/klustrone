@@ -14,6 +14,7 @@ enum loc {
   ACTION_REMOVE = 'Remove',
 
   LINK_LABEL_HOME = 'Home',
+  LINK_LABEL_ABOUT = 'About',
   LABEL_SIZE = 'Size',
   LABEL_DATE_MODIFIED = 'Modified on',
   LABEL_NAME = 'Name',
@@ -62,7 +63,10 @@ enum loc {
   M_ACTION_PANEL_SORT_BUTTON = 'SORT',
   M_ACTION_PANEL_ACTIONS_BUTTON = 'ACTN',
   M_RESOURCE_INFO_SELECTED = 'SEL.',
-  M_RESOURCE_INFO_DIRECTORY = 'IN'
+  M_RESOURCE_INFO_DIRECTORY = 'IN',
+  M_NAVI_HOME = '< Home',
+  M_NAVI_PAGE_DOWN = 'PgDn',
+  M_NAVI_PAGE_UP = 'PgUp'
 }
 
 export default loc
