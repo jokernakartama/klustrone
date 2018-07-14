@@ -2,6 +2,7 @@
 
 MOBILE_ICON_TILE = 50px
 MOBILE_ICON_LIST = 28px
+MOBILE_LIST_PUBLIC = 14px
 FILETYPES = 'dir',
             'plaintext',
             'document',
@@ -40,7 +41,7 @@ FILETYPES = 'dir',
             display: flex
             width: auto
             margin: 0
-            padding: 0 10px 0 3px
+            padding: 0 25px 0 3px
             align-items: center
             @media MOBILE
                 height: 32px
@@ -66,8 +67,9 @@ FILETYPES = 'dir',
             ~/_view_list &
                 padding: 0 5px
     &_selected
-        background-color: LCD_BLACK
-        color: LCD_BEIGE
+        @media MOBILE
+            background-color: LCD_BLACK
+            color: LCD_BEIGE
             
     &__icon
         @media MOBILE
@@ -96,20 +98,35 @@ FILETYPES = 'dir',
                             background-position: -(MOBILE_ICON_LIST*i) MOBILE_ICON_LIST
     &__publicity-icon
         position: absolute
-        @media MOBILE
-            background-color: LCD_BLACK
-            border: 2px solid LCD_BEIGE
-        ~/_selected &
-            background-color: LCD_BEIGE
-            border-color: LCD_BLACK
         ~/_view_tile &
-            height: 8px
-            right: calc(50% - 24px)
-            top: 42px
-            width: 8px
+            @media MOBILE
+                background-color: LCD_BLACK
+                border: 2px solid LCD_BEIGE
+                height: 8px
+                right: calc(50% - 24px)
+                top: 42px
+                width: 8px
             ~/_type_dir&
-                right: calc(50% - 27px)
-                top: 45px
+                @media MOBILE
+                    right: calc(50% - 27px)
+                    top: 45px
+            ~/_selected&
+                @media MOBILE
+                    background-color: LCD_BEIGE
+                    border-color: LCD_BLACK
+                    
+        ~/_view_list &
+            @media MOBILE
+                background-image: url(/static/klustr/img/mobile-icons.svg)
+                background-position: -(MOBILE_LIST_PUBLIC*3) 0
+                background-size: auto (MOBILE_LIST_PUBLIC*2)
+                height: MOBILE_LIST_PUBLIC
+                right: 10px
+                top: 9px
+                width: MOBILE_LIST_PUBLIC
+                ~/_selected&
+                    background-position: -(MOBILE_LIST_PUBLIC*3) MOBILE_LIST_PUBLIC
+                
     &__size
         display: none
         @media MOBILE

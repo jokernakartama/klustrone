@@ -43,21 +43,42 @@
 
     &__option
         line-height: 2em
+        position: relative
         &_type
             &_separator
                 border-bottom: 2px solid LCD_BLACK
                 box-shadow: 1px 1px 0px LCD_SHADOWCOLOR
                 padding: 0
-            &_radio^[1]_checked:after
-                background-color: LCD_BLACK
-                box-shadow: 1px 1px 0px LCD_SHADOWCOLOR
-                border-radius: 50%
-                content: ""
-                display: inline-block
-                height: 6px
-                margin-left: 8px
-                vertical-align: middle
-                width: 6px
+            &_radio
+                padding-right: 18px
+                display: table
+                &^[1]_checked:after
+                    background-color: LCD_BLACK
+                    box-shadow: 1px 1px 0px LCD_SHADOWCOLOR
+                    content: ""
+                    display: block
+                    height: 6px
+                    margin-left: 8px
+                    vertical-align: middle
+                    width: 6px
+                    position: absolute
+                    right: 6px
+                    top: calc(50% - 1px)
+            &_checkbox
+                padding-right: 18px
+                display: table
+                &:after
+                    font-family: MOBILE_SMALL_FONT
+                    line-height: 10px
+                    content: "\2715"
+                    display: block
+                    height: 10px
+                    position: absolute
+                    right: 0
+                    top: calc(50% - 7px)
+                    width: 10px
+                &^[1]_checked:after
+                    content: "\2713"
     &__scroll-area
         max-height: calc(100vh - 64px)
         padding-right: 18px
