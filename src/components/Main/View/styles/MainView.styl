@@ -1,7 +1,9 @@
 @import '~src/global'
 
 .content
-    margin-top: 23px
+    @media MOBILE
+        margin-top: 23px
+        height: calc(100vh - 23px)
 
     *
         user-select: none

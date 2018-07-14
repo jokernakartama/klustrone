@@ -1,0 +1,83 @@
+@import '~src/global'
+
+MOBILE_ICON_HEIGHT = 35px
+SERVICES = 'disk',
+           'drive',
+           'dropbox',
+           'box',
+           'onedrive'
+
+.homepage
+    &__services-wrapper
+        @media MOBILE
+            align-self: normal
+    &__links-wrapper
+        @media MOBILE
+            align-self: normal
+            &:before
+                background-color: #333
+                content: ""
+                display: block
+                height: 2px
+                margin: 10px auto 25px
+                max-width: 300px
+                width: 100%
+                box-shadow: 1px 1px 0px LCD_SHADOWCOLOR
+
+    &__link
+        text-decoration: none
+        @media MOBILE
+            color: LCD_BLACK
+            border: 2px solid LCD_BLACK
+            box-shadow: 1px 1px 0px LCD_SHADOWCOLOR, 1px 1px 0px LCD_SHADOWCOLOR inset
+            display: block
+            width: 100%
+            line-height: 35px
+            max-width: 300px
+            margin: 0 auto 15px
+            padding: 15px 25px
+            text-align: left
+            text-transform: uppercase
+            border-radius: 2px
+            box-sizing: border-box
+            flex-basis: 100%
+        &:active
+            @media MOBILE
+                color: LCD_BEIGE
+                background-color: LCD_BLACK
+            & .icon
+                background-position-y: MOBILE_ICON_HEIGHT
+    &__icon
+        @media MOBILE
+            background-image: url(/static/klustr/img/mobile-pixel-services.svg)
+            background-size: auto (MOBILE_ICON_HEIGHT*2)
+            height: MOBILE_ICON_HEIGHT
+            width: MOBILE_ICON_HEIGHT
+            vertical-align: middle
+            background-position-y: 0
+            margin-right: 8px
+        &.icon_
+            &about
+                @media MOBILE
+                    background-position-x: 0
+            for name, i in SERVICES
+                &{name}
+                    @media MOBILE
+                        background-position-x: -(MOBILE_ICON_HEIGHT*(i+1))
+
+    @media MOBILE
+        height: 100%
+        width: 100%
+    &__scroll-area
+        @media MOBILE
+            overflow-x: auto !important
+	        height: 100%
+    & .scroll-area__content
+        @media MOBILE
+            padding 16px 20px
+            box-sizing: border-box
+            display: flex
+            flex-direction: column
+            min-height: 100%
+            align-items: center
+            justify-content: center
