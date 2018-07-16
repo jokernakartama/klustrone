@@ -3,7 +3,7 @@ import React from 'react'
 import { Scrollbars } from 'react-custom-scrollbars'
 import bem from '~/utils/bemName'
 
-const UIScrollAreaView: React.SFC<IUIScrollAreaViewComponent.Props> = ({ style, className, children }) => {
+const UIScrollAreaView: React.SFC<IUIScrollAreaViewComponent.Props> = ({ domRef, style, className, children }) => {
   const blockName = 'scroll-area'
   const scrollAreaClassNames: IBEMEntityObject[] = [
     { block: blockName }
@@ -37,7 +37,7 @@ const UIScrollAreaView: React.SFC<IUIScrollAreaViewComponent.Props> = ({ style, 
   }
 
   return (
-    <Scrollbars { ...defaults } style={ {...style, height: '100%' } }>
+    <Scrollbars ref={ domRef } { ...defaults } style={ {...style, height: '100%' } }>
       <div className={ contentClass }>{ children }</div>
     </Scrollbars>
   )
