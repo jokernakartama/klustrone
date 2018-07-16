@@ -1,8 +1,7 @@
 import React from 'react'
 import SimpleMarkdown from '../SimpleMarkdown'
-import { debug } from 'util';
 
-describe.only('Component <SimpleMarkdown />', () => {
+describe('Component <SimpleMarkdown />', () => {
   const blockTags = {
     p: `
       A test paragraph
@@ -29,12 +28,20 @@ describe.only('Component <SimpleMarkdown />', () => {
           * unmarked
          **multiline** **list** 
            just a line
+           + it looks like an ordered list element
+           + but it's just a new lines
+           + with "plus" symbol
+           + of the same element of unmarked list
       * contains only two items
     `,
     ol: `
             + align
         ++ like a bull's pee ++
       + contains only two items
+          * it looks like an unmarked list element
+          * but it's just a new lines
+          * with "asterisk" symbol
+          * of the same element of ordered list
     `,
   }
   const lists = ['ul', 'ol']

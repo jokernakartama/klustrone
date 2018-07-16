@@ -28,8 +28,8 @@ class SimpleMarkdown extends React.PureComponent<ISimpleMarkdownComponent.Props>
     const h1 = /#\s(.+)/
     const h2 = /##\s(.+)/
     const p = /([^\n](?:[^\n]|\n[^\n]+)+)/
-    const ul = /(?:^[^\S\n]*)(\*[^\S\n][^\n]+(\n?[^\n]+)*)/m
-    const ol = /(?:^[^\S\n]*)(\+[^\S\n][^\n]+(\n?[^\n]+)*)/m
+    const ul = /^(\s*\*[^\S\n][^\n]+(\n?[^\n]+)*)/
+    const ol = /^(\s*\+[^\S\n][^\n]+(\n?[^\n]+)*)/
     const parsed = []
     sections.forEach((block, i) => {
       if (h2.test(block)) {
