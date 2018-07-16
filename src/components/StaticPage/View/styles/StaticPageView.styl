@@ -1,0 +1,138 @@
+@import '~src/global'
+
+CONTENT_BLOCK_MARGIN = 0.75em 0
+
+.static-page
+    @media MOBILE
+        height: 100%
+        width: 100%
+    &__content
+        @media MOBILE
+            @media MOBILE_PORTRAIT
+                height: calc(100% - 50px)
+            @media MOBILE_LANDSCAPE
+                height: 100%
+                width: calc(100% - 80px)
+    &__navi-button
+        @media MOBILE
+            display: flex
+            flex-direction: column
+            text-decoration: none
+            align-content: center
+            justify-content: center
+            border-radius: 0
+            padding: 0
+            text-align: center
+            border-color: LCD_BLACK
+            border-style: solid
+            background-color: LCD_BEIGE
+            color: LCD_BLACK
+            box-shadow: 1px 1px 0 LCD_SHADOWCOLOR inset
+
+            &:active
+                background-color: LCD_BLACK
+                color: LCD_BEIGE
+            @media MOBILE_PORTRAIT
+                box-sizing: border-box
+                height: 100%
+                line-height: 34px
+                width: (100/3)%
+                border-width: 2px 1px
+            @media MOBILE_LANDSCAPE
+                width: 100%
+                height: (100/3)%
+                min-height: 28px
+                border-width: 1px 0px 1px 2px
+            &:first-child
+                @media MOBILE_LANDSCAPE
+                    border-top-width: 0px
+                @media MOBILE_PORTRAIT
+                    border-left-width: 0px
+            &:last-child
+                @media MOBILE_LANDSCAPE
+                    border-bottom-width: 0px
+                @media MOBILE_PORTRAIT
+                    border-right-width: 0px
+
+    &__navigation
+        @media MOBILE
+            display: flex
+            height: 50px
+            @media MOBILE_LANDSCAPE
+                width: 80px
+                position: fixed
+                height: calc(100% - 23px)
+                top: 23px
+                right: 0
+                flex-direction: column
+    &__scroll-area
+        @media MOBILE
+            overflow-x: auto !important
+	        height: 100%
+    & .scroll-area__content
+        @media MOBILE
+            padding 16px 20px
+            box-sizing: border-box
+    h1
+        @media MOBILE
+            text-transform: uppercase
+            margin: CONTENT_BLOCK_MARGIN
+    h2
+        @media MOBILE
+            margin: CONTENT_BLOCK_MARGIN
+    p
+        @media MOBILE
+            margin: CONTENT_BLOCK_MARGIN
+    ul
+        @media MOBILE
+            list-style-position: inside
+            margin: CONTENT_BLOCK_MARGIN
+        li
+            @media MOBILE
+                list-style-type: none
+                padding-left: 16px
+                position: relative
+            &:before
+                @media MOBILE
+                    content: ''
+                    display: block
+                    background-color: LCD_BLACK
+                    box-shadow: 1px 1px 0 LCD_SHADOWCOLOR
+                    height: 4px
+                    width: 4px
+                    position: absolute
+                    top: 0.625em
+                    left 0
+    ol
+        @media MOBILE
+            list-style-position: outside
+            padding-left: 16px
+            margin: CONTENT_BLOCK_MARGIN
+    pre
+        display: block
+        @media MOBILE
+            width: 100%
+            background-color: LCD_BLACK
+            margin: CONTENT_BLOCK_MARGIN
+        & .scroll-area__content
+            @media MOBILE
+                color: LCD_BEIGE
+        .scroll-area
+            &__thumb
+                @media MOBILE
+                    background-color: LCD_BEIGE
+                &:after
+                    @media MOBILE
+                        background-color: LCD_BEIGE
+    
+    em
+        @media MOBILE
+            font-style: normal
+    strong
+        @media MOBILE
+            font-weight: 700
+    a
+        @media MOBILE
+            text-decoration: none
+            border-bottom: 2px solid LCD_BLACK
+
