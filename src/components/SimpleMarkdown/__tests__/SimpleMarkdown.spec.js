@@ -2,7 +2,7 @@ import React from 'react'
 import SimpleMarkdown from '../SimpleMarkdown'
 import { debug } from 'util';
 
-describe('Component <SimpleMarkdown />', () => {
+describe.only('Component <SimpleMarkdown />', () => {
   const blockTags = {
     p: `
       A test paragraph
