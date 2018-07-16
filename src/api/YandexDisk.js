@@ -14,8 +14,6 @@ const AUTH_TYPE = 'OAuth'
 class YandexDisk extends CloudAPI {
   static get settings () {
     return {
-      winHeight: '600',
-      winWidth: '800',
       clientId: yandexDiskConfig.id,
       stateName: yandexDiskConfig.name,
       listLimit: 99999,

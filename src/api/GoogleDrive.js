@@ -14,8 +14,6 @@ const AUTH_TYPE = 'Bearer'
 class GoogleDrive extends CloudAPI {
   static get settings () {
     return {
-      winHeight: '600',
-      winWidth: '800',
       clientId: googleDriveConfig.id,
       stateName: googleDriveConfig.name,
       redirectURI: googleDriveConfig.redirectURI,

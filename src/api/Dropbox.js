@@ -35,8 +35,6 @@ const ROOT_DIR_RESPONSE = {
 class Dropbox extends CloudAPI {
   static get settings () {
     return {
-      winHeight: '600',
-      winWidth: '800',
       clientId: DropboxConfig.id,
       stateName: DropboxConfig.name,
       redirectURI: DropboxConfig.redirectURI,

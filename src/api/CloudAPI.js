@@ -8,6 +8,8 @@ import getFileType from './getFileType'
  * closing of the authorization window and recieving incorrect data.
  */
 const MESSAGE_SOURCE_IDENTIFIER = 'cloud-api-postcode-method'
+const WIN_WIDTH = 1025
+const WIN_HEIGHT = 768
 
 /**
  * Common abstract interface for services api
@@ -530,7 +532,11 @@ class CloudAPI {
    */
   static openAuthWindow (callback) {
     var params = urlStr(this.urls.authorize.params)
-    var win = window.open(this.urls.authorize.path + '?' + params, 'serviceAuthorizationWindow', 'width=' + this.settings.winWidth + ',height=' + this.settings.winHeight)
+    var win = window.open(
+      this.urls.authorize.path + '?' + params,
+      'serviceAuthorizationWindow',
+      'width=' + (this.settings.winWidth || WIN_WIDTH) + ',height=' + (this.settings.winHeight || WIN_HEIGHT)
+    )
     var onMessage = function onMessage (e) {
       if (e.data.source === MESSAGE_SOURCE_IDENTIFIER) {
         window.removeEventListener('message', onMessage)
