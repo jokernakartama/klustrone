@@ -32,6 +32,7 @@ enum loc {
   DIALOG_CONFIRM_PURGE = 'Purge the trash?',
   DIALOG_SERVICE_UNMOUNTED = 'The service is not mounted, would you like to mount it?',
   DIALOG_SERVICE_UPDATED = 'The service is mounted now, would you like to display the directory resources?',
+  DIALOG_NOT_FOUND = 'No route matches for the requested url',
   DIALOG_RESOURCE_EXISTS = 'A resource with the same name already exists',
   DIALOG_DIRECTORY_EXISTS = 'A directory with the same name already exists',
   DIALOG_RESOURCE_TO_OVERWRITE = 'A resource with the same path already exists, do you want to overwrite it?',
