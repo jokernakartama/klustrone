@@ -43,10 +43,10 @@ const UIDialogPromptView: React.SFC<IUIDialogPromptViewComponent.Props> = (props
         />
       </div>
       <div className={ buttonWrapClass }>
-        <button onClick={ accept } className={ declineClass }>
+        <button onClick={ decline } className={ declineClass }>
           { declineLabel }
         </button>
-        <button onClick={ decline } className={ acceptClass }>
+        <button onClick={ accept } className={ acceptClass }>
           { acceptLabel }
         </button>
       </div>
