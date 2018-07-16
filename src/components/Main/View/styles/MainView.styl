@@ -21,3 +21,17 @@
             font-size: inherit
             height: 1.5em
             padding: 0 0.25em
+
+.button
+    @media MOBILE
+        background-color: LCD_BEIGE
+        color: LCD_BLACK
+        border: 2px solid LCD_BLACK
+        display: inline-block
+        padding: 5px 1em
+        text-decoration: none
+    &:active
+        @media MOBILE
+            color: LCD_BEIGE
+            background-color: LCD_BLACK
+
