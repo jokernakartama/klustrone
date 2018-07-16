@@ -14,7 +14,7 @@ class UIDialog extends React.PureComponent<IUIDialogComponent.Props> {
   public componentDidMount () {
     const { closeDialog } = this.props.dialogActions
     this.unlisten = history.listen((location) => {
-      closeDialog()
+      if (this.props.data !== false) closeDialog()
     })
   }
 
