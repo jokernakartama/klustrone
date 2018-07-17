@@ -8,7 +8,6 @@ declare namespace IFileManagerComponent {
     resourceListActions: any
     loadingActions: any
     resourceDirectioryActions: any
-    resourceSelectedActions: any
     serviceListActions: any
     services: IServiceListState
     active: IActiveState

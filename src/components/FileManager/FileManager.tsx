@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as resourceListActions from '~/ducks/resourceList'
-import * as resourceSelectedActions from '~/ducks/resourceSelected'
 import * as loadingActions from '~/ducks/loading'
 import * as resourceDirectioryActions from '~/ducks/resourceDirectory'
 import * as serviceListActions from '~/ducks/serviceList'
@@ -189,7 +188,6 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     resourceListActions: bindActionCreators(resourceListActions, dispatch),
-    resourceSelectedActions: bindActionCreators(resourceSelectedActions, dispatch),
     loadingActions: bindActionCreators(loadingActions, dispatch),
     resourceDirectioryActions: bindActionCreators(resourceDirectioryActions, dispatch),
     serviceListActions: bindActionCreators(serviceListActions, dispatch)
