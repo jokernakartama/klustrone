@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as listActions from '~/ducks/resourceList'
+import * as resourceSelectedActions from '~/ducks/resourceSelected'
 import * as dirActions from '~/ducks/resourceDirectory'
 import * as loadingActions from '~/ducks/loading'
 import * as bufferActions from '~/ducks/resourceBuffer'
@@ -69,18 +70,26 @@ class ActionsPanel extends React.PureComponent<IActionsPanelComponent.Props> {
   }
   private purge () {
     const { purgeTrash } = this.props.listActions
+    const { deselect } = this.props.resourceSelectedActions
     const { loadingStart, loadingEnd } = this.props.loadingActions
     loadingStart()
     purgeTrash()
+      .then(() => {
+        deselect()
+      })
       .then(() => {
         loadingEnd()
       })
   }
   private restore () {
+    const { deselect } = this.props.resourceSelectedActions
     const { restoreResource } = this.props.listActions
     const { list, selected, isTrash } = this.props
     if (list !== null && selected !== null && list[selected] && isTrash) {
       restoreResource(list[selected].path)
+        .then(() => {
+          deselect()
+        })
     }
   }
   private paste (): void {
@@ -142,9 +151,13 @@ class ActionsPanel extends React.PureComponent<IActionsPanelComponent.Props> {
   }
   private remove (): void {
     const { removeResource } = this.props.listActions
+    const { deselect } = this.props.resourceSelectedActions
     const { list, selected } = this.props
     if (list !== null && selected !== null && list[selected]) {
       removeResource(list[selected].path)
+        .then(() => {
+          deselect()
+        })
     }
   }
 
@@ -171,6 +184,7 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     listActions: bindActionCreators(listActions, dispatch),
+    resourceSelectedActions: bindActionCreators(resourceSelectedActions, dispatch),
     dirActions: bindActionCreators(dirActions, dispatch),
     loadingActions: bindActionCreators(loadingActions, dispatch),
     bufferActions: bindActionCreators(bufferActions, dispatch),

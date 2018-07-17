@@ -11,6 +11,7 @@ declare namespace IActionsPanelComponent {
     isTrash: boolean
     listActions: any
     loadingActions: any
+    resourceSelectedActions: any
     dirActions: any
     bufferActions: any
   }
