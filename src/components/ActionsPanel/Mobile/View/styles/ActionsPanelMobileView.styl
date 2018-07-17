@@ -28,7 +28,7 @@
             justify-content: center
             align-content: center
             flex-direction: column
-            box-shadow: 2px 1px 0px SHADOWCOLOR
+            box-shadow: 1px 1px 0px LCD_SHADOWCOLOR inset
             @media MOBILE_LANDSCAPE
                 display: block
                 width: 100%
@@ -38,6 +38,7 @@
         &:first-child
             @media MOBILE_LANDSCAPE
                  border-top-width: 0px
+                 box-shadow: 1px 0px 0px LCD_SHADOWCOLOR inset
             @media MOBILE_PORTRAIT
                 border-left-width: 0px
         &:last-child

@@ -6,13 +6,6 @@ CONTENT_BLOCK_MARGIN = 0.75em 0
     @media MOBILE
         height: 100%
         width: 100%
-    &__content
-        @media MOBILE
-            @media MOBILE_PORTRAIT
-                height: calc(100% - 50px)
-            @media MOBILE_LANDSCAPE
-                height: 100%
-                width: calc(100% - 80px)
     &__navi-button
         @media MOBILE
             display: flex
@@ -46,6 +39,7 @@ CONTENT_BLOCK_MARGIN = 0.75em 0
             &:first-child
                 @media MOBILE_LANDSCAPE
                     border-top-width: 0px
+                    box-shadow: 1px 0px 0 LCD_SHADOWCOLOR inset
                 @media MOBILE_PORTRAIT
                     border-left-width: 0px
             &:last-child
@@ -73,66 +67,73 @@ CONTENT_BLOCK_MARGIN = 0.75em 0
         @media MOBILE
             padding 16px 20px
             box-sizing: border-box
-    h1
+    &__content
         @media MOBILE
-            text-transform: uppercase
-            margin: CONTENT_BLOCK_MARGIN
-    h2
-        @media MOBILE
-            margin: CONTENT_BLOCK_MARGIN
-    p
-        @media MOBILE
-            margin: CONTENT_BLOCK_MARGIN
-    ul
-        @media MOBILE
-            list-style-position: inside
-            margin: CONTENT_BLOCK_MARGIN
-        li
+            @media MOBILE_PORTRAIT
+                height: calc(100% - 50px)
+            @media MOBILE_LANDSCAPE
+                height: 100%
+                width: calc(100% - 80px)
+        h1
             @media MOBILE
-                list-style-type: none
+                text-transform: uppercase
+                margin: CONTENT_BLOCK_MARGIN
+        h2
+            @media MOBILE
+                margin: CONTENT_BLOCK_MARGIN
+        p
+            @media MOBILE
+                margin: CONTENT_BLOCK_MARGIN
+        ul
+            @media MOBILE
+                list-style-position: inside
+                margin: CONTENT_BLOCK_MARGIN
+            li
+                @media MOBILE
+                    list-style-type: none
+                    padding-left: 16px
+                    position: relative
+                &:before
+                    @media MOBILE
+                        content: ''
+                        display: block
+                        background-color: LCD_BLACK
+                        box-shadow: 1px 1px 0 LCD_SHADOWCOLOR
+                        height: 4px
+                        width: 4px
+                        position: absolute
+                        top: 0.625em
+                        left 0
+        ol
+            @media MOBILE
+                list-style-position: outside
                 padding-left: 16px
-                position: relative
-            &:before
-                @media MOBILE
-                    content: ''
-                    display: block
-                    background-color: LCD_BLACK
-                    box-shadow: 1px 1px 0 LCD_SHADOWCOLOR
-                    height: 4px
-                    width: 4px
-                    position: absolute
-                    top: 0.625em
-                    left 0
-    ol
-        @media MOBILE
-            list-style-position: outside
-            padding-left: 16px
-            margin: CONTENT_BLOCK_MARGIN
-    pre
-        display: block
-        @media MOBILE
-            width: 100%
-            background-color: LCD_BLACK
-            margin: CONTENT_BLOCK_MARGIN
-        & .scroll-area__content
+                margin: CONTENT_BLOCK_MARGIN
+        pre
+            display: block
             @media MOBILE
-                color: LCD_BEIGE
-        .scroll-area
-            &__thumb
+                width: 100%
+                background-color: LCD_BLACK
+                margin: CONTENT_BLOCK_MARGIN
+            & .scroll-area__content
                 @media MOBILE
-                    background-color: LCD_BEIGE
-                &:after
+                    color: LCD_BEIGE
+            .scroll-area
+                &__thumb
                     @media MOBILE
                         background-color: LCD_BEIGE
-    
-    em
-        @media MOBILE
-            font-style: normal
-    strong
-        @media MOBILE
-            font-weight: 700
-    a
-        @media MOBILE
-            text-decoration: none
-            border-bottom: 2px solid LCD_BLACK
+                    &:after
+                        @media MOBILE
+                            background-color: LCD_BEIGE
+        
+        em
+            @media MOBILE
+                font-style: normal
+        strong
+            @media MOBILE
+                font-weight: 700
+        a
+            @media MOBILE
+                text-decoration: none
+                border-bottom: 2px solid LCD_BLACK
 
