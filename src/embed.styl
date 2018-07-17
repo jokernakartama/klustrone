@@ -52,3 +52,52 @@ body
 @media DESKTOP
     .hide-on-desktop
         display: none !important
+
+.app-loading
+    height: 100vh
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+
+    &__logo
+        @media MOBILE
+            background-image: url('/static/klustr/img/mobile-logo.svg')
+            width: 299px
+            height: 37px
+            background-size: auto 37px
+            background-repeat: no-repeat
+            background-position: center
+            @media MOBILE_PORTRAIT
+                margin-top: -25px
+
+    &__spinner
+        @media MOBILE
+            margin-top: 16px
+            background-color: LCD_BEIGE
+            width: 298px
+            height: 8px
+            box-sizing: content-box
+            padding: 2px
+            border: 2px solid LCD_BLACK
+            box-shadow: 1px 1px 0 LCD_SHADOWCOLOR
+
+    &__line
+        @media MOBILE
+            height: 8px
+            width: 30%
+            background-color: LCD_BLACK
+            position: relative
+            animation-name: loading-mobile
+            animation-duration: 0.5s
+            animation-timing-function: linear
+            animation-delay: 0s
+            animation-iteration-count: infinite
+            animation-direction: alternate
+
+
+@keyframes loading-mobile
+    0%
+        left: 0%
+    100%
+        left: 70%

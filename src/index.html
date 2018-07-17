@@ -6,7 +6,20 @@
     <title>Klustr File Manager</title>
   </head>
   <body>
-    <div id="app">Wait while loading...</div>
+    <div id="app">
+      <div class="app-loading">
+        <div class="app-loading__logo">
+        </div>
+        <div class="app-loading__spinner">
+          <div class="app-loading__line"></div>
+        </div>
+      </div>
+    </div>
     <div id="modal"></div>
+    <script>
+      if (/^\/token/g.test(window.location.pathname)) {
+        document.getElementById('app').firstElementChild.className = 'app-token-spinner'
+      }
+    </script>
   </body>
 </html>
