@@ -11,7 +11,7 @@ const PAGES_EXTENSION = '.md'
 
 class StaticPage extends React.PureComponent<IStaticPageComponent.Props, IStaticPageComponent.State> {
   public state = {
-    content: ''
+    content: '1'
   }
 
   constructor (props) {
@@ -23,8 +23,8 @@ class StaticPage extends React.PureComponent<IStaticPageComponent.Props, IStatic
     loadingStart()
     AX.get(STATIC_PAGES_DIR + this.props.pageName + PAGES_EXTENSION)
       .status({
-        success: [200, 302],
-        error: 404,
+        success: [200, 302, 304],
+        error: ['!200', '!302', '!304'],
         anyway: 'all'
       })
       .on('success', (body) => {
@@ -46,10 +46,9 @@ class StaticPage extends React.PureComponent<IStaticPageComponent.Props, IStatic
     const { content } = this.state
     if (content === null) {
       return <NotFound />
+    } else {
+      return <StaticPageView content={ content } />
     }
-    return (
-      <StaticPageView content={ content } />
-    )
   }
 }
 
