@@ -45,11 +45,17 @@ function callback (instance) {
           for (let n = 0; n < instance._statusesMap[statusEvent].length; n++) {
             if (typeof instance._statusesMap[statusEvent][n] === 'number') {
               includes.push(instance._statusesMap[statusEvent][n])
-            } else if (typeof instance._statusesMap[statusEvent][n] === 'string' && instance._statusesMap[statusEvent].slice(0, 1) === '!') {
+            } else if (typeof instance._statusesMap[statusEvent][n] === 'string' && /^!\d{3}/.test(instance._statusesMap[statusEvent][n])) {
               excludes.push(Number(instance._statusesMap[statusEvent][n].slice(1)))
             }
           }
-          if (includes.indexOf(resp.statusCode) > -1 && excludes.indexOf(resp.statusCode) === -1) rule = true
+          if (
+            (includes.length > 0 && includes.indexOf(resp.statusCode) > -1) ||
+            (includes.length === 0 && excludes.length > 0 && excludes.indexOf(resp.statusCode) === -1)
+          ) {
+            rule = true
+          }
+          if (statusEvent === 'error') console.log(rule)
         } else if (typeof instance._statusesMap[statusEvent] === 'number' && instance._statusesMap[statusEvent] === resp.statusCode) {
           // status number
           rule = true
