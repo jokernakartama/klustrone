@@ -15,10 +15,11 @@
         padding: 20px
     &__message
         @media MOBILE
-            margin-top: -2em
+            margin: -2em auto 2em
             padding: 8px 0
             text-align: center
     &__buttons
-        display: flex
-        width: 100%
-        justify-content: space-evenly
+        @media MOBILE
+            display: flex
+            width: 100%
+            justify-content: space-between

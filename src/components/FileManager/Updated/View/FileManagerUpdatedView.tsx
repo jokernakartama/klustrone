@@ -20,7 +20,7 @@ const FileManagerUpdatedView: React.SFC<IFileManagerUpdatedViewComponent.Props> 
       </div>
       <div className={ btnWrapperClass }>
         <Link to='/' className={ buttonClass }>{ loc.M_NAVI_HOME }</Link>
-        <button className={ buttonClass } onClick={ props.action }>{ loc.LABEL_OK }</button>
+        <button className={ buttonClass } onClick={ props.action }>{ loc.SERVICE_MOUNT }</button>
       </div>
     </div>
   )

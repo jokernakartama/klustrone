@@ -5,8 +5,8 @@ describe('Component <FileManagerUpdatedView />', () => {
   const actionSpy = sinon.spy()
   const wrapper = enzyme.shallow(<FileManagerUpdatedView action={ actionSpy }/>)
   it('should contain a button to make an action', () => {
-    wrapper.find('.button').simulate('click')
-    expect(wrapper.find('.button').exists()).to.be.true
+    wrapper.find('button.button').simulate('click')
+    expect(wrapper.find('button.button').exists()).to.be.true
     expect(actionSpy.called).to.be.true
   })
 })
