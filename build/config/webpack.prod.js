@@ -4,7 +4,6 @@ const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin')
-const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const webpackConfig = require('./webpack.common')
@@ -37,9 +36,6 @@ const plugins = [
     // files that will be embed through <style> tag,
     // this option is provided by HtmlWebpackInlineSourcePlugin
     inlineSource: 'embed.[0-9, a-z]+.css$',
-    // exclude an empty embed.[hash].js from assets,
-    // this option is provided by HtmlWebpackExcludeAssetsPlugin
-    excludeAssets: [/embed\.[0-9, a-z]+\.js/],
     minify: {
       removeComments: true,
       collapseWhitespace: false
@@ -58,8 +54,7 @@ const plugins = [
     filename: path.posix.join(config.assetsSubDirectory, 'klustr/css/[name].[contenthash].css'),
     chunkFilename: path.posix.join(config.assetsSubDirectory, 'klustr/css/[name].[contenthash].css')
   }),
-  new HtmlWebpackInlineSourcePlugin(),
-  new HtmlWebpackExcludeAssetsPlugin()
+  new HtmlWebpackInlineSourcePlugin()
 ]
 
 module.exports =  merge(webpackConfig, {
