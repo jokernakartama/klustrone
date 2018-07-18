@@ -68,7 +68,8 @@ module.exports =  merge(webpackConfig, {
   output: {
     path: config.assetsRoot,
     publicPath: '/',
-    filename: path.posix.join(config.assetsSubDirectory, 'klustr/js/[name].[chunkhash].js')
+    filename: path.posix.join(config.assetsSubDirectory, 'klustr/js/[name].[chunkhash].js'),
+    chunkFilename: path.posix.join(config.assetsSubDirectory, 'klustr/js/[name].[chunkhash].js')
   },
   module: {
     rules
