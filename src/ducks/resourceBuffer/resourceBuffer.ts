@@ -1,15 +1,14 @@
 import { serviceMap } from '~/api/'
 import { keys } from '~/constants'
-import { setKey, getKey } from '~/utils/session'
+import { setKey } from '~/utils/session'
 
 const initialState = {}
 Object.keys(serviceMap).forEach((name) => {
-  const saved = getKey(keys.BUFFER_PREFIX + name) || {}
-  initialState[name] = Object.assign({
+  initialState[name] = {
     id: null,
     path: null, // to use in queries
     copy: true // to use the right method
-  }, saved)
+  }
 })
 
 export const BUFFER_UPDATE = 'buffer::update'

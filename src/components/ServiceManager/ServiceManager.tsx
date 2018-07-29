@@ -2,10 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as serviceListActions from '~/ducks/serviceList'
+import * as resourceBufferActions from '~/ducks/resourceBuffer'
+import { getKey } from '~/utils/session'
 import { serviceMap } from '~/api'
+import { keys } from '~/constants'
 
 /**
- * This component sets services' mounted status
+ * This component sets initial services' mounted status
+ * and its buffer data
  * @extends React.PureComponent
  */
 
@@ -13,10 +17,16 @@ class ServiceManager extends React.PureComponent<IServiceManagerComponent.Props>
   constructor (props) {
     super(props)
     const { connectService } = props.serviceListActions
+    const { updateBuffer } = props.resourceBufferActions
     // It is pretty important to set the initial state of services
     // as soon as possible to avoid additional rendering of other components
     for (const service in serviceMap) {
       if (serviceMap[service].saveTokenData) {
+        // also set buffer for each service if it needed
+        const saved = getKey(keys.BUFFER_PREFIX + service)
+        if (saved !== null) {
+          updateBuffer(saved.id, saved.path, service, saved.copy)
+        }
         connectService(service)
       }
     }
@@ -56,7 +66,8 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    serviceListActions: bindActionCreators(serviceListActions, dispatch)
+    serviceListActions: bindActionCreators(serviceListActions, dispatch),
+    resourceBufferActions: bindActionCreators(resourceBufferActions, dispatch)
   }
 }
 
